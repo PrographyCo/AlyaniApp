@@ -1,3 +1,2 @@
-<?
-  define("CP_PATH", '/v3/dtMEk');
-?>
+<?php
+  const CP_PATH = '/v3/dtMEk';

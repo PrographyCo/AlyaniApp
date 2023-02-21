@@ -1,4 +1,4 @@
-<?
+<?php
 
 require 'msegat.php';
 
@@ -15,4 +15,3 @@ $result = $sms->send($teles, $message, 0);
 print_r($result);
 
 echo 'done';
-?>

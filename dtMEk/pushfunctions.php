@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once 'db.php';
 
@@ -238,5 +238,3 @@ function addPushMsgs($platform, $type, $title, $message, $sound, $pil_id, $staff
 	$sql1->execute();
 
 }
-
-?>
