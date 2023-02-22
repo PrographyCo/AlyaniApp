@@ -1,4 +1,4 @@
-<? include 'header.php';
+<?php include '../../layout/header.php';
 
 if ($_POST) {
 
@@ -87,7 +87,7 @@ $kmsranges = $db->query("SELECT s_value FROM settings WHERE s_id = 4")->fetchCol
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../../layout/footer.php'; ?>
 <script>
 	$('select').select2();
 </script>

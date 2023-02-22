@@ -1,5 +1,5 @@
 <?php
-    require 'db.php';
+    require 'config/db.php';
     
     $cardurl = 'media/pils_cards/GENERATED_1.pdf';
     

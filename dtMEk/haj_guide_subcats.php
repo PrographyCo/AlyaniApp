@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_HajGuideSubCats;
     $table = 'guide_categories';
@@ -97,4 +97,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

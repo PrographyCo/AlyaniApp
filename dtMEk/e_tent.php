@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     // $title = HM_Tents;
     $table = 'tents';
@@ -176,7 +176,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
 </script>

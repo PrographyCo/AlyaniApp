@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     
     $title = HM_ContactInfo;
     $table = 'contactinfo';
@@ -113,7 +113,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
 </script>

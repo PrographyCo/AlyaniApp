@@ -1,5 +1,5 @@
-<? include 'header.php';
-	
+<?php include '../../layout/header.php';
+
 $title = 'Sample';
 $table = 'sample';
 $table_id = 'sample_id';
@@ -197,7 +197,7 @@ if (is_numeric($_GET['id'])) {
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../../layout/footer.php'; ?>
 <script>
 	$('select').select2();
 	$("#d_file").fileinput({

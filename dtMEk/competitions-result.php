@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     
     $title = HM_competitions_results;
     $table = 'competition_result';
@@ -122,4 +122,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

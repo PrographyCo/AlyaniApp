@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     include 'XLSClasses/PHPExcel/IOFactory.php';
     include('phpqrcode/qrlib.php');
 
@@ -111,7 +111,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $("#zipfile").fileinput({
         showRemove: true,

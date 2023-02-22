@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_STAFF;
     $table = 'staff';
@@ -75,5 +75,5 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 

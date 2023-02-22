@@ -1,5 +1,5 @@
-<? include 'header.php';
-	
+<?php include '../layout/header.php';
+
 $title = '';
 $table = '';
 $table_id = '';
@@ -34,4 +34,4 @@ $newedit_page = '';
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../layout/footer.php'; ?>

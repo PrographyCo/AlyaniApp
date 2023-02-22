@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     
     $title = HM_Halls . ' - ' . arafa;
     
@@ -135,4 +135,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

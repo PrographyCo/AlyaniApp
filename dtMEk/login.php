@@ -2,6 +2,7 @@
     //error_reporting(E_ALL);
     //ini_set('display_errors', 1);
     require 'config.inc.php';
+    global $session, $db;
     
     if ($session->logged_in) {
         header("Location: index.php");
@@ -39,9 +40,8 @@
         <img src="logo-card-header.png" style="width:250px; padding-top:10%"/>
     </div><!-- /.login-logo -->
     <div class="login-box-body">
-        <?
+        <?php
             if ($session->error) {
-                
                 echo '<div class="text-center">' . $session->error . '</div>';
             }
         ?>

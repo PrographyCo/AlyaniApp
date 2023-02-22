@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_RatingQuestions;
     $table = 'questions';
@@ -93,4 +93,4 @@
     </section><!-- /.content -->
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

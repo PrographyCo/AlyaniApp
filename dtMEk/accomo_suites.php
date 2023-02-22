@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     
     $title = HM_SuitesAccomodations;
     
@@ -278,7 +278,7 @@
 </div>
 
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 
 <script type="text/javascript">
 

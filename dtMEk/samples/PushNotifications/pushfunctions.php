@@ -1,6 +1,6 @@
-<?
+<?php
 //include 'nfc.inc.php';
-require_once 'db.php';
+require_once '../../config/db.php';
 
 function sendpush_android($message, $year) {
 
@@ -265,4 +265,3 @@ function sendpush_ios_new($message, $year, $openKey, $openValue, $openPage) {
 
 	return $sendnotiresult;
 }
-?>

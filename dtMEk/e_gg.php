@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_GENERALGUIDE;
     $table = 'general_guide';
@@ -225,7 +225,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("#gg_uphoto").fileinput({

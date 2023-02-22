@@ -7,7 +7,7 @@
         
     }
     
-    include 'header.php'; ?>
+    include 'layout/header.php'; ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Main content -->
@@ -70,4 +70,4 @@
 
     </section><!-- /.content -->
 </div><!-- /.content-wrapper -->
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db.php';
+require_once 'config/db.php';
 
 function sendPushNotification($platform, $title = null, $message, $type = 0, $pil_id, $staff_id, $sound = null, $saveToNotis, $saveToPushMsgs) {
 	global $db;

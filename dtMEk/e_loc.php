@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_OurLocations;
     $table = 'ourlocations';
@@ -405,7 +405,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("#loc_uphoto").fileinput({

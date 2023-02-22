@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     if ($_POST) {
         
@@ -114,7 +114,7 @@
     </section><!-- /.content -->
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("file").fileinput({

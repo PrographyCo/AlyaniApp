@@ -30,7 +30,7 @@
 <script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
 <script src="plugins/iCheck/icheck.min.js" type="text/javascript"></script>
 <script src="plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
-<?
+<?php
     global $js_file;
 ?>
 <script src="js/<?= $js_file; ?>" type="text/javascript"></script>
@@ -50,10 +50,10 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 
-<?
+<?php
     global $lang;
     
-    if ($lang == 'ar') {
+    if ($lang === 'ar') {
         
         $dt_ar = ',"oLanguage": {
         "sInfo": "عرض من _START_ إلى _END_ (يوجد _TOTAL_)",
@@ -163,7 +163,7 @@
                 pdf.addPage(PDF_Width, PDF_Height);
                 pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 2), canvas_image_width, canvas_image_height);
             }
-            pdf.save(" <?=$title;?>");
+            pdf.save(" <?= $title ?>");
             // $(".html-content").hide();
 
             $(".dt-buttons").show();

@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     if (is_numeric($_GET['del'])) {
         $sql = $db->query("DELETE FROM _users WHERE user_id = " . $_GET['del']);
@@ -72,4 +72,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

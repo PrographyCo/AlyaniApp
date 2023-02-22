@@ -1,5 +1,5 @@
 <?php
-    require 'db.php';
+    require 'config/db.php';
     
     $cardurl = 'media/accomo_PDF/ACCOMO_2.pdf';
     

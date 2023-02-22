@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     //error_reporting(E_ALL);
     //ini_set('display_errors', 1);
     if ($_POST) {
@@ -220,7 +220,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     function showperm(userlevel) {
 

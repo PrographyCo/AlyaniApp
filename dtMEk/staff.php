@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     if (!is_numeric($_GET['type'])) die();
     $type = $_GET['type'];
@@ -97,4 +97,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

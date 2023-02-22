@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     require 'pushfunctions.php';
     require 'msegat.php';
     $title = HM_AutoAccomo . " - " . LBL_MENA;
@@ -282,7 +282,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
 

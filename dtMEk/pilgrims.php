@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_PILGRIMS;
     $table = 'pils';
@@ -281,7 +281,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     function confirmRemoveAccomo(pil_id) {
 

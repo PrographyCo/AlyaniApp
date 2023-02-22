@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include 'layout/header.php';
     if (file_exists('install.php')) {
         header("Location: install.php");
         exit();
@@ -29,4 +29,4 @@
         </div>
     <?php } ?>
 </div><!-- /.content-wrapper -->
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

@@ -1,5 +1,5 @@
 <?php
-    require 'db.php';
+    require 'config/db.php';
     
     if (!is_numeric($_GET['id'])) die();
     $id = $_GET['id'];

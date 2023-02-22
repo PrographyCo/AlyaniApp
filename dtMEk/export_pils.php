@@ -1,6 +1,6 @@
 <?php
     include 'XLSClasses/PHPExcel/IOFactory.php';
-    require 'db.php';
+    require 'config/db.php';
     
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getActiveSheet()->setRightToLeft(true);

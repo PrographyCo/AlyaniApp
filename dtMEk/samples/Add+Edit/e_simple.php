@@ -1,4 +1,4 @@
-<? include 'header.php';
+<?php include '../../layout/header.php';
 
 $title = 'Sample';
 $table = 'sample';
@@ -106,7 +106,7 @@ if (is_numeric($_GET['id'])) {
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../../layout/footer.php'; ?>
 <script>
 	$('select').select2();
 </script>

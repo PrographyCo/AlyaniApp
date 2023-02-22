@@ -16,17 +16,17 @@ class Config {
     public $logged_in = false;
     public $userinfo = array();  //The array holding all user info
     public $error = "";
-    public $allowedCountries = array('EG', 'SA');
+    public $allowedCountries = []; //'EG', 'SA'
     public $showErrors = false;
     public $forceLogin = true;
     public $loginURL = 'login.php';
     public $con;
 
-    private $dbhost = "localhost"; // Host Name
-    private $dbport = "3306"; //Port
-    private $dbuser = "iqbay487_db3"; // MySQL Database Username
-    private $dbpass = ";QQiJrEjHDpz"; // MySQL Database Password
-    private $dbname = "iqbay487_db3"; // Database Name
+    public static $dbhost = "localhost"; // Host Name
+    public static $dbport = "3306"; //Port
+    public static $dbuser = "root"; //iqbay487_db3 // MySQL Database Username
+    public static $dbpass = ""; //;QQiJrEjHDpz // MySQL Database Password
+    public static $dbname = "iqbay487_db3"; // Database Name
 
 
     function __construct() {
@@ -38,9 +38,9 @@ class Config {
         }
 
         // Database Connection
-        $stmt = "mysql:dbname=".$this->dbname.";host=".$this->dbhost.";port=".$this->dbport.";charset=utf8";
+        $stmt = "mysql:dbname=".self::$dbname.";host=".self::$dbhost.";port=".self::$dbport.";charset=utf8";
         //echo $stmt;
-        $this->con = new PDO($stmt, $this->dbuser, $this->dbpass);
+        $this->con = new PDO($stmt, self::$dbuser, self::$dbpass);
         $this->con->exec("set names utf8");
         $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -48,13 +48,13 @@ class Config {
         session_start();
 
         // Login
-        if($_POST['sublogin']) $this->login($_POST['email'], $_POST['password'], $_POST['remember'], $_GET['goto']);
+        if(!empty($_POST['sublogin'])) $this->login($_POST['email'], $_POST['password'], $_POST['remember'], $_GET['goto']);
 
         // Security - Limit access to certain countries
         $this->countryAccess($this->allowedCountries);
 
         // Logout
-        if($_GET['logout']) $this->logout();
+        if(isset($_GET['logout'])) $this->logout();
         else $this->logged_in = $this->checkLogin();
 
         // Disable referer when comes from ajax
@@ -101,14 +101,15 @@ class Config {
 
 
 
-        if ($_SESSION['userinfo']) {
+        if (isset($_SESSION['userinfo'])) {
 
             // Check if the user is still on the system
             $chk1 = $this->con->query("SELECT user_id FROM _users WHERE user_id = ".$_SESSION['userinfo']['user_id']." AND active = 1")->fetchColumn();
 
             if (!$chk1) {
-
-                unset($this->userinfo, $_SESSION['userinfo']);
+    
+                $this->userinfo = [];
+                unset($_SESSION['userinfo']);
                 setcookie(COOKIE_TOKEN, "", time()+COOKIE_EXPIRE, COOKIE_PATH);
                 setcookie(COOKIE_SECRET,   "", time()+COOKIE_EXPIRE, COOKIE_PATH);
                 return false;
@@ -127,15 +128,17 @@ class Config {
                 return true;
 
             }
-
-            unset($this->userinfo, $_SESSION['userinfo']);
+    
+            $this->userinfo = [];
+            unset($_SESSION['userinfo']);
             setcookie(COOKIE_TOKEN, "", time()+COOKIE_EXPIRE, COOKIE_PATH);
             setcookie(COOKIE_SECRET,   "", time()+COOKIE_EXPIRE, COOKIE_PATH);
             return false;
         }
-
-
-        unset($this->userinfo, $_SESSION['userinfo']);
+    
+    
+        $this->userinfo = [];
+        unset($_SESSION['userinfo']);
         setcookie(COOKIE_TOKEN, "", time()+COOKIE_EXPIRE, COOKIE_PATH);
         setcookie(COOKIE_SECRET,   "", time()+COOKIE_EXPIRE, COOKIE_PATH);
         return false;
@@ -178,13 +181,14 @@ class Config {
 
     function loglogin($email, $password) {
 
-        $log = $this->con->prepare("INSERT INTO _login_attempts VALUES (
-		'',
-		:ip,
-		NOW(),
-		:email,
-		:password
-		)");
+        $log = $this->con->prepare(
+            "INSERT INTO _login_attempts VALUES (
+                '',
+                :ip,
+                NOW(),
+                :email,
+                :password
+            )");
         $log->bindValue("ip", $this->get_client_ip());
         $log->bindValue("email", $email);
         $log->bindValue("password", '');
@@ -206,7 +210,10 @@ class Config {
     }
 
     // Helper functions
-
+    
+    /**
+     * @throws Exception
+     */
     function GUID()
     {
         if (function_exists('com_create_guid') === true)
@@ -214,20 +221,18 @@ class Config {
             return com_create_guid();
         }
 
-        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', random_int(0, 65535), random_int(0, 65535), random_int(0, 65535), random_int(16384, 20479), random_int(32768, 49151), random_int(0, 65535), random_int(0, 65535), random_int(0, 65535));
     }
 
 
     function countryAccess($countries) {
-
+        
         if (is_array($countries) && sizeof($countries) > 0) {
-
-            $userIP = ip2long($this->get_client_ip());
-            $countrycode = $this->con->query("SELECT countrycode FROM _ip2country WHERE ipfrom < $userIP AND ipto >= $userIP")->fetchColumn();
-            if (!in_array($countrycode, $countries)) die('access denied');
-
+            if($userIP = ip2long($this->get_client_ip())) {
+                $countrycode = $this->con->query("SELECT countrycode FROM _ip2country WHERE ipfrom < $userIP AND ipto >= $userIP")->fetchColumn();
+                if (!in_array($countrycode, $countries, true)) die('access denied');
+            }else die('access denied');
         }
-
     }
 
     function get_client_ip() {
@@ -278,7 +283,7 @@ class Config {
 
     function checkPermission($permid) {
 
-        if ($this->userinfo['userlevel'] == 9) return true;
+        if (!empty($this->userinfo) && $this->userinfo['userlevel'] === 9) return true;
 
         if ($permid > 0) {
 
@@ -401,16 +406,12 @@ function reporterrortoadmin($page, $error) {
 
 function addlog($user_id, $shift_id, $action, $title, $link) {
 
-
-
-
-
-
-    $dbhost = "localhost"; // Host Name
-    $dbport = "3306"; //Port
-    $dbuser = "alshamel_aDm1891"; // MySQL Database Username
-    $dbpass = "5gEjle6ClH2l"; // MySQL Database Password
-    $dbname = "alshamel_aDm1891"; // Database Name
+    $dbhost = Config::$dbhost; // Host Name
+    $dbport = Config::$dbport; //Port
+    $dbuser = Config::$dbuser; // MySQL Database Username
+    $dbpass = Config::$dbpass; // MySQL Database Password
+    $dbname = Config::$dbname; // Database Name
+    
     $db = new PDO("mysql:dbname={$dbname};host={$dbhost};port={$dbport};charset=utf8", $dbuser, $dbpass);
     $db->exec("set names utf8");
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

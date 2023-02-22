@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include 'layout/header.php'; ?>
 <?php
     
     if (is_numeric($_GET['del'])) {
@@ -85,4 +85,4 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

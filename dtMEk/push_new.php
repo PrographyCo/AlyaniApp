@@ -1,5 +1,5 @@
-<?
-    include 'header.php';
+<?php
+    include 'layout/header.php';
     require 'pushfunctions.php';
     
     if ($_POST) {
@@ -163,7 +163,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
 
     function checktype(type_id) {

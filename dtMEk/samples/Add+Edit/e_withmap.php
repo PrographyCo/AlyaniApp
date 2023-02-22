@@ -1,4 +1,4 @@
-<? include 'header.php';
+<?php include '../../layout/header.php';
 
 $title = 'Sample';
 $table = 'sample';
@@ -257,7 +257,7 @@ var markersArray = [];
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../../layout/footer.php'; ?>
 <script>
 	$('select').select2();
 </script>

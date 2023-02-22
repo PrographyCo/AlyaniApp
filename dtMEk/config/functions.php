@@ -1,35 +1,37 @@
-<?php
+<?php /** @noinspection ALL */
     
     require_once 'db.php';
     
+    /**
+     * @throws Exception
+     */
     function GUID()
     {
         if (function_exists('com_create_guid') === true) {
             return com_create_guid();
         }
         
-        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', random_int(0, 65535), random_int(0, 65535), random_int(0, 65535), random_int(16384, 20479), random_int(32768, 49151), random_int(0, 65535), random_int(0, 65535), random_int(0, 65535));
     }
     
-    function genRandCode($length = 30)
+    /**
+     * @throws Exception
+     */
+    function genRandCode($length = 30): string
     {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+            $randomString .= $characters[random_int(0, strlen($characters) - 1)];
         }
         return $randomString;
     }
     
-    function time_left($integer)
+    function time_left(int $seconds): string
     {
-        
-        if ($integer < 0) $integer = $integer * -1;
-        
-        $seconds = $integer;
-        
+        $return = '';
+        $seconds = (int)abs($seconds);
         if ($seconds / 60 >= 1) {
-            
             $minutes = floor($seconds / 60);
             
             if ($minutes / 60 >= 1) { # Hours
@@ -37,74 +39,34 @@
                 $hours = floor($minutes / 60);
                 
                 if ($hours / 24 >= 1) { #days
-                    
                     $days = floor($hours / 24);
                     
                     if ($days / 7 >= 1) { #weeks
-                        
                         $weeks = floor($days / 7);
-                        
-                        //if ($weeks>=2) $return="$weeks Weeks";
-                        
-                        //else $return="$weeks Week";
-                        
+                        $return="$weeks Week".(($weeks >= 2)?'s':'');
                     } #end of weeks
-                    
-                    //$days=$days-(floor($days/7))*7;
-                    
-                    //if ($weeks>=1 && $days >=1) $return="$return, ";
-                    
-                    if ($days >= 2) $return = "$return $days days";
-                    
-                    if ($days == 1) $return = "$return $days day";
-                    
+    
+                    $return = implode(',',[$return,"$days day".(($days >= 2)?'s':'')]);
                 } #end of days
                 
                 $hours = $hours - (floor($hours / 24)) * 24;
-                
-                if ($days >= 1 && $hours >= 1) $return = "$return, ";
-                
-                if ($hours >= 2) $return = "$return $hours hrs";
-                
-                if ($hours == 1) $return = "$return $hours hr";
-                
+                $return = implode(',',[$return,"$hours hr".(($hours >= 2)?'s':'')]);
             } #end of Hours
             
             $minutes = $minutes - (floor($minutes / 60)) * 60;
-            
-            if ($hours >= 1 && $minutes >= 1) $return = "$return,";
-            
-            if ($minutes >= 2) $return = "$return $minutes mins";
-            
-            if ($minutes == 1) $return = "$return $minutes min";
-            
+            $return = implode(',',[$return,"$minutes min".(($minutes >= 2)?'s':'')]);
         } #end of minutes
         
-        /*
-        $seconds=$integer-(floor($integer/60))*60;
-    
-        if ($minutes>=1 && $seconds >=1) $return="$return, ";
-    
-        if ($seconds >=2) $return="$return $seconds seconds";
-    
-        if ($seconds ==1) $return="$return $seconds second";
-        */
-        $return = "$return";
-        
         return $return;
-        
     }
     
-    function suitesToAcc($gender)
+    function suitesToAcc($gender): bool|array
     {
-        
         global $db;
-        $return = array();
-        $return = $db->query("SELECT suite_id, suite_title FROM suites WHERE suite_gender = '$gender' AND suite_id IN (SELECT hall_suite_id FROM suites_halls WHERE hall_id IN (" . implode(',', suitesHallsToAcc()) . "))")->fetchAll(PDO::FETCH_ASSOC);
-        return $return;
+        return $db->query("SELECT suite_id, suite_title FROM suites WHERE suite_gender = '$gender' AND suite_id IN (SELECT hall_suite_id FROM suites_halls WHERE hall_id IN (" . implode(',', suitesHallsToAcc()) . "))")->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    function suitesHallsToAcc()
+    function suitesHallsToAcc(): array
     {
         
         global $db;
@@ -115,13 +77,12 @@
             $occu = $db->query("SELECT COUNT(pil_code) FROM pils_accomo WHERE hall_id = " . $row['hall_id'])->fetchColumn();
             
             if ($occu < $row['hall_capacity']) $return_halls[] = $row['hall_id'];
-            
         }
         
         return $return_halls;
     }
     
-    function hallsToAcc($suite_id)
+    function hallsToAcc($suite_id): array
     {
         
         global $db;
@@ -138,7 +99,7 @@
         return $return_halls;
     }
     
-    function hallsToAccWithPredefined($suite_id, $halls)
+    function hallsToAccWithPredefined($suite_id, $halls): array
     {
         
         global $db;
@@ -155,7 +116,7 @@
         return $return_halls;
     }
     
-    function buildingsToAcc($gender, $pil_accomo_type)
+    function buildingsToAcc($gender, $pil_accomo_type): bool|array
     {
         
         global $db;
@@ -168,16 +129,13 @@
         return $return;
     }
     
-    function floorsToAcc($bld_id, $gender)
+    function floorsToAcc($bld_id, $gender): bool|array
     {
-        
         global $db;
-        $return = array();
-        $return = $db->query("SELECT floor_id, floor_title FROM buildings_floors WHERE floor_bld_id = $bld_id AND floor_active = 1 AND floor_id IN (SELECT room_floor_id FROM buildings_rooms WHERE room_gender = '$gender' AND room_id IN (" . implode(',', floorsRoomsToAcc()) . "))")->fetchAll(PDO::FETCH_ASSOC);
-        return $return;
+        return $db->query("SELECT floor_id, floor_title FROM buildings_floors WHERE floor_bld_id = $bld_id AND floor_active = 1 AND floor_id IN (SELECT room_floor_id FROM buildings_rooms WHERE room_gender = '$gender' AND room_id IN (" . implode(',', floorsRoomsToAcc()) . "))")->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    function floorsRoomsToAcc()
+    function floorsRoomsToAcc(): array
     {
         
         global $db;
@@ -194,7 +152,7 @@
         return $return_rooms;
     }
     
-    function roomsToAcc($floor_id, $gender)
+    function roomsToAcc($floor_id, $gender): array
     {
         
         global $db;
@@ -211,13 +169,13 @@
         return $return_rooms;
     }
     
-    function roomsToAccWithPredefined($floor_id, $rooms, $gender)
+    function roomsToAccWithPredefined($floor_id, $rooms, $gender): array
     {
         
         global $db;
         $return_rooms = array();
         
-        if (is_array($rooms) && sizeof($rooms) > 0) $sqlmore1 = " AND room_id IN (" . implode(',', $rooms) . ")";
+        if (is_array($rooms) && count($rooms) > 0) $sqlmore1 = " AND room_id IN (" . implode(',', $rooms) . ")";
         
         $sql = $db->query("SELECT room_id, room_capacity FROM buildings_rooms WHERE room_floor_id = $floor_id AND room_gender = '$gender' AND room_active = 1 $sqlmore1");
         while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
@@ -231,7 +189,7 @@
         return $return_rooms;
     }
     
-    function tentsToAcc($id, $gender, $type)
+    function tentsToAcc($id, $gender, $type): array
     {
         
         global $db;
@@ -253,7 +211,7 @@
         return $return_tents;
     }
     
-    function busesToAcc()
+    function busesToAcc(): array
     {
         
         global $db;
@@ -270,13 +228,13 @@
         return $return_buses;
     }
     
-    function busesToAccWithPredefined($buses, $city_id)
+    function busesToAccWithPredefined($buses, $city_id): array
     {
         
         global $db;
         $return_buses = array();
         
-        if (is_array($buses) && sizeof($buses) > 0) $sqlmore1 = " AND bus_id IN (" . implode(',', $buses) . ")";
+        if (is_array($buses) && count($buses) > 0) $sqlmore1 = " AND bus_id IN (" . implode(',', $buses) . ")";
         
         $sql = $db->query("SELECT bus_id, bus_title, bus_seats FROM buses WHERE bus_active = 1 AND bus_city_id = $city_id $sqlmore1 ORDER BY bus_order");
         while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
@@ -291,18 +249,18 @@
     }
     
     
-    function AccomoSuites($suites, $halls, $extratype_id, $pil_code, $pil_gender)
+    function AccomoSuites($suites, $halls, $extratype_id, $pil_code, $pil_gender): bool
     {
         
         global $db;
         
         $available_suites = $db->query("SELECT suite_id FROM suites WHERE suite_gender = '$pil_gender' AND suite_id IN (" . implode(',', $suites) . ") AND suite_id IN (SELECT hall_suite_id FROM suites_halls WHERE hall_id IN (" . implode(',', suitesHallsToAcc()) . "))")->fetchAll(PDO::FETCH_COLUMN);
-        if (is_array($available_suites) && sizeof($available_suites) > 0) {
+        if (is_array($available_suites) && count($available_suites) > 0) {
             
-            if (is_array($halls) && sizeof($halls) > 0) $available_halls = hallsToAccWithPredefined($available_suites[0], $halls);
+            if (is_array($halls) && count($halls) > 0) $available_halls = hallsToAccWithPredefined($available_suites[0], $halls);
             else $available_halls = hallsToAcc($available_suites[0]);
             
-            if (is_array($available_halls) && sizeof($available_halls) > 0) {
+            if (is_array($available_halls) && count($available_halls) > 0) {
                 
                 if ($extratype_id > 0) {
                     
@@ -373,23 +331,23 @@
         
     }
     
-    function AccomoBuildings($buildings, $floors, $rooms, $pil_code, $pil_gender)
+    function AccomoBuildings($buildings, $floors, $rooms, $pil_code, $pil_gender): bool
     {
         
         global $db;
         
         $available_buildings = $db->query("SELECT bld_id, bld_type FROM buildings WHERE bld_id IN (SELECT floor_bld_id FROM buildings_floors WHERE floor_id IN (SELECT room_floor_id FROM buildings_rooms WHERE room_gender = '$pil_gender' AND room_id IN (" . implode(',', floorsRoomsToAcc()) . ")))")->fetchAll(PDO::FETCH_ASSOC);
-        if (is_array($available_buildings) && sizeof($available_buildings) > 0) {
+        if (is_array($available_buildings) && count($available_buildings) > 0) {
             
-            if (is_array($floors) && sizeof($floors) > 0) $sqlmore1 = " AND floor_id IN (" . implode(',', $floors) . ")";
+            if (is_array($floors) && count($floors) > 0) $sqlmore1 = " AND floor_id IN (" . implode(',', $floors) . ")";
             $available_floors = $db->query("SELECT floor_id FROM buildings_floors WHERE floor_bld_id = " . $available_buildings[0]['bld_id'] . " AND floor_active = 1 $sqlmore1 AND floor_id IN (SELECT room_floor_id FROM buildings_rooms WHERE room_gender = '$pil_gender' AND room_id IN (" . implode(',', floorsRoomsToAcc()) . "))")->fetchAll(PDO::FETCH_COLUMN);
             
-            if (is_array($available_floors) && sizeof($available_floors) > 0) {
+            if (is_array($available_floors) && count($available_floors) > 0) {
                 
-                if (is_array($rooms) && sizeof($rooms) > 0) $available_rooms = roomsToAccWithPredefined($available_floors[0], $rooms, $pil_gender);
+                if (is_array($rooms) && count($rooms) > 0) $available_rooms = roomsToAccWithPredefined($available_floors[0], $rooms, $pil_gender);
                 else $available_rooms = roomsToAcc($available_floors[0], $pil_gender);
                 
-                if (is_array($available_rooms) && sizeof($available_rooms) > 0) {
+                if (is_array($available_rooms) && count($available_rooms) > 0) {
                     
                     $extratype_id = $available_buildings[0]['bld_type'];
                     
@@ -441,7 +399,7 @@
         
     }
     
-    function AccomoTents($tents, $pil_code, $pil_gender)
+    function AccomoTents($tents, $pil_code, $pil_gender): bool
     {
         
         global $db;
@@ -451,7 +409,7 @@
         //  $available_halls = tentsToAcc($halls,$pil_gender , 2);
         
         
-        if (is_array($available_tents) && sizeof($available_tents) > 0) {
+        if (is_array($available_tents) && count($available_tents) > 0) {
             
             
             $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
@@ -500,13 +458,13 @@
     }
     
     
-    function Accomohallsarfa($tents, $pil_code, $pil_gender, $seats)
+    function Accomohallsarfa($tents, $pil_code, $pil_gender, $seats): bool
     {
         global $db;
         
         $available_tents = tentsToAcc($tents, $pil_gender, 2);
         
-        if (is_array($available_tents) && sizeof($available_tents) > 0) {
+        if (is_array($available_tents) && count($available_tents) > 0) {
             
             
             $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
@@ -560,7 +518,7 @@
         global $db;
         
         $available_buses = busesToAccWithPredefined($buses, $city_id);
-        if (is_array($available_buses) && sizeof($available_buses) > 0) {
+        if (is_array($available_buses) && count($available_buses) > 0) {
             
             $sqlac = $db->prepare("UPDATE pils SET pil_bus_id = :bus_id WHERE pil_code = :pil_code");
             
@@ -610,7 +568,7 @@
         
     }
     
-    function sendSMSPilGeneral($pil_id, $message)
+    function sendSMSPilGeneral($pil_id, $message): bool
     {
         
         global $db;
@@ -631,14 +589,14 @@
         
     }
     
-    function sendSMSStaffGeneral($staff_id, $message)
+    function sendSMSStaffGeneral($staff_id, $message): void
     {
         
         global $db;
         $staff_phones = $db->query("SELECT staff_phones FROM staff WHERE staff_id = $staff_id")->fetchColumn();
         $phones_array = explode(",", $staff_phones);
         
-        if (is_array($phones_array) && sizeof($phones_array) > 0) {
+        if (is_array($phones_array) && count($phones_array) > 0) {
             
             foreach ($phones_array as $phone) {
                 
@@ -658,7 +616,7 @@
         }
     }
     
-    function sendWelcomeMessagePil($pil_id)
+    function sendWelcomeMessagePil($pil_id): void
     {
         
         global $db;
@@ -684,7 +642,7 @@
         if (is_array($suites)) {
             
             if ($gender) $sqlmore1 = "AND hall_suite_id IN (SELECT suite_id FROM suites WHERE suite_active = 1 AND suite_gender = '$gender')";
-            if (is_array($halls) && sizeof($halls) > 0) $sqlmore2 = "AND hall_id IN (" . implode(',', $halls) . ")";
+            if (is_array($halls) && count($halls) > 0) $sqlmore2 = "AND hall_id IN (" . implode(',', $halls) . ")";
             
             $sql = $db->query("SELECT hall_id, hall_capacity FROM suites_halls WHERE hall_active = 1 AND hall_suite_id IN (" . implode(',', $suites) . ") $sqlmore1 $sqlmore2");
             
@@ -701,9 +659,9 @@
         if ($bld_type > 0) {
             
             $sqlmore3 = " AND room_floor_id IN (SELECT floor_id FROM buildings_floors WHERE floor_bld_id IN (SELECT bld_id FROM buildings WHERE bld_type = $bld_type))";
-            if (is_array($buildings) && sizeof($buildings) > 0) $sqlmore4 = " AND room_floor_id IN (SELECT floor_id FROM buildings_floors WHERE floor_bld_id IN (" . implode(',', $buildings) . "))";
-            if (is_array($floors) && sizeof($floors) > 0) $sqlmore5 = " AND room_floor_id IN (" . implode(',', $floors) . ")";
-            if (is_array($rooms) && sizeof($rooms) > 0) $sqlmore6 = " AND room_id IN (" . implode(',', $rooms) . ")";
+            if (is_array($buildings) && count($buildings) > 0) $sqlmore4 = " AND room_floor_id IN (SELECT floor_id FROM buildings_floors WHERE floor_bld_id IN (" . implode(',', $buildings) . "))";
+            if (is_array($floors) && count($floors) > 0) $sqlmore5 = " AND room_floor_id IN (" . implode(',', $floors) . ")";
+            if (is_array($rooms) && count($rooms) > 0) $sqlmore6 = " AND room_id IN (" . implode(',', $rooms) . ")";
             if ($gender) $sqlmore7 = "AND room_gender = '$gender'";
             
             $query = "SELECT room_id, room_capacity FROM buildings_rooms WHERE 1 $sqlmore3 $sqlmore7 $sqlmore6 $sqlmore5 $sqlmore4";

@@ -1,4 +1,4 @@
-<? include 'header.php'; ?>
+<?php include '../layout/header.php'; ?>
 <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -27,4 +27,4 @@
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../layout/footer.php'; ?>

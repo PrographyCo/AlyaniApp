@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     include('phpqrcode/qrlib.php');
     require 'pushfunctions.php';
     require 'msegat.php';
@@ -947,7 +947,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("#pil_uphoto").fileinput({

@@ -1,4 +1,4 @@
-<?php include 'header.php';
+<?php include 'layout/header.php';
     
     $title = HM_Feedback;
     $table = 'feedback';
@@ -97,4 +97,4 @@
     </section><!-- /.content -->
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include 'layout/footer.php'; ?>

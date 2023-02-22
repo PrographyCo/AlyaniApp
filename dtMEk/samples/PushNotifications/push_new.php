@@ -1,4 +1,4 @@
-<? include 'header.php';
+<?php include '../../layout/header.php';
 //error_reporting(E_ALL);
 //ini_set('display_errors', 1);
 require 'pushfunctions.php';
@@ -78,4 +78,4 @@ if ($_POST) {
 
       </div>
 
-<? include 'footer.php'; ?>
+<?php include '../../layout/footer.php'; ?>
