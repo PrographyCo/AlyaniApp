@@ -144,9 +144,9 @@
         
         $missing = array();
         
-        if (is_array($expectedParams) && sizeof($expectedParams) > 0) foreach ($expectedParams as $paramArray) foreach ($paramArray as $type => $param) if (!array_key_exists($param, $data)) $missing[] = '(' . $type . ')' . $param;
+        if (is_array($expectedParams) && count($expectedParams) > 0) foreach ($expectedParams as $paramArray) foreach ($paramArray as $type => $param) if (!array_key_exists($param, $data)) $missing[] = '(' . $type . ')' . $param;
         
-        if (sizeof($missing) > 0) {
+        if (count($missing) > 0) {
             
             $items['message'] = 'Missing or invalid parameters: ' . implode(", ", $missing);
             headerBadRequest();
@@ -163,13 +163,13 @@
         
         $missing = array();
         
-        if (is_array($requiredParams) && sizeof($requiredParams) > 0) foreach ($requiredParams as $paramArray) foreach ($paramArray as $type => $param) {
+        if (is_array($requiredParams) && count($requiredParams) > 0) foreach ($requiredParams as $paramArray) foreach ($paramArray as $type => $param) {
             
             if (empty($data[$param])) $missing[] = $param;
             
         }
         
-        if (sizeof($missing) > 0) {
+        if (count($missing) > 0) {
             
             $items['message'] = 'Missing values: ' . implode(", ", $missing);
             headerBadRequest();
@@ -605,7 +605,7 @@
         $staff_phones = $db->query("SELECT staff_phones FROM staff WHERE staff_id = $staff_id")->fetchColumn();
         $phones_array = explode(",", $staff_phones);
         
-        if (is_array($phones_array) && sizeof($phones_array) > 0) {
+        if (is_array($phones_array) && count($phones_array) > 0) {
             
             foreach ($phones_array as $phone) {
                 

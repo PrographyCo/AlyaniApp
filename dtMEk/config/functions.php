@@ -1,6 +1,7 @@
 <?php /** @noinspection ALL */
     
     require_once 'db.php';
+    require_once 'pushfunctions.php';
     
     /**
      * @throws Exception

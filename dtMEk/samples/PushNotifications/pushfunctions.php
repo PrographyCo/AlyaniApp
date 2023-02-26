@@ -18,7 +18,7 @@ function sendpush_android($message, $year) {
 		}
 	}
 
-	if (sizeof($tokens) > 0) {
+	if (count($tokens) > 0) {
 
 
 		$path_to_firebase_cm = 'https://fcm.googleapis.com/fcm/send';
@@ -152,7 +152,7 @@ function sendpush_android_new($message, $year, $openKey, $openValue, $openPage) 
 		}
 	}
 
-	if (sizeof($tokens) > 0) {
+	if (count($tokens) > 0) {
 
 
 		$path_to_firebase_cm = 'https://fcm.googleapis.com/fcm/send';

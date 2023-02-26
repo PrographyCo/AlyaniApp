@@ -1,32 +1,46 @@
 <?php
-    include 'layout/header.php';
-    if (file_exists('install.php')) {
-        header("Location: install.php");
+    $url = explode('?',$_SERVER['REQUEST_URI'])[0];
+    
+    if ($url === '' || $url === '/')
+        header('Location: /main/index?'.http_build_query($_GET));
+    
+    elseif (file_exists('parts/'.trim($url,'/').'.php')) {
+        if (strpos($url,'post') > -1) {
+    
+            require_once 'config/config.inc.php';
+            require_once 'config/db.php';
+            require_once 'config/init.php';
+            require_once 'config/functions.php';
+            require 'config/msegat.php';
+    
+            include_once 'parts/' . trim($url, '/') . '.php';
+            exit();
+        } elseif (strpos($url,'export') > -1) {
+            
+            require_once 'config/config.inc.php';
+            require 'config/db.php';
+            include '_includes/XLSClasses/PHPExcel/IOFactory.php';
+            include'_includes/phpqrcode/qrlib.php';
+            require 'config/msegat.php';
+            require_once 'config/init.php';
+            
+    
+            include_once 'parts/' . trim($url, '/') . '.php';
+            exit();
+        }else {
+            require_once 'layout/header.php';
+    
+            if (file_exists('install.php')) {
+                header("Location: install.php");
+                exit();
+            }
+            include_once 'parts/' . trim($url, '/') . '.php';
+    
+            include 'layout/footer.php';
+            exit();
+        }
+    } elseif (file_exists('parts/'.trim($url,'/').'/index.php')) {
+        header('Location: /' . trim($url, '/') . '/index?'.http_build_query($_GET));
         exit();
     }
-    
-    $stmt = $db->prepare("SELECT * FROM feedback WHERE status=?");
-    $stmt->execute(array(0));
-    $feedback = $stmt->rowCount();
-?>
-<div class="content-wrapper">
-    <!-- Main content -->
-    <section class="content">
-
-        <center>
-            <img src="logo-card-header.png" style="width:50%; min-width:200px; padding-top:2%; margin-bottom:30px"/>
-        </center>
-
-
-    </section><!-- /.content -->
-    
-    <?php if ($feedback > 0) { ?>
-        <div class="alert alert-danger alert-dismissible fade show" style="opacity:1;" role="alert">
-            <?= msg_feedback_not_read; ?> <strong>( <?php echo $feedback . ' ' . msg; ?> ) </strong>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    <?php } ?>
-</div><!-- /.content-wrapper -->
-<?php include 'layout/footer.php'; ?>
+    else http_response_code(404);

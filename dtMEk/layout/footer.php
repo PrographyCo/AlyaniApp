@@ -9,36 +9,36 @@
 <div class="control-sidebar-bg"></div>
 </div><!-- ./wrapper -->
 
-<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<script src="plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script type="text/javascript">
     $.widget.bridge('uibutton', $.ui.button);
 </script>
-<script src="js/bootstrap.min.js" type="text/javascript"></script>
-<script src="plugins/select2/select2.full.min.js" type="text/javascript"></script>
-<script src="plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
-<script src="plugins/input-mask/jquery.inputmask.js" type="text/javascript"></script>
-<script src="plugins/input-mask/jquery.inputmask.date.extensions.js" type="text/javascript"></script>
-<script src="plugins/input-mask/jquery.inputmask.extensions.js" type="text/javascript"></script>
-<script src="js/moment.min.js" type="text/javascript"></script>
-<script src="plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
-<script src="plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
-<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="plugins/DataTables2/datatables.min.js"></script>
-<script src="plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="plugins/iCheck/icheck.min.js" type="text/javascript"></script>
-<script src="plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/select2/select2.full.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/input-mask/jquery.inputmask.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/input-mask/jquery.inputmask.date.extensions.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/input-mask/jquery.inputmask.extensions.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/moment.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/timepicker/bootstrap-timepicker.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?= CP_PATH ?>/assets/plugins/DataTables2/datatables.min.js"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/slimScroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/plugins/fastclick/fastclick.min.js" type="text/javascript"></script>
 <?php
     global $js_file;
 ?>
-<script src="js/<?= $js_file; ?>" type="text/javascript"></script>
-<script type="text/javascript" src="plugins/sticky/jquery.plugin.js"></script>
-<script type="text/javascript" src="plugins/sticky/jquery.sticky.js"></script>
-<script src="js/fileinput.js" type="text/javascript"></script>
-<script src="js/bootstrap-colorpicker.js" type="text/javascript"></script>
-<script src="js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/<?= $js_file; ?>" type="text/javascript"></script>
+<script type="text/javascript" src="<?= CP_PATH ?>/assets/plugins/sticky/jquery.plugin.js"></script>
+<script type="text/javascript" src="<?= CP_PATH ?>/assets/plugins/sticky/jquery.sticky.js"></script>
+<script src="<?= CP_PATH ?>/assets/js/fileinput.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/bootstrap-colorpicker.js" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>

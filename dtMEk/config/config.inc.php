@@ -227,7 +227,7 @@ class Config {
 
     function countryAccess($countries) {
         
-        if (is_array($countries) && sizeof($countries) > 0) {
+        if (is_array($countries) && count($countries) > 0) {
             if($userIP = ip2long($this->get_client_ip())) {
                 $countrycode = $this->con->query("SELECT countrycode FROM _ip2country WHERE ipfrom < $userIP AND ipto >= $userIP")->fetchColumn();
                 if (!in_array($countrycode, $countries, true)) die('access denied');
@@ -339,7 +339,7 @@ function containsTLD($string) {
 
 function cleaner($url) {
     $chkurl = explode(' ', $url);
-    if (sizeof($chkurl) > 35) {
+    if (count($chkurl) > 35) {
         $url = implode(' ', array_slice(explode(' ', $url), 0, 35));
         $url .= ' ... ';
     }

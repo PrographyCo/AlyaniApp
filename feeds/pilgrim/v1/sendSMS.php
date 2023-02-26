@@ -20,7 +20,7 @@
             if ($data['type'] == 1) {
                 
                 // send to pilgrims
-                if (is_array($data['cities']) && sizeof($data['cities']) > 0) $sqlmore = " AND pil_city_id IN (" . implode(',', $data['cities']) . ")";
+                if (is_array($data['cities']) && count($data['cities']) > 0) $sqlmore = " AND pil_city_id IN (" . implode(',', $data['cities']) . ")";
                 $sql = $db->query("SELECT pil_id FROM pils WHERE pil_active = 1 $sqlmore");
                 while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
                     
@@ -31,7 +31,7 @@
             } elseif ($data['type'] == 2) {
                 
                 // send to supervisors
-                if (is_array($data['cities']) && sizeof($data['cities']) > 0) $sqlmore = " AND staff_id IN (SELECT staff_id FROM cities_staff WHERE city_id IN (" . implode(',', $data['cities']) . "))";
+                if (is_array($data['cities']) && count($data['cities']) > 0) $sqlmore = " AND staff_id IN (SELECT staff_id FROM cities_staff WHERE city_id IN (" . implode(',', $data['cities']) . "))";
                 $sql = $db->query("SELECT staff_id FROM staff WHERE staff_type = 2 AND staff_active = 1 $sqlmore");
                 while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
                     

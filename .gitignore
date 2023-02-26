@@ -1,4 +1,5 @@
 .DS_store
 /__MACOSX
 /.idea
-.gitCommitMessage 
+.gitCommitMessage
+*.xlsx
