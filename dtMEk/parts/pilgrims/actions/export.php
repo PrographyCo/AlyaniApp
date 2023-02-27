@@ -21,6 +21,7 @@
     $objPHPExcel->getActiveSheet()->SetCellValue('I1', "الكود");
     
     $cnt = 2;
+    $sqlmore1 = $sqlmore2 = $sqlmore3 = $sqlmore4 = $sqlmore5 = $sqlmore6 = '';
     
     if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore1 = " AND pil_city_id = " . $_GET['city_id'];
     if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore2 = " AND pil_gender = '" . $_GET['gender'] . "'";

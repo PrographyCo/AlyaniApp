@@ -10,7 +10,7 @@
     <section class="content">
 
         <center>
-            <img src="/assets/images/logo-card-header.png" style="width:50%; min-width:200px; padding-top:2%; margin-bottom:30px"/>
+            <img src="<?= CP_PATH ?>/assets/images/logo-card-header.png" style="width:50%; min-width:200px; padding-top:2%; margin-bottom:30px"/>
         </center>
 
 

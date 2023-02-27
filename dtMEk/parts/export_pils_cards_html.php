@@ -3,7 +3,7 @@
     
     $cardurl = 'media/pils_cards/GENERATED_1.pdf';
     
-    $command = "wkhtmltopdf -T 0 -B 0 -L 0 -R 0 --page-size A4 --dpi 300 \"http://alyaniapp.com/v2/dtMEk/export_pils_cards_html.php?city_id=" . $_GET['city_id'] . "&gender=" . $_GET['gender'] . "&pilc_id=" . $_GET['pilc_id'] . "&code=" . $_GET['code'] . "&resno=" . $_GET['resno'] . "&accomo=" . $_GET['accomo'] . "\" /home3/alshamelads/public_html/v2/dtMEk/media/pils_cards/GENERATED_1.pdf";
+    $command = "wkhtmltopdf -T 0 -B 0 -L 0 -R 0 --page-size A4 --dpi 300 \"".$_SERVER['HTTP_HOST'].CP_PATH."/accomo/export/export_pils_cards_html?city_id=" . $_GET['city_id'] . "&gender=" . $_GET['gender'] . "&pilc_id=" . $_GET['pilc_id'] . "&code=" . $_GET['code'] . "&resno=" . $_GET['resno'] . "&accomo=" . $_GET['accomo'] . "\" /home3/alshamelads/public_html/v2/dtMEk/media/pils_cards/GENERATED_1.pdf";
     $result = exec($command);
     
     $content = file_get_contents($cardurl);

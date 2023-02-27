@@ -4,7 +4,7 @@
     $title = HM_OurCompanies;
     $table = 'ourcompanies';
     $table_id = 'comp_id';
-    $newedit_page = '/basic_info/edit/companies';
+    $newedit_page = CP_PATH.'/basic_info/edit/companies';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         

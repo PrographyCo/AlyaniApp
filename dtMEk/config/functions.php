@@ -576,6 +576,7 @@
         $pil_phone = $db->query("SELECT pil_phone FROM pils WHERE pil_id = $pil_id")->fetchColumn();
         $pil_phone = trim(str_replace(array("966", "+966"), "", $pil_phone));
         $pil_phone = '966' . $pil_phone;
+        $return = false;
         
         if (is_numeric($pil_phone) && strlen($pil_phone) >= 11 && strlen($pil_phone) <= 13) {
             

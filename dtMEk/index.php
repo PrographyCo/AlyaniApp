@@ -1,44 +1,57 @@
 <?php
     $url = explode('?',$_SERVER['REQUEST_URI'])[0];
     
+    require './config/constants.php';
+    
+    $includes = [
+        'post' => [
+            'config/config.inc.php',
+            'config/db.php',
+            'config/init.php',
+            'config/functions.php',
+            'config/msegat.php'
+        ],
+        'export' => [
+            'config/config.inc.php',
+            'config/db.php',
+            '_includes/XLSClasses/PHPExcel/IOFactory.php',
+            '_includes/phpqrcode/qrlib.php',
+            'config/msegat.php',
+            'config/init.php'
+        ],
+        'cards' => [
+            'config/init.php',
+            'config/config.inc.php',
+            'config/db.php',
+        ]
+    ];
+    
     if ($url === '' || $url === '/')
         header('Location: /main/index?'.http_build_query($_GET));
     
     elseif (file_exists('parts/'.trim($url,'/').'.php')) {
-        if (strpos($url,'post') > -1) {
-    
-            require_once 'config/config.inc.php';
-            require_once 'config/db.php';
-            require_once 'config/init.php';
-            require_once 'config/functions.php';
-            require 'config/msegat.php';
-    
-            include_once 'parts/' . trim($url, '/') . '.php';
-            exit();
-        } elseif (strpos($url,'export') > -1) {
-            
-            require_once 'config/config.inc.php';
-            require 'config/db.php';
-            include '_includes/XLSClasses/PHPExcel/IOFactory.php';
-            include'_includes/phpqrcode/qrlib.php';
-            require 'config/msegat.php';
-            require_once 'config/init.php';
-            
-    
-            include_once 'parts/' . trim($url, '/') . '.php';
-            exit();
-        }else {
-            require_once 'layout/header.php';
-    
-            if (file_exists('install.php')) {
-                header("Location: install.php");
+        
+        foreach ($includes as $include => $files) {
+            if (strpos($url,$include) > -1) {
+                foreach ($files as $file)
+                    require_once ((CP_PATH==='')?'.':CP_PATH) . '/' . $file;
+        
+                include_once 'parts/' . trim($url, '/') . '.php';
                 exit();
             }
-            include_once 'parts/' . trim($url, '/') . '.php';
+        }
     
-            include 'layout/footer.php';
+        require_once 'layout/header.php';
+    
+        if (file_exists('install.php')) {
+            header("Location: install.php");
             exit();
         }
+        include_once 'parts/' . trim($url, '/') . '.php';
+    
+        include 'layout/footer.php';
+        exit();
+        
     } elseif (file_exists('parts/'.trim($url,'/').'/index.php')) {
         header('Location: /' . trim($url, '/') . '/index?'.http_build_query($_GET));
         exit();

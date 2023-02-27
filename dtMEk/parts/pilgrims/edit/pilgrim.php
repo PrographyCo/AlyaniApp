@@ -1,30 +1,20 @@
-<?php include 'layout/header.php';
-    include('phpqrcode/qrlib.php');
-    require 'pushfunctions.php';
-    require 'msegat.php';
+<?php
+    global $db, $session, $lang, $url;
     
+    $edit = false;
     $title = HM_Pilgrims;
     $table = 'pils';
     $table_id = 'pil_id';
     
+    if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
+    else $id = '';
+    
     if ($_POST) {
         
         // check if new or update
-        if (is_numeric($_GET['id'])) $id = $_GET['id'];
-        else $id = '';
         $continue = true;
         $errors = '';
-        /*
-        // check duplicate phone
-        $chk1 = $db->prepare("SELECT $table_id FROM $table WHERE pil_phone = :pil_phone AND $table_id != '$id' AND pil_phone != '' LIMIT 1");
-        $chk1->bindValue("pil_phone", $_POST['pil_phone']);
-        $chk1->execute();
-    
-        if ($chk1->rowCount() > 0) {
-            $continue = false;
-            $errors .= LBL_Phone.' '.LBL_AlreadyExists.'<br />';
-        }
-        */
+        
         // check duplicate nationalid
         $chk2 = $db->prepare("SELECT $table_id FROM $table WHERE pil_nationalid = :pil_nationalid AND $table_id != '$id' AND pil_nationalid != '' LIMIT 1");
         $chk2->bindValue("pil_nationalid", $_POST['pil_nationalid']);
@@ -91,18 +81,18 @@
                 $sql->bindValue("pil_reservation_number", $_POST['pil_reservation_number']);
                 $sql->bindValue("pil_code", $_POST['pil_code']);
                 $sql->bindValue("pil_city_id", $_POST['pil_city_id']);
-                $sql->bindValue("pil_bus_id", ($_POST['pil_bus_id'] ?: 0));
+                $sql->bindValue("pil_bus_id", ($_POST['pil_bus_id'] ?? 0));
                 $sql->bindValue("pil_photo", $_POST['pil_photo']);
                 $sql->bindValue("pil_gender", $_POST['pil_gender']);
                 $sql->bindValue("pil_qrcode", $_POST['pil_qrcode']);
                 $sql->bindValue("pil_card", $_POST['pil_card']);
                 $sql->bindValue("pil_verified", $_POST['pil_verified']);
-                $sql->bindValue("pil_active", ($_POST['pil_active'] ? 1 : 0));
-                $sql->bindValue("pil_dateadded", ($_POST['pil_dateadded'] ?: time()));
+                $sql->bindValue("pil_active", (isset($_POST['pil_active']) ? 1 : 0));
+                $sql->bindValue("pil_dateadded", ($_POST['pil_dateadded'] ?? time()));
                 $sql->bindValue("pil_lastupdated", time());
                 
                 if ($sql->execute()) {
-                    
+                    $result = '';
                     $id = $db->lastInsertId();
                     
                     if ($sendwelcome) sendWelcomeMessagePil($id);
@@ -133,14 +123,14 @@
                     if ($_FILES['pil_uphoto']['tmp_name']) {
                         $ext = strtolower(pathinfo($_FILES['pil_uphoto']['name'], PATHINFO_EXTENSION));
                         $newname = GUID();
-                        if (copy($_FILES['pil_uphoto']['tmp_name'], 'media/pils/' . $newname . '.' . $ext)) {
+                        if (copy($_FILES['pil_uphoto']['tmp_name'], ASSETS_PATH. 'media/pils/' . $newname . '.' . $ext)) {
                             
                             $sql2 = $db->query("UPDATE $table SET pil_photo = '" . $newname . "." . $ext . "' WHERE $table_id = $id");
                             $result .= LBL_PhotoUploaded . '<br />';
                             
                         }
                     } else {
-                        if (!is_numeric($_GET['id'])) {
+                        if (!is_numeric($_REQUEST['id'])) {
                             
                             if ($_POST['pil_gender'] == 'm') $def = 'default_male.png';
                             elseif ($_POST['pil_gender'] == 'f') $def = 'default_female.png';
@@ -172,10 +162,10 @@
                     } else $pil_code = $_POST['pil_code'];
                     
                     // Manage QR Code
-                    if (!is_file('media/pils_qrcodes/' . $id . '.png')) {
+                    if (!is_file(ASSETS_PATH . 'media/pils_qrcodes/' . $id . '.png')) {
                         
                         // how to build raw content - QRCode with simple Business Card (VCard)
-                        $Dir = 'media/pils_qrcodes/';
+                        $Dir = ASSETS_PATH . 'media/pils_qrcodes/';
                         
                         // we building raw data
                         //$codeContents  = 'BEGIN:VCARD'."\n";
@@ -516,7 +506,7 @@
                     }
                     
                     
-                    if ($_GET['id'] > 0) $label = LBL_Updated;
+                    if ($_REQUEST['id'] > 0) $label = LBL_Updated;
                     else $label = LBL_Added;
                     
                     $msg = '<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-check"></i>' . $label . '!</h4>' . LBL_Item . ' ' . $label . ' ' . LBL_Successfully . '<br />' . $result . '</div>';
@@ -542,10 +532,10 @@
         
     }
     
-    if (is_numeric($_GET['id'])) {
+    if (is_numeric($id)) {
         
         $edit = true;
-        $row = $db->query("SELECT * FROM $table WHERE $table_id = " . $_GET['id'])->fetch();
+        $row = $db->query("SELECT * FROM $table WHERE $table_id = " . $id)->fetch();
         
     }
 
@@ -555,8 +545,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?= $title; ?>
-            <small><?php echo $edit ? LBL_Edit : LBL_New; ?></small>
+            <?= $title ?>
+            <small><?= $edit ? LBL_Edit : LBL_New ?></small>
         </h1>
     </section>
 
@@ -566,7 +556,7 @@
             <!-- left column -->
             <div class="col-md-12">
                 
-                <?php echo $msg; ?>
+                <?= $msg??'' ?>
                 <!-- Input addon -->
                 <form role="form" method="post" enctype="multipart/form-data">
 
@@ -577,20 +567,20 @@
                             <div class="row">
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Name; ?></label>
+                                    <label><?= LBL_Name ?></label>
                                     <input type="text" class="form-control" name="pil_name" required="required"
-                                           value="<?php echo $_POST['pil_name'] ?: $row['pil_name'] ?>"/>
+                                           value="<?= $_POST['pil_name'] ?? $row['pil_name'] ?? '' ?>"/>
                                 </div>
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Class; ?></label>
+                                    <label><?= LBL_Class ?></label>
                                     <select name="pil_pilc_id" class="form-control select2">
-                                        <?
+                                        <?php
                                             $sql_pilc = $db->query("SELECT * FROM pils_classes ORDER BY pilc_title_en");
                                             while ($row_pilc = $sql_pilc->fetch(PDO::FETCH_ASSOC)) {
                                                 
                                                 echo '<option value="' . $row_pilc['pilc_id'] . '" ';
-                                                if ($row['pil_pilc_id'] == $row_pilc['pilc_id'] || $_POST['pil_pilc_id'] == $row_pilc['pilc_id']) echo 'selected="selected"';
+                                                if ((isset($row['pil_pilc_id']) && $row['pil_pilc_id'] == $row_pilc['pilc_id']) || (isset($_POST['pil_pilc_id']) && $_POST['pil_pilc_id'] == $row_pilc['pilc_id'])) echo 'selected="selected"';
                                                 echo '>' . $row_pilc['pilc_title_' . $lang] . '</option>';
                                                 
                                             }
@@ -601,14 +591,14 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Nationality; ?></label>
+                                    <label><?= LBL_Nationality ?></label>
                                     <select name="pil_country_id" class="form-control select2">
-                                        <?
+                                        <?php
                                             $sql_c = $db->query("SELECT country_id, country_title_$lang FROM countries ORDER BY country_title_$lang");
                                             while ($row_c = $sql_c->fetch(PDO::FETCH_ASSOC)) {
                                                 
                                                 echo '<option value="' . $row_c['country_id'] . '" ';
-                                                if ($row['pil_country_id'] == $row_c['country_id'] || $_POST['pil_country_id'] == $row_c['country_id']) echo 'selected="selected"';
+                                                if ((isset($row['pil_country_id']) && $row['pil_country_id'] == $row_c['country_id']) || (isset($_POST['pil_country_id']) && $_POST['pil_country_id'] == $row_c['country_id'])) echo 'selected="selected"';
                                                 echo '>' . $row_c['country_title_' . $lang] . '</option>';
                                                 
                                             }
@@ -617,46 +607,46 @@
                                 </div>
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Gender; ?></label>
+                                    <label><?= LBL_Gender ?></label>
                                     <select name="pil_gender" id="pil_gender" class="form-control select2">
-                                        <option value="m" <?php if ($row['pil_gender'] == 'm') echo 'selected="selected"'; ?>><?= LBL_Male; ?></option>
-                                        <option value="f" <?php if ($row['pil_gender'] == 'f') echo 'selected="selected"'; ?>><?= LBL_Female; ?></option>
+                                        <option value="m" <?php if (isset($row['pil_gender']) && $row['pil_gender'] == 'm') echo 'selected="selected"'; ?>><?= LBL_Male ?></option>
+                                        <option value="f" <?php if (isset($row['pil_gender']) && $row['pil_gender'] == 'f') echo 'selected="selected"'; ?>><?= LBL_Female ?></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Phone; ?></label>
+                                    <label><?= LBL_Phone ?></label>
                                     <input type="text" class="form-control" name="pil_phone" required="required"
-                                           value="<?php echo $_POST['pil_phone'] ?: $row['pil_phone'] ?>"/>
+                                           value="<?= $_POST['pil_phone'] ?? $row['pil_phone'] ?? '' ?>"/>
                                 </div>
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_NationalId; ?></label>
+                                    <label><?= LBL_NationalId ?></label>
                                     <input type="text" class="form-control" name="pil_nationalid" required="required"
-                                           value="<?php echo $_POST['pil_nationalid'] ?: $row['pil_nationalid'] ?>"/>
+                                           value="<?= $_POST['pil_nationalid'] ?? $row['pil_nationalid'] ?? '' ?>"/>
                                 </div>
                             </div>
 
 
                             <div class="form-group">
-                                <label><?= LBL_ReservationNumber; ?></label>
+                                <label><?= LBL_ReservationNumber ?></label>
                                 <input type="text" class="form-control" name="pil_reservation_number"
                                        required="required"
-                                       value="<?php echo $_POST['pil_reservation_number'] ?: $row['pil_reservation_number'] ?>"/>
+                                       value="<?= $_POST['pil_reservation_number'] ?? $row['pil_reservation_number'] ?? '' ?>"/>
                             </div>
 
                             <div class="form-group">
-                                <label><?= LBL_City; ?></label>
+                                <label><?= LBL_City ?></label>
                                 <select name="pil_city_id" class="form-control select2"
                                         onchange="cityselected(this.value)" required="required">
-                                    <option value=""><?= LBL_Choose; ?></option>
-                                    <?
+                                    <option value=""><?= LBL_Choose ?></option>
+                                    <?php
                                         $sql_ci = $db->query("SELECT city_id, city_title_$lang FROM cities ORDER BY city_title_$lang");
                                         while ($row_ci = $sql_ci->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $row_ci['city_id'] . '" ';
-                                            if ($row['pil_city_id'] == $row_ci['city_id'] || $_POST['pil_city_id'] == $row_ci['city_id']) echo 'selected="selected"';
+                                            if ((isset($row['pil_city_id']) && $row['pil_city_id'] == $row_ci['city_id']) || (isset($_POST['pil_city_id']) && $_POST['pil_city_id'] == $row_ci['city_id'])) echo 'selected="selected"';
                                             echo '>' . $row_ci['city_title_' . $lang] . '</option>';
                                             
                                         }
@@ -665,12 +655,12 @@
                             </div>
 
                             <div class="form-group">
-                                <label><?= HM_Bus; ?></label>
+                                <label><?= HM_Bus ?></label>
                                 <span id="busarea">
-												<?php if ($row) { ?>
+												<?php if (isset($row)) { ?>
                                                     <select name="pil_bus_id" class="form-control select2">
-													<option value=""><?= LBL_Choose; ?></option>
-													<?
+													<option value=""><?= LBL_Choose ?></option>
+													<?php
                                                         $sql_bus = $db->query("SELECT bus_id, bus_title, bus_seats FROM buses WHERE bus_active = 1 AND bus_city_id = " . $row['pil_city_id'] . " ORDER BY bus_order");
                                                         while ($row_bus = $sql_bus->fetch(PDO::FETCH_ASSOC)) {
                                                             
@@ -693,18 +683,18 @@
                             <div class="row">
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_Photo; ?></label><br/>
-                                    <?php if ($row['pil_photo']) echo '<img src="media/pils/' . $row['pil_photo'] . '" width="150"/>'; ?>
+                                    <label><?= LBL_Photo ?></label><br/>
+                                    <?php if (isset($row['pil_photo']) && $row['pil_photo']) echo '<img src="'.CP_PATH.'/assets/media/pils/' . $row['pil_photo'] . '" width="150"/>'; ?>
                                     <input id="pil_uphoto" name="pil_uphoto" type="file" class="file">
                                 </div>
 
                                 <div class="form-group col-sm-6">
-                                    <label><?= LBL_QRCode; ?></label><br/>
-                                    <?
+                                    <label><?= LBL_QRCode ?></label><br/>
+                                    <?php
                                         
-                                        if ($row) {
+                                        if (isset($row)) {
                                             
-                                            echo '<img src="media/pils_qrcodes/' . $row['pil_qrcode'] . '" style="width:150px" />';
+                                            echo '<img src="'.CP_PATH.'/assets/media/pils_qrcodes/' . $row['pil_qrcode'] . '" style="width:150px" />';
                                             
                                         } else {
                                             
@@ -721,7 +711,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="pil_active" <?php if (!$row || $row['pil_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active; ?>
+                                              name="pil_active" <?php if (!isset($row) || $row['pil_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 
@@ -734,9 +724,9 @@
 
                         <div class="box-body">
 
-                            <h2><?= LBL_Accomodation; ?> ( <?= LBL_MENA; ?> ) </h2>
-                            <?
-                                $accomoinfo = $db->query("SELECT * FROM pils_accomo WHERE pil_code = '" . $row['pil_code'] . "'")->fetch(PDO::FETCH_ASSOC);
+                            <h2><?= LBL_Accomodation ?> ( <?= LBL_MENA ?> ) </h2>
+                            <?php
+                                $accomoinfo = $db->query("SELECT * FROM pils_accomo WHERE pil_code = '" . (isset($row)?$row['pil_code']:'NULL') . "'")->fetch(PDO::FETCH_ASSOC);
                                 
                                 if ($accomoinfo) {
                                     
@@ -881,26 +871,26 @@
 
 
                             <div class="form-group">
-                                <label><?= LBL_AccomodationType; ?></label>
+                                <label><?= LBL_AccomodationType ?></label>
                                 <select name="pil_accomo_type" class="form-control select2"
                                         onchange="pilaccomoselect(this.value);">
-                                    <option value=""><?= LBL_CHANGEACCOMODATION; ?></option>
-                                    <option value="0"><?= LBL_NOACCOMODATION; ?></option>
-                                    <option value="1"><?= HM_Suite; ?></option>
-                                    <option value="2"><?= HM_Building; ?></option>
-                                    <option value="5"><?= LBL_Premises; ?></option>
-                                    <option value="3"><?= HM_Tent; ?></option>
-                                    <!-- <option value="4"><?= HM_Bus; ?></option> -->
+                                    <option value=""><?= LBL_CHANGEACCOMODATION ?></option>
+                                    <option value="0"><?= LBL_NOACCOMODATION ?></option>
+                                    <option value="1"><?= HM_Suite ?></option>
+                                    <option value="2"><?= HM_Building ?></option>
+                                    <option value="5"><?= LBL_Premises ?></option>
+                                    <option value="3"><?= HM_Tent ?></option>
+                                    <!-- <option value="4"><?= HM_Bus ?></option> -->
                                 </select>
                             </div>
 
                             <div id="accomoarea"></div>
 
                             <div class="form-group col-sm-6">
-                                <label><?= LBL_TentNumber_halls; ?> ( <?= arafa; ?> )</label>
+                                <label><?= LBL_TentNumber_halls ?> ( <?= arafa ?> )</label>
                                 <select name="pil_accomo_type_arafa" class="form-control select2">
                                     <option value=""><?= LBL_TentNumber_halls ?></option>
-                                    <?
+                                    <?php
                                         $gender = $row['pil_gender'];
                                         $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 2 AND  tent_gender = '$gender'  ORDER BY tent_title");
                                         while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
@@ -914,7 +904,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-6">
-                                <label><?= with_seat; ?>  </label>
+                                <label><?= with_seat ?>  </label>
                                 <div>
                                     <select name="seat" class="form-control select2">
 
@@ -930,14 +920,14 @@
                     </div>
 
                     <input type="submit" class="col-md-12 btn btn-success"
-                           value="<?php echo $edit ? LBL_Update : LBL_Add; ?>"/>
-                    <input type="hidden" name="id" id="id" value="<?= $_GET['id']; ?>"/>
-                    <input type="hidden" name="pil_code" id="pil_code" value="<?= $row['pil_code']; ?>"/>
-                    <input type="hidden" name="pil_photo" id="pil_photo" value="<?= $row['pil_photo']; ?>"/>
-                    <input type="hidden" name="pil_qrcode" id="pil_qrcode" value="<?= $row['pil_qrcode']; ?>"/>
-                    <input type="hidden" name="pil_card" id="pil_card" value="<?= $row['pil_card']; ?>"/>
-                    <input type="hidden" name="pil_verified" id="pil_verified" value="<?= $row['pil_verified']; ?>"/>
-                    <input type="hidden" name="pil_dateadded" id="pil_dateadded" value="<?= $row['pil_dateadded']; ?>"/>
+                           value="<?= $edit ? LBL_Update : LBL_Add ?>"/>
+                    <input type="hidden" name="id" id="id" value="<?= $id ?>"/>
+                    <input type="hidden" name="pil_code" id="pil_code" value="<?= $row['pil_code']??'' ?>"/>
+                    <input type="hidden" name="pil_photo" id="pil_photo" value="<?= $row['pil_photo']??'' ?>"/>
+                    <input type="hidden" name="pil_qrcode" id="pil_qrcode" value="<?= $row['pil_qrcode']??'' ?>"/>
+                    <input type="hidden" name="pil_card" id="pil_card" value="<?= $row['pil_card']??'' ?>"/>
+                    <input type="hidden" name="pil_verified" id="pil_verified" value="<?= $row['pil_verified']??'' ?>"/>
+                    <input type="hidden" name="pil_dateadded" id="pil_dateadded" value="<?= $row['pil_dateadded']??time() ?>"/>
 
                 </form>
 
@@ -946,8 +936,6 @@
     </section><!-- /.content -->
 
 </div>
-
-<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("#pil_uphoto").fileinput({
@@ -964,15 +952,15 @@
 
         if (accomo_type > 0) {
 
-            $('#accomoarea').html('<?=LBL_Loading;?>');
+            $('#accomoarea').html('<?=LBL_Loading?>');
 
             var data = {
-                pil_id: <?=$row['pil_id'] ?: 0;?>,
+                pil_id: <?=$row['pil_id'] ?? 0?>,
                 pil_gender: $('#pil_gender').val(),
                 pil_accomo_type: accomo_type
             };
 
-            $.post('post/getAccomoInfo.php', data, function (response) {
+            $.post('/post/getAccomoInfo', data, function (response) {
 
                 $('#accomoarea').html(response);
                 $('select').select2();
@@ -989,14 +977,14 @@
 
     function suiteselected(suite_id, gender) {
 
-        $('#hallsarea').html('<?=LBL_Loading;?>');
+        $('#hallsarea').html('<?=LBL_Loading?>');
 
         var data = {
             suite_id: suite_id,
             gender: gender
         };
 
-        $.post('post/getSuiteHalls.php', data, function (response) {
+        $.post('/post/getSuiteHalls', data, function (response) {
             $('#hallsarea').html(response);
             $('select').select2();
         });
@@ -1005,21 +993,21 @@
 
     function hallselected(hall_id) {
 
-        //$('#afterhallsarea').html('<label><?=LBL_Chair1;?> / <?=LBL_Chair2;?> / <?=LBL_Bed;?></label><select name="extratype_id" class="form-control select2"><option value="0"><?=LBL_Choose;?></option><option value="1"><?=LBL_Chair1;?></option><option value="2"><?=LBL_Chair2;?></option><option value="3"><?=LBL_Bed;?></option></select><br /><input type="text" class="form-control" name="extratype_text"  />');
-        $('#afterhallsarea').html('<label><?=LBL_Chair1;?> / <?=LBL_Chair2;?> / <?=LBL_Bed;?></label><select name="extratype_id" class="form-control select2"><option value="0"><?=LBL_Choose;?></option><option value="1"><?=LBL_Chair1;?></option><option value="2"><?=LBL_Chair2;?></option><option value="3"><?=LBL_Bed;?></option></select>');
+        //$('#afterhallsarea').html('<label><?=LBL_Chair1?> / <?=LBL_Chair2?> / <?=LBL_Bed?></label><select name="extratype_id" class="form-control select2"><option value="0"><?=LBL_Choose?></option><option value="1"><?=LBL_Chair1?></option><option value="2"><?=LBL_Chair2?></option><option value="3"><?=LBL_Bed?></option></select><br /><input type="text" class="form-control" name="extratype_text"  />');
+        $('#afterhallsarea').html('<label><?=LBL_Chair1?> / <?=LBL_Chair2?> / <?=LBL_Bed?></label><select name="extratype_id" class="form-control select2"><option value="0"><?=LBL_Choose?></option><option value="1"><?=LBL_Chair1?></option><option value="2"><?=LBL_Chair2?></option><option value="3"><?=LBL_Bed?></option></select>');
         $('select').select2();
     }
 
     function bldselected(bld_id, gender) {
 
-        $('#floorsarea').html('<?=LBL_Loading;?>');
+        $('#floorsarea').html('<?=LBL_Loading?>');
 
         var data = {
             bld_id: bld_id,
             gender: gender
         };
 
-        $.post('post/getBuildingFloors.php', data, function (response) {
+        $.post('/post/getBuildingFloors', data, function (response) {
             $('#floorsarea').html(response);
             $('select').select2();
         });
@@ -1028,14 +1016,14 @@
 
     function floorselected(floor_id, gender) {
 
-        $('#roomsarea').html('<?=LBL_Loading;?>');
+        $('#roomsarea').html('<?=LBL_Loading?>');
 
         var data = {
             floor_id: floor_id,
             gender: gender
         };
 
-        $.post('post/getFloorRooms.php', data, function (response) {
+        $.post('/post/getFloorRooms', data, function (response) {
             $('#roomsarea').html(response);
             $('select').select2();
         });
@@ -1046,20 +1034,20 @@
 
         if (city_id > 0) {
 
-            $('#busarea').html('<br /><?=LBL_Loading;?>');
+            $('#busarea').html('<br /><?=LBL_Loading?>');
 
             var data = {
                 city_id: city_id
             };
 
-            $.post('post/grabBusesOfCity.php', data, function (response) {
+            $.post('/post/grabBusesOfCity', data, function (response) {
                 $('#busarea').html(response);
                 $('select').select2();
             });
 
         } else {
 
-            $('#busarea').html('<br /><?=LBL_ChooseCity;?>');
+            $('#busarea').html('<br /><?=LBL_ChooseCity?>');
 
         }
 

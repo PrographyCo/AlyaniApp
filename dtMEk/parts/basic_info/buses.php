@@ -4,7 +4,7 @@
     $title = HM_PilgrimsBuses;
     $table = 'buses';
     $table_id = 'bus_id';
-    $newedit_page = '/basic_info/edit/bus';
+    $newedit_page = CP_PATH.'/basic_info/edit/bus';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         $id = $_GET['del'];

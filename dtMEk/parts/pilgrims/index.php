@@ -4,7 +4,7 @@
     $title = HM_PILGRIMS;
     $table = 'pils';
     $table_id = 'pil_id';
-    $newedit_page = '/pilgrims/edit';
+    $newedit_page = CP_PATH.'/pilgrims/edit/pilgrim';
     
     $sqlmore1 = $sqlmore2 = $sqlmore3 = $sqlmore4 = $sqlmore5 = $sqlmore6 = '';
     
@@ -69,21 +69,19 @@
             <?= $title ?>
             <a href="<?= $newedit_page ?>" class="btn btn-success pull-<?= DIR_AFTER ?>"><i
                         class="fa fa-star"></i> <?= BTN_AddNew ?></a>
-            <?php /*
-						<a href="export_pils_cards.php?city_id=<?=$_GET['city_id'];?>&gender=<?=$_GET['gender'];?>&pilc_id=<?=$_GET['pilc_id'];?>&code=<?=$_GET['code'];?>&resno=<?=$_GET['resno'];?>&accomo=<?=$_GET['accomo'];?>" class="btn btn-success pull-<?=DIR_AFTER;?>" style="margin-<?=DIR_AFTER;?>: 10px"><i class="fa fa-file-pdf-o"></i> <?=BTN_ExportPilsCards;?></a>
-					*/ ?>
-            <a href="/pil_cards_designs/pils/generated/sticker.php?city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
+
+            <a href="<?= CP_PATH ?>/cards/pils/generated/sticker?city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
                target="_blank" class="btn btn-success pull-<?= DIR_AFTER ?>" style="margin-<?= DIR_AFTER ?>: 10px"><i
                         class="fa fa-file-pdf-o"></i> <?= LBL_sticker ?></a>
-            <a href="/pil_cards_designs/pils/generated/index.php??city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
+            <a href="<?= CP_PATH ?>/cards/pils/generated/index?city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
                target="_blank" class="btn btn-success pull-<?= DIR_AFTER ?>" style="margin-<?= DIR_AFTER ?>: 10px"><i
                         class="fa fa-file-pdf-o"></i> <?= BTN_ExportPilsCards ?></a>
 
 
-            <a href="/pilgrims/actions/export?city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
+            <a href="<?= CP_PATH ?>/pilgrims/actions/export?city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
                class="btn btn-success pull-<?= DIR_AFTER ?>" style="margin-<?= DIR_AFTER ?>: 10px"><i
                         class="fa fa-file-excel-o"></i> <?= BTN_ExportToExcel ?></a>
-            <a href="/pilgrims/actions/import" class="btn btn-success pull-<?= DIR_AFTER ?>"
+            <a href="<?= CP_PATH ?>/pilgrims/actions/import" class="btn btn-success pull-<?= DIR_AFTER ?>"
                style="margin-<?= DIR_AFTER ?>: 10px"><i class="fa fa-file-excel-o"></i> <?= BTN_ImportFromExcel ?></a>
             <a href="<?= $url ?>?deleteall=1&city_id=<?= $_GET['city_id'] ?? '' ?>&gender=<?= $_GET['gender'] ?? '' ?>&pilc_id=<?= $_GET['pilc_id'] ?? '' ?>&code=<?= $_GET['code'] ?? '' ?>&resno=<?= $_GET['resno'] ?? '' ?>&accomo=<?= $_GET['accomo'] ?? '' ?>"
                onclick="return confirm('<?= LBL_DeleteConfirm ?>');" class="btn btn-danger pull-<?= DIR_AFTER ?>"
@@ -263,7 +261,7 @@
                                     <span class="label label-<?= ($row['pil_bus_id'] > 0) ? "success" : "danger" ?>"><?= ($row['pil_bus_id'] > 0) ? LBL_VALIDACCOM : LBL_NOACCOM ?></span>
                                 </td>
                                 <td>
-                                    <a href="/pil_cards_designs/pils/common/index.php?id=<?= $row[$table_id] ?>"
+                                    <a href="<?= CP_PATH ?>/pil_cards_designs/pils/common/index.php?id=<?= $row[$table_id] ?>"
                                        target="_blank"><?= LBL_Card ?></a>
                                 </td>
                                 <td>

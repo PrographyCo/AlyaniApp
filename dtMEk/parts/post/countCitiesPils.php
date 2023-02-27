@@ -4,6 +4,7 @@
     $gender = $_REQUEST['gender'];
     $pilc_id = $_REQUEST['pilc_id'];
     $type = $_REQUEST['type'];
+    $sqlmore1 = $sqlmore2 = '';
     
     $extra = $type == 'arafa' ? 'halls_id = 0' : 'suite_id =0 AND hall_id =0 AND bld_id =0 AND floor_id =0 AND room_id =0 AND tent_id =0';
     

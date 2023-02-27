@@ -4,7 +4,7 @@
     $title = HM_Suites;
     $table = 'suites';
     $table_id = 'suite_id';
-    $newedit_page = '/basic_info/edit/suite';
+    $newedit_page = CP_PATH.'/basic_info/edit/suite';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -62,7 +62,7 @@
                                         <td><?= $row["suite_title"] ?>
                                         <td><?= ($row['suite_gender'] === 'm') ? LBL_Male : LBL_Female ?></td>
                                         <td>
-                                            <a href="/basic_info/halls?suite_id=<?= $row['suite_id'] ?>"><?= $counthalls . ' ' . HM_Halls ?></a>
+                                            <a href="<?= CP_PATH ?>/basic_info/halls?suite_id=<?= $row['suite_id'] ?>"><?= $counthalls . ' ' . HM_Halls ?></a>
                                         </td>
                                         <td><?= number_format($totalcapacity) ?></td>
                                         <td><?= number_format($remaining) ?></td>

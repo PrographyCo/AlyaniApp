@@ -10,7 +10,7 @@
     
     $table = 'staff';
     $table_id = 'staff_id';
-    $newedit_page = '/staff/edit';
+    $newedit_page = CP_PATH.'/staff/edit';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -78,7 +78,7 @@
                                     </td>
                                     <td>
                                         <a href="<?= $newedit_page . '?id=' . $row[$table_id] ?>" class="label label-info"><i class="fa fa-edit"></i><?= LBL_Modify ?></a>
-                                        <a href="/staff/msg?id=<?= $row[$table_id] ?>" class="label label-info"><i class="fa fa-edit"></i><?= LBL_SendMessages ?></a>
+                                        <a href="<?= CP_PATH ?>/staff/msg?id=<?= $row[$table_id] ?>" class="label label-info"><i class="fa fa-edit"></i><?= LBL_SendMessages ?></a>
                                         <a href="<?= $url . '?type=' . $_GET['type'] . '&del=' . $row[$table_id] ?>" class="label label-danger" onclick="return confirm('<?= LBL_DeleteConfirm ?>');"><i class="fa fa-trash"></i><?= LBL_Delete ?></a>
                                     </td>
                                     </tr>

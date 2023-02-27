@@ -4,7 +4,7 @@
     $title = HM_Rooms;
     $table = 'buildings_rooms';
     $table_id = 'room_id';
-    $newedit_page = '/basic_info/edit/room';
+    $newedit_page = CP_PATH.'/basic_info/edit/room';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         

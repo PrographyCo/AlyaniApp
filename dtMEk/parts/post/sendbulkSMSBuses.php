@@ -1,7 +1,7 @@
 <?php
   global $db;
-
-  $cities = $_POST['cities'] ?: $_GET['cities'];
+  
+$cities = $_REQUEST['cities'];
 
   $sms_message = $db->query("SELECT s_value FROM settings WHERE s_id = 15")->fetchColumn();
 

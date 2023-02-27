@@ -4,7 +4,7 @@
     $title = HM_Floors;
     $table = 'buildings_floors';
     $table_id = 'floor_id';
-    $newedit_page = '/basic_info/edit/floor';
+    $newedit_page = CP_PATH.'/basic_info/edit/floor';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -70,7 +70,7 @@
                                             <?= $row['bld_title'] ?>
                                         </td>
                                         <td>
-                                            <a href="/basic_info/rooms?floor_id=<?= $row['floor_id'] ?>"><?= $countrooms . ' ' . HM_Rooms ?></a>
+                                            <a href="<?= CP_PATH ?>/basic_info/rooms?floor_id=<?= $row['floor_id'] ?>"><?= $countrooms . ' ' . HM_Rooms ?></a>
                                         </td>
                                         <td>
                                             <?= number_format($totalcapacity) ?>

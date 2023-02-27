@@ -4,6 +4,7 @@
   $cities = $_REQUEST['cities'];
   $gender = $_REQUEST['gender'];
   $pilc_id = $_REQUEST['pilc_id'];
+  $sqlmore1 = $sqlmore2 = '';
 
   if (is_array($cities) && count($cities)) {
 

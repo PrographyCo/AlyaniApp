@@ -3,7 +3,7 @@
     $title = HM_OurLocations;
     $table = 'ourlocations';
     $table_id = 'loc_id';
-    $newedit_page = '/basic_info/edit/locations';
+    $newedit_page = CP_PATH.'/basic_info/edit/locations';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         

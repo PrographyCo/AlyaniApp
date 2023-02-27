@@ -4,7 +4,7 @@
     $title = HM_Halls;
     $table = 'suites_halls';
     $table_id = 'hall_id';
-    $newedit_page = '/basic_info/edit/hall';
+    $newedit_page = CP_PATH.'/basic_info/edit/hall';
     
     if (isset($_GET['suite_id']) && $_GET['suite_id'] > 0) $newedit_page .= '?suite_id=' . $_GET['suite_id'];
     

@@ -1,8 +1,7 @@
 <?php
   global $db;
-
-
-  $cities = $_POST['cities'] ?: $_GET['cities'];
+  
+  $cities = $_REQUEST['cities'];
 
   $sms_message = $db->query("SELECT s_value FROM settings WHERE s_id = 14")->fetchColumn();
 
@@ -14,6 +13,7 @@
     while ($pilinfo = $pils->fetch(PDO::FETCH_ASSOC)) {
 
       $message = str_replace("{{name}}", $pilinfo['pil_name'], $sms_message);
+      $to_replace = '';
 
       $accomoinfo = $db->query("SELECT * FROM pils_accomo WHERE pil_code = '".$pilinfo['pil_code']."'")->fetch(PDO::FETCH_ASSOC);
       if ($accomoinfo) {

@@ -4,7 +4,7 @@
     $title = HM_Buildings;
     $table = 'buildings';
     $table_id = 'bld_id';
-    $newedit_page = '/basic_info/edit/building';
+    $newedit_page = CP_PATH.'/basic_info/edit/building';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -63,9 +63,9 @@
                                     
                                     ?>
                             <tr><td><?= $row['bld_title'] ?></td><td><?= ($row['bld_type'] === 1)?HM_Building:LBL_Premises ?></td><td>
-                                    <a href="/basic_info/floors?bld_id=<?= $row['bld_id'] ?>"><?= $countfloors . ' ' . HM_Floors ?></a>
+                                    <a href="<?= CP_PATH ?>/basic_info/floors?bld_id=<?= $row['bld_id'] ?>"><?= $countfloors . ' ' . HM_Floors ?></a>
                                 </td>
-                                <td><a href="/basic_info/rooms?bld_id=<?= $row['bld_id'] ?>"><?= $countrooms . ' ' . HM_Rooms ?></a></td>
+                                <td><a href="<?= CP_PATH ?>/basic_info/rooms?bld_id=<?= $row['bld_id'] ?>"><?= $countrooms . ' ' . HM_Rooms ?></a></td>
                                 <td>
                                     <?= number_format($totalcapacity) ?>
                                 </td>

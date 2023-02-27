@@ -14,8 +14,8 @@
         $qr_photo = $db->query("SELECT pil_qrcode FROM $table WHERE $table_id = $id")->fetchColumn();
         
         if ($pil_code) $sqldel2 = $db->query("DELETE FROM pils_accomo WHERE pil_code = '$pil_code'");
-        if ($photo && $photo != 'default_photo.png' && $photo != 'default_male.png' && $photo != 'default_female.png' && is_file('media/pils/' . $photo)) @unlink('media/pils/' . $photo);
-        if ($qr_photo && is_file('media/pils_qrcodes/' . $qr_photo)) @unlink('media/pils_qrcodes/' . $qr_photo);
+        if ($photo && $photo !== 'default_photo.png' && $photo != 'default_male.png' && $photo != 'default_female.png' && is_file(ASSETS_PATH.'media/pils/' . $photo)) @unlink(ASSETS_PATH.'media/pils/' . $photo);
+        if ($qr_photo && is_file(ASSETS_PATH.'media/pils_qrcodes/' . $qr_photo)) @unlink(ASSETS_PATH.'media/pils_qrcodes/' . $qr_photo);
         
         $sqldel1 = $db->query("DELETE FROM $table WHERE $table_id = $id");
         
@@ -88,7 +88,7 @@
                                     <option value="0">
                                         <?= HM_ListAll; ?>
                                     </option>
-                                    <?
+                                    <?php
                                         
                                         $sqlhalls = $db->query("SELECT * FROM tents WHERE tent_type = 2 AND tent_active = 1");
                                         while ($rowh = $sqlhalls->fetch(PDO::FETCH_ASSOC)) {
@@ -134,7 +134,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?
+                            <?php
                                 
                                 
                                 if (is_numeric($_GET['tent_id'])) {

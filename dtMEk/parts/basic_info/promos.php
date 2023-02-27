@@ -4,7 +4,7 @@
     $title = HM_Promos;
     $table = 'promos';
     $table_id = 'promo_id';
-    $newedit_page = '/basic_info/edit/promos';
+    $newedit_page = CP_PATH.'/basic_info/edit/promos';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -52,7 +52,7 @@
                                 while ($row = $sql->fetch()) {
                                     ?>
                                     <tr>
-                                        <td><img src="/assets/media/promos/<?= $row['promo_photo'] ?>" style="width:100px;" alt="image"/>
+                                        <td><img src="<?= CP_PATH ?>/assets/media/promos/<?= $row['promo_photo'] ?>" style="width:100px;" alt="image"/>
                                         </td>
                                         <td><?= $row['promo_title_ar'] ?></td>
                                         <td>

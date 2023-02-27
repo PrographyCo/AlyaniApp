@@ -4,7 +4,7 @@
     $title = HM_Cities;
     $table = 'cities';
     $table_id = 'city_id';
-    $newedit_page = '/basic_info/edit/city';
+    $newedit_page = CP_PATH.'/basic_info/edit/city';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
