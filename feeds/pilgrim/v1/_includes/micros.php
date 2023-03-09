@@ -115,13 +115,13 @@
         
         $lang = 'ur' ? 'ar' : $lang;
         
-        if ($pilinfo['pil_id'] > 0) {
+        if (isset($pilinfo['pil_id']) && $pilinfo['pil_id'] > 0) {
             
             // this is a pilgrim
             $sql = $db->query("SELECT noti_id, noti_body_$lang, noti_dateadded FROM notifications WHERE noti_user_type = 1 AND noti_user_id = " . $pilinfo['pil_id'] . " ORDER BY noti_dateadded DESC");
             return fetchNotifications($sql, $lang);
             
-        } elseif ($pilinfo['staff_id'] > 0) {
+        } elseif (isset($pilinfo['staff_id']) && $pilinfo['staff_id'] > 0) {
             
             // this is a staff
             $sql = $db->query("SELECT noti_id, noti_body_$lang, noti_dateadded FROM notifications WHERE noti_user_type = 2 AND noti_user_id = " . $pilinfo['staff_id'] . " ORDER BY noti_dateadded DESC");
@@ -614,14 +614,14 @@
     function getNewNotificationsCount($pilinfo, $lang, $device_uuid, $platform)
     {
         global $db;
-        if ($pilinfo['pil_id'] > 0) {
+        if (isset($pilinfo['pil_id']) && $pilinfo['pil_id'] > 0) {
             
             // this is a pilgrim
             $lastnoti_id = $db->query("SELECT noti_id FROM notifications_read WHERE noti_user_type = 1 AND noti_user_id = " . $pilinfo['pil_id'] . "")->fetchColumn() ?: 0;
             $count = $db->query("SELECT COUNT(noti_id) FROM notifications WHERE noti_user_type = 1 AND noti_user_id = " . $pilinfo['pil_id'] . " AND noti_id > $lastnoti_id")->fetchColumn();
             return (int)$count;
             
-        } elseif ($pilinfo['staff_id'] > 0) {
+        } elseif (isset($pilinfo['staff_id']) && $pilinfo['staff_id'] > 0) {
             
             // this is a staff
             $lastnoti_id = $db->query("SELECT noti_id FROM notifications_read WHERE noti_user_type = 2 AND noti_user_id = " . $pilinfo['staff_id'] . "")->fetchColumn() ?: 0;

@@ -1,9 +1,10 @@
 <?php
-    require 'config/db.php';
+    $cardurl = $root_absolute_path . trim(CP_PATH."/media/accomo_PDF/ACCOMO_4.pdf",'/');
     
-    $cardurl = 'media/accomo_PDF/ACCOMO_4.pdf';
-    
-    $command = "wkhtmltopdf -T 10 -B 10 -L 10 -R 10 --page-size A4 --dpi 300 \"".$_SERVER['HTTP_HOST'].CP_PATH."/accomo/export/export_accomo_buses_html?bus_id=" . $_GET['bus_id'] . "&city_id=" . $_GET['city_id'] . "\" /home1/atipg2142020/public_html/v2/dtMEk/media/accomo_PDF/ACCOMO_4.pdf";
+    $command = $command = "wkhtmltopdf -T 0 -B 0 -L 0 -R 0 --page-size A4 --dpi 300 \"";
+    $command .= (($_SERVER['SERVER_PORT']==443)?'https':'http')."://".str_replace(['http','https'],'',$_SERVER['HTTP_HOST']).CP_PATH."/accomo/export/export_accomo_buses_html?bus_id=" . $_GET['bus_id'] . "&city_id=" . $_GET['city_id'] . "\" ";
+    $command .= $cardurl;
+
     $result = exec($command);
     
     $content = file_get_contents($cardurl);

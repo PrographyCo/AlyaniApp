@@ -52,7 +52,7 @@
             <?php
                 $sqlmore1 = '';
                 $array_of_tents = array();
-                if (is_numeric($_GET['tent_id']) && $_GET['tent_id'] > 0) $sqlmore1 = " AND pa.tent_id = " . $_GET['tent_id'];
+                if (isset($_GET['tent_id']) && is_numeric($_GET['tent_id']) && $_GET['tent_id'] > 0) $sqlmore1 = " AND pa.tent_id = " . $_GET['tent_id'];
                 
                 $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, t.tent_title
 					FROM pils_accomo pa

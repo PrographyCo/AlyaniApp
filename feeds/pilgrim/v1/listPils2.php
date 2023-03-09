@@ -6,6 +6,7 @@
     $lang = checkLang();
     
     $data = $_POST;
+    requiredInputs(['staff_id','search','city_id','from','maxresults']);
     
     $expectedParams[]['integer'] = 'from';
     $expectedParams[]['integer'] = 'maxresults';

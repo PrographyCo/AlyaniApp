@@ -173,7 +173,7 @@
             
             $items['message'] = 'Missing values: ' . implode(", ", $missing);
             headerBadRequest();
-            echo json_encode($items);
+            echo outputJSON($items);
             exit();
             
         }
@@ -197,7 +197,7 @@
         
         $headers = apache_request_headers();
         
-        if (!$headers['Accesstoken']) {
+        if (!isset($headers['Accesstoken'])) {
             
             headerUnauthorized();
             $items['message'] = 'Missing Accesstoken';
@@ -263,6 +263,14 @@
         }
     }
     
+    function requiredInputs(array $fields) {
+        foreach ($fields as $field)
+        if (empty($_POST[$field]))
+        {
+            outputJSON(['message' => $field.' must be provided']);
+            exit();
+        }
+    }
     function checkIfToken()
     {
         
@@ -336,7 +344,7 @@
         
         $headers = apache_request_headers();
         
-        if (!$headers['Lang']) {
+        if (!isset($headers['Lang'])) {
             
             headerUnauthorized();
             $items['message'] = 'Missing Language (ar) (en) (ur)';
@@ -368,12 +376,12 @@
         $log_data .= 'FILES: ' . json_encode($files) . " \n";
         $log_data .= 'HEADERS: ' . json_encode($headers) . " \n\n<hr />";
         
-        $myfile = "/home1/atipg2142020/public_html/v2/feeds/pilgrim/v1/logs/" . date("d-m-Y") . "-log.txt";
+        $myfile = "logs/" . date("d-m-Y") . "-log.txt";
         if (file_exists($myfile)) {
-            $fh = fopen($myfile, 'a');
+            $fh = fopen($myfile, 'a+');
             fwrite($fh, $log_data);
         } else {
-            $fh = fopen($myfile, 'w');
+            $fh = fopen($myfile, 'w+');
             fwrite($fh, $log_data);
         }
         fclose($fh);

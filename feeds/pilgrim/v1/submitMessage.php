@@ -20,15 +20,15 @@
         
         try {
             
-            $sql = $db->prepare("INSERT INTO feedback VALUES (
-				'',
-				:type,
-				:name,
-				:phone,
-				:email,
-				:message,
-				:dateadded
-			)");
+            $sql = $db->prepare("INSERT INTO feedback(feedb_id,feedb_type,feedb_name,feedb_phone,feedb_email,feedb_message,feedb_dateadded) VALUES (
+                '',
+                :type,
+                :name,
+                :phone,
+                :email,
+                :message,
+                :dateadded
+            )");
             
             $sql->bindValue("type", $data['type']);
             $sql->bindValue("name", $data['name']);

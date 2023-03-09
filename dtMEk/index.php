@@ -1,8 +1,9 @@
 <?php
-    $url = explode('?',$_SERVER['REQUEST_URI'])[0];
-    
     require './config/constants.php';
     
+    $url = explode('?',str_replace(strtolower(CP_PATH),'',strtolower($_SERVER['REQUEST_URI'])))[0];
+    $root_absolute_path = str_replace(trim(CP_PATH,'/'),'',__DIR__);
+
     $includes = [
         'post' => [
             'config/config.inc.php',
@@ -23,18 +24,22 @@
             'config/init.php',
             'config/config.inc.php',
             'config/db.php',
+        ],
+        'login' => [
+            'config/config.inc.php',
+            'config/db.php',
         ]
     ];
     
     if ($url === '' || $url === '/')
-        header('Location: /main/index?'.http_build_query($_GET));
+        header('Location: '.CP_PATH.'/main/index?'.http_build_query($_GET));
     
     elseif (file_exists('parts/'.trim($url,'/').'.php')) {
         
         foreach ($includes as $include => $files) {
             if (strpos($url,$include) > -1) {
                 foreach ($files as $file)
-                    require_once ((CP_PATH==='')?'.':CP_PATH) . '/' . $file;
+                    require_once $file;
         
                 include_once 'parts/' . trim($url, '/') . '.php';
                 exit();
@@ -53,7 +58,7 @@
         exit();
         
     } elseif (file_exists('parts/'.trim($url,'/').'/index.php')) {
-        header('Location: /' . trim($url, '/') . '/index?'.http_build_query($_GET));
+        header('Location: '.CP_PATH.'/' . trim($url, '/') . '/index?'.http_build_query($_GET));
         exit();
     }
     else http_response_code(404);

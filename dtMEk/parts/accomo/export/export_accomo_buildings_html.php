@@ -43,20 +43,20 @@
         <table class="datatable-table4 table table-bordered table-striped">
             <thead>
             <tr>
-                <th><?= LBL_Code; ?></th>
-                <th><?= LBL_Name; ?></th>
-                <th><?= LBL_NationalId; ?></th>
-                <!-- <th><?= LBL_ReservationNumber; ?></th> -->
-                <th><?= LBL_BuildingNumber; ?></th>
-                <th><?= HM_Floor; ?></th>
-                <th><?= LBL_RoomNumber; ?></th>
+                <th><?= LBL_Code ?></th>
+                <th><?= LBL_Name ?></th>
+                <th><?= LBL_NationalId ?></th>
+                <!-- <th><?= LBL_ReservationNumber ?></th> -->
+                <th><?= LBL_BuildingNumber ?></th>
+                <th><?= HM_Floor ?></th>
+                <th><?= LBL_RoomNumber ?></th>
             </tr>
             </thead>
             <tbody>
             <?php
                 $sqlmore1 = $sqlmore2 = '';
-                if (is_numeric($_GET['building_id']) && $_GET['building_id'] > 0) $sqlmore1 = " AND pa.bld_id = " . $_GET['building_id'];
-                if (is_numeric($_GET['floor_id']) && $_GET['floor_id'] > 0) $sqlmore2 = " AND pa.floor_id = " . $_GET['floor_id'];
+                if (isset($_GET['building_id']) && is_numeric($_GET['building_id']) && $_GET['building_id'] > 0) $sqlmore1 = " AND pa.bld_id = " . $_GET['building_id'];
+                if (isset($_GET['floor_id']) && is_numeric($_GET['floor_id']) && $_GET['floor_id'] > 0) $sqlmore2 = " AND pa.floor_id = " . $_GET['floor_id'];
                 
                 $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, b.bld_title, f.floor_title, r.room_title
 					FROM pils_accomo pa

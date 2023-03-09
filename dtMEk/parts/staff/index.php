@@ -10,13 +10,13 @@
     
     $table = 'staff';
     $table_id = 'staff_id';
-    $newedit_page = CP_PATH.'/staff/edit';
+    $newedit_page = CP_PATH . '/staff/edit';
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
         $id = $_GET['del'];
         $photo = $db->query("SELECT staff_photo FROM $table WHERE $table_id = $id")->fetchColumn();
-        if ($photo && $photo !== 'default_photo.png' && is_file(ASSETS_PATH.'media/staff/' . $photo)) @unlink(ASSETS_PATH.'media/staff/' . $photo);
+        if ($photo && $photo !== 'default_photo.png' && is_file(ASSETS_PATH . 'media/staff/' . $photo)) @unlink(ASSETS_PATH . 'media/staff/' . $photo);
         $sqldel1 = $db->query("DELETE FROM $table WHERE $table_id = $id");
         
     }
@@ -38,7 +38,7 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <?= $msg??'' ?>
+                <?= $msg ?? '' ?>
 
                 <div class="box">
                     <div class="box-body">
@@ -48,6 +48,7 @@
                                 <th><?= LBL_Type ?></th>
                                 <th><?= LBL_Name ?></th>
                                 <th><?= LBL_ContactNumbers ?></th>
+                                <th><?= LBL_BusNumber ?></th>
                                 <th><?= LBL_Status ?></th>
                                 <th><?= LBL_Actions ?></th>
                             </tr>
@@ -56,33 +57,48 @@
                             <?php
                                 $sql = $db->query("SELECT * FROM $table WHERE staff_type = $type ORDER BY staff_name");
                                 while ($row = $sql->fetch()) {
+                                    $buses = $db->query('SELECT * FROM buses WHERE bus_staff_id=' . $row['staff_id'])
                                     ?>
                                     <tr>
                                         <td>
-                                        <?= match ($row['staff_type']) {
-                                            1 => HM_Managers,
-                                            2 => HM_Supervisors,
-                                            3 => HM_Muftis,
-                                        } ?>
-                                    </td>
-                                    <td>
-                                        <?= $row['staff_name'] ?>
-                                    </td>
-                                    <td>
-                                        <?= $row['staff_phones'] ?>
-                                    </td>
-                                    <td>
-                                    <span class="label label-<?= (((int)$row['staff_active']) === 1)?'success':'danger' ?>">
-                                        <?= (((int)$row['staff_active']) === 1)?LBL_Active:LBL_Inactive ?>
+                                            <?= match ($row['staff_type']) {
+                                                1 => HM_Managers,
+                                                2 => HM_Supervisors,
+                                                3 => HM_Muftis,
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <?= $row['staff_name'] ?>
+                                        </td>
+                                        <td>
+                                            <?= $row['staff_phones'] ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                                $a = [];
+                                                while ($b = $buses->fetch())
+                                                    $a[]='<a href="'.CP_PATH.'/basic_info/edit/bus?id='.$b['bus_id'].'">'.$b['bus_title'].'</a>';
+                                                echo implode(',',$a);
+                                            ?>
+                                        </td>
+                                        <td>
+                                    <span class="label label-<?= (((int)$row['staff_active']) === 1) ? 'success' : 'danger' ?>">
+                                        <?= (((int)$row['staff_active']) === 1) ? LBL_Active : LBL_Inactive ?>
                                     </span>
-                                    </td>
-                                    <td>
-                                        <a href="<?= $newedit_page . '?id=' . $row[$table_id] ?>" class="label label-info"><i class="fa fa-edit"></i><?= LBL_Modify ?></a>
-                                        <a href="<?= CP_PATH ?>/staff/msg?id=<?= $row[$table_id] ?>" class="label label-info"><i class="fa fa-edit"></i><?= LBL_SendMessages ?></a>
-                                        <a href="<?= $url . '?type=' . $_GET['type'] . '&del=' . $row[$table_id] ?>" class="label label-danger" onclick="return confirm('<?= LBL_DeleteConfirm ?>');"><i class="fa fa-trash"></i><?= LBL_Delete ?></a>
-                                    </td>
+                                        </td>
+                                        <td>
+                                            <a href="<?= $newedit_page . '?id=' . $row[$table_id] ?>"
+                                               class="label label-info"><i class="fa fa-edit"></i><?= LBL_Modify ?></a>
+                                            <a href="<?= CP_PATH ?>/staff/msg?id=<?= $row[$table_id] ?>"
+                                               class="label label-info"><i
+                                                        class="fa fa-edit"></i><?= LBL_SendMessages ?></a>
+                                            <a href="<?= $url . '?type=' . $_GET['type'] . '&del=' . $row[$table_id] ?>"
+                                               class="label label-danger"
+                                               onclick="return confirm('<?= LBL_DeleteConfirm ?>');"><i
+                                                        class="fa fa-trash"></i><?= LBL_Delete ?></a>
+                                        </td>
                                     </tr>
-                            <?php
+                                    <?php
                                 }
                             ?>
 

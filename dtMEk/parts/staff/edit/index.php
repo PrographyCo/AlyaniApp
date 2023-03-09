@@ -84,6 +84,11 @@
             
                     if ($_REQUEST['id'] > 0) $label = LBL_Updated;
                     else $label = LBL_Added;
+                    
+                    if (!empty($_POST['newpassword'])) {
+                        $message = 'تم تغيير كلمة المرور ل: ' . ($_POST['newpassword']);
+                        sendSMSStaffGeneral($id,$message);
+                    }
             
                     $msg = '<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-check"></i>' . $label . '!</h4>' . LBL_Item . ' ' . $label . ' ' . LBL_Successfully . '<br />' . $result . '</div>';
     
@@ -261,7 +266,7 @@
 
         var data = {};
 
-        $.post('/post/generateRand', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/generateRand', data, function (response) {
             $('#newpassword').attr("type", 'text');
             $('#newpassword').val(response.trim());
         });

@@ -5,6 +5,7 @@
     $lang = checkLang();
     
     $data = $_POST;
+    requiredInputs(['device_uuid','platform']);
     
     try {
         
@@ -63,7 +64,7 @@
         // General Guide
         $items['data']['general_guide'] = getGeneralGuide($lang);
         
-        if ($pilinfo['pil_id'] && $pilinfo['pil_id'] > 0) {
+        if (isset($pilinfo['pil_id']) && $pilinfo['pil_id'] > 0) {
             
             // Pilgrim Info
             $items['data']['pilgriminfo'] = getPilInfoExtended($pilinfo, $lang);
@@ -74,7 +75,7 @@
             // Locations Supervisors
             $items['data']['locations_supervisors'] = getClassSupervisors($pilinfo, $lang);
             
-        } elseif ($pilinfo['staff_id'] && $pilinfo['staff_id'] > 0) {
+        } elseif (isset($pilinfo['staff_id']) && $pilinfo['staff_id'] > 0) {
             
             // Staff Info
             $items['data']['staffinfo'] = getStaffInfo($pilinfo['staff_id']);
@@ -83,7 +84,7 @@
             $items['data']['pilgrims'] = 'listPils.php API';
             
             // check if manager, then show complains, inquiries
-            if ($pilinfo['staff_type'] == 1) {
+            if (isset($pilinfo['staff_type']) && $pilinfo['staff_type'] == 1) {
                 
                 // Manager
                 $items['data']['feedback'] = getFeedback($lang);

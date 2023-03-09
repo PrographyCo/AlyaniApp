@@ -1,11 +1,11 @@
 <?php
   global $db;
 
-  $suites = $_REQUEST['suites'];
-  $selected = $_REQUEST['selected'];
+  $suites = $_REQUEST['suites']??[];
+  $selected = $_REQUEST['selected']??[];
 
   $output['html'] = '';
-  if (is_array($suites) && count($suites)) {
+  if (is_array($suites) && count($suites)>0) {
 
     $sqlhalls = $db->query("SELECT hall_id, hall_title FROM suites_halls WHERE hall_suite_id IN (".implode(',', $suites).")");
     $output['html'] .= '<select name="hall_id[]" id="hall_id[]" class="form-control select2" multiple="multiple" data-placeholder="'.LBL_ChooseHalls.'" onchange="calcAvailAccomo();">';

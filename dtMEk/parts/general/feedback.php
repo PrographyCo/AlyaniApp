@@ -3,7 +3,7 @@
     
     $title = HM_Feedback;
     $table = 'feedback';
-    $table_id = CP_PATH.'feedb_id';
+    $table_id = 'feedb_id';
     
     if (is_numeric($_GET['del']??'')) {
         
@@ -38,6 +38,7 @@
                                 <th><?= LBL_Type ?></th>
                                 <th><?= LBL_Name ?></th>
                                 <th><?= LBL_Message ?></th>
+                                <th><?= LBL_Reply ?></th>
                                 <th><?= LBL_DateAdded ?></th>
                                 <th><?= LBL_Actions ?></th>
                             </tr>
@@ -53,10 +54,13 @@
 		                    WHERE 1 $sqlmore1
 		                    ORDER BY feedb_dateadded DESC");
                                 while ($row = $sql->fetch()) {
-                                    if ($row['status'] == 0) {
+                                    if ($row['is_read'] == 0) {
                                         $color = "color:#f00";
-                                    } else {
+                                    } elseif ($row['replied'] == 0)
+                                    {
                                         $color = "color:#000";
+                                    } else {
+                                        $color = "color:#01950c";
                                     }
                                     echo "<tr style='$color'>";
                                     echo '<td>';
@@ -76,16 +80,21 @@
                                     echo nl2br($row['feedb_message']);
                                     echo '</td>';
                                     
+                                    echo '<td>';
+                                    echo nl2br(stripslashes($row['reply_body']));
+                                    echo '</td>';
+                                    
                                     echo '<td style="display:inline-block; direction:ltr">';
                                     echo date("j F Y g:i:s a", $row['feedb_dateadded']);
                                     echo '</td>';
                                     
                                     echo '<td>';
                                     echo '
-													<a href="'.CP_PATH.'/general/feedback_details?id=' . $row[$table_id] . '" class="label label-success"><i class="fa fa-info"></i> ' . LBL_Details . '</a>
-													<a href="' . $url . '?feedb_type=' . ($_GET['feedb_type']??'') . '&del=' . $row[$table_id] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
+                                    <a href="'.CP_PATH.'/general/feedback_details?id=' . $row[$table_id] . '" class="btn btn-success"><i class="fa fa-info"></i> ' . LBL_Details . '</a>
+                                    <a href="' . $url . '?feedb_type=' . ($_GET['feedb_type']??'') . '&del=' . $row[$table_id] . '" class="btn btn-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
                                     echo '</td>
 	                      </tr>';
+                                    $db->query("UPDATE $table SET is_read=1 WHERE feedb_id=".$row['feedb_id']);
                                 
                                 }
                             ?>

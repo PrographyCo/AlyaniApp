@@ -168,7 +168,7 @@
                 </div>
     
                 <?php
-                    if ($_POST) { ?>
+                    if (!empty($_POST)) { ?>
                         <div class="box">
                             <div class="box-body">
     
@@ -191,17 +191,14 @@
                                             $count[$city_title] = 0;
                                             $sqlmore1 = $sqlmore2 = '';
                                             
-                                            if ($_POST['gender']) $sqlmore1 = " AND pil_gender='" . $_POST['gender'] . "'";
-                                            if ($_POST['pilc_id']) $sqlmore2 = " AND pil_pilc_id='" . $_POST['pilc_id'] . "'";
+                                            if (!empty($_POST['gender'])) $sqlmore1 = " AND pil_gender='" . $_POST['gender'] . "'";
+                                            if (!empty($_POST['pilc_id'])) $sqlmore2 = " AND pil_pilc_id='" . $_POST['pilc_id'] . "'";
                                             
                                             $sql1 = $db->query("SELECT pil_id, pil_code, pil_gender FROM pils WHERE pil_city_id = $city_id AND ( (pil_code NOT IN (SELECT pil_code FROM pils_accomo))  OR (pil_code IN (SELECT pil_code FROM pils_accomo WHERE suite_id =0 AND hall_id =0 AND bld_id =0 AND floor_id =0 AND room_id =0 AND tent_id =0))) $sqlmore1 $sqlmore2 ORDER BY pil_reservation_number");
-                                            // echo "<pre>";
-                                            // print_r($sql1->fetchAll());die;
                                             if ($sql1->rowCount() > 0) {
                                                 
                                                 while ($row1 = $sql1->fetch(PDO::FETCH_ASSOC)) {
                                                     $accomodated = false;
-                                                    
                                                     
                                                     if (!$accomodated && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
                                                         
@@ -219,7 +216,7 @@
                                                     
                                                     if (!$accomodated && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
                                                         
-                                                        // accomodate to suites
+                                                        // accomodate to buildings
                                                         $accomodated = AccomoBuildings($_POST['building_id'], $_POST['floor_id'], $_POST['room_id'], $row1['pil_code'], $row1['pil_gender']);
                                                         if ($accomodated) {
                                                             
@@ -233,7 +230,7 @@
                                                     
                                                     if (!$accomodated && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
                                                         
-                                                        // accomodate to suites
+                                                        // accomodate to tents
                                                         $accomodated = AccomoTents($_POST['tent_id'][$i], $row1['pil_code'], $row1['pil_gender']);
                                                         if ($accomodated) {
                                                             
@@ -291,7 +288,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_suites_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_suites_selected', data, function (response) {
 
             $('#hallsarea').html(response.html);
             $('select').select2();
@@ -309,7 +306,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_bldtype_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_bldtype_selected', data, function (response) {
             $('#buildingsarea').html(response);
             $('select').select2();
 
@@ -326,7 +323,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_buildings_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_buildings_selected', data, function (response) {
 
             $('#floorsarea').html(response);
             $('select').select2();
@@ -344,7 +341,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_floors_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_floors_selected', data, function (response) {
 
             $('#roomsarea').html(response);
             $('select').select2();
@@ -364,7 +361,7 @@
             type: 'mena'
         };
 
-        $.post('/post/countCitiesPils', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/countCitiesPils', data, function (response) {
 
             $('#countpils').html(response);
 
@@ -388,7 +385,7 @@
             halls_arfa: $('#halls_arfa').val()
         };
 
-        $.post('/post/calcAvailAccomo', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/calcAvailAccomo', data, function (response) {
 
             if (response.availcount) $('#availcount').html(response.availcount);
             else $('#availcount').html('0');
@@ -407,7 +404,7 @@
             gender
         };
 
-        $.post('/post/getAccomosGender', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/getAccomosGender', data, function (response) {
             $('#SuitesArea').html(response.SuitesArea);
             $('#BuildingsTypeArea').html(response.BuildingsTypeArea);
             $('#TentsArea').html(response.TentsArea);

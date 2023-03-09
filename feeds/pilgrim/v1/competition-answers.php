@@ -5,6 +5,8 @@
     $lang = checkLang();
     $userinfo = checkToken();
     
+    requiredInputs(['competition_id','questions']);
+    
     if (isset($_POST['competition_id'])) {
         
         $competition_id = $_POST['competition_id'];

@@ -43,13 +43,13 @@
         <table class="datatable-table4 table table-bordered table-striped">
             <thead>
             <tr>
-                <th><?= LBL_Code; ?></th>
-                <th><?= LBL_Name; ?></th>
-                <th><?= LBL_NationalId; ?></th>
-                <!-- <th><?= LBL_ReservationNumber; ?></th> -->
-                <th><?= LBL_SuiteNumber; ?></th>
-                <th><?= HM_Hall; ?></th>
-                <!-- <th><?= LBL_Chair1; ?> / <?= LBL_Chair2; ?> / <?= LBL_Bed; ?></th> -->
+                <th><?= LBL_Code ?></th>
+                <th><?= LBL_Name ?></th>
+                <th><?= LBL_NationalId ?></th>
+                <!-- <th><?= LBL_ReservationNumber ?></th> -->
+                <th><?= LBL_SuiteNumber ?></th>
+                <th><?= HM_Hall ?></th>
+                <!-- <th><?= LBL_Chair1 ?> / <?= LBL_Chair2 ?> / <?= LBL_Bed ?></th> -->
             </tr>
             </thead>
             <tbody>
@@ -59,8 +59,8 @@
                 $array_of_halls = array();
                 $sqlmore1 = $sqlmore2 = '';
                 
-                if (is_numeric($_GET['suite_id']) && $_GET['suite_id'] > 0) $sqlmore1 = " AND pa.suite_id = " . $_GET['suite_id'];
-                if (is_numeric($_GET['hall_id']) && $_GET['hall_id'] > 0) $sqlmore2 = " AND pa.hall_id = " . $_GET['hall_id'];
+                if (isset($_GET['suite_id']) && is_numeric($_GET['suite_id']) && $_GET['suite_id'] > 0) $sqlmore1 = " AND pa.suite_id = " . $_GET['suite_id'];
+                if (isset($_GET['hall_id']) && is_numeric($_GET['hall_id']) && $_GET['hall_id'] > 0) $sqlmore2 = " AND pa.hall_id = " . $_GET['hall_id'];
                 
                 $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title, h.hall_title
 					FROM pils_accomo pa

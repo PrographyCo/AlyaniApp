@@ -639,6 +639,7 @@
 // return $halls_arfa;
         global $db;
         $totals = 0;
+        $sqlmore1 = $sqlmore2 = '';
         
         // Suites && Halls
         if (is_array($suites)) {

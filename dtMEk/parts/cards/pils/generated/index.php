@@ -11,7 +11,7 @@
     <style>
         @font-face {
             font-family: ArbFONTS;
-            src: url("<?php CP_PATH ?>/assets/fonts/ArbFONTS-Mohammad-Bold-normal.ttf");
+            src: url("<?= CP_PATH ?>/assets/fonts/ArbFONTS-Mohammad-Bold-normal.ttf");
         }
         .item-setting{
                 font-size: 36px;

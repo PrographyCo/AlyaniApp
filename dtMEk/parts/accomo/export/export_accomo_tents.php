@@ -1,8 +1,8 @@
 <?php
     
-    $cardurl = 'media/accomo_PDF/ACCOMO_3.pdf';
+    $cardurl = $root_absolute_path . trim(CP_PATH."/media/accomo_PDF/ACCOMO_3.pdf",'/');
     
-    $command = "wkhtmltopdf -T 10 -B 10 -L 10 -R 10 --page-size A4 --dpi 300 \"".$_SERVER['HTTP_HOST'].CP_PATH."/accomo/export/export_accomo_tents_html?tent_id=" . $_GET['tent_id'] . "\" /home1/atipg2142020/public_html/v3/dtMEk/media/accomo_PDF/ACCOMO_55.pdf";
+    $command = "wkhtmltopdf -T 10 -B 10 -L 10 -R 10 --page-size A4 --dpi 300 \"".$_SERVER['HTTP_HOST'].CP_PATH."/accomo/export/export_accomo_tents_html?tent_id=" . $_GET['tent_id'] . "\" ". $cardurl;
     $result = exec($command);
     
     $content = file_get_contents($cardurl);

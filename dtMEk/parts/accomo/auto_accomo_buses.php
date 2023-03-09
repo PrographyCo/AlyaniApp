@@ -202,7 +202,7 @@
             cities: $('#city_id\\[\\]').val()
         };
 
-        $.post('/post/accomo_buses_cities_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_buses_cities_selected', data, function (response) {
 
             $('#busesarea').html(response);
             $('select').select2();
@@ -221,7 +221,7 @@
             pilc_id: $('#pilc_id').val()
         };
 
-        $.post('/post/countCitiesPilsBuses', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/countCitiesPilsBuses', data, function (response) {
 
             $('#countpils').html(response);
 
@@ -238,7 +238,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/calcAvailAccomoBuses', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/calcAvailAccomoBuses', data, function (response) {
 
             if (response.availcount) $('#availcount').html(response.availcount);
             else $('#availcount').html('0');

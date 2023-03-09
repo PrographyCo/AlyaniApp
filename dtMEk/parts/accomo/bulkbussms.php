@@ -75,7 +75,7 @@
             cities: $('#city_id\\[\\]').val()
         };
 
-        $.post('/post/countCitiesPilsBusesAccomo', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/countCitiesPilsBusesAccomo', data, function (response) {
 
             $('#countpils').html(response);
 
@@ -95,7 +95,7 @@
             cities
         };
 
-        $.post('/post/sendbulkSMSBuses', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/sendbulkSMSBuses', data, function (response) {
 
             $('#bulksmsresult').html(response);
 

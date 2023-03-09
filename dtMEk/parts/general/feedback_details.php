@@ -2,9 +2,9 @@
     global $db, $url, $lang, $session;
     
     $title = HM_Feedback;
-    $table = '';
-    $table_id = '';
-    $newedit_page = '';
+    $table = 'feedback';
+    $table_id = 'feedb_id';
+    
     $settings_fromname = $db->query("SELECT s_value FROM settings WHERE s_id = 2")->fetchColumn();
     $settings_fromemail = $db->query("SELECT s_value FROM settings WHERE s_id = 3")->fetchColumn();
     
@@ -17,8 +17,10 @@
             
             
             $emailto = $feedbinfo['feedb_email'];
-            $subject = $_POST['subject'] ? $_POST['subject'] : "A new contact from " . $settings_fromname;
+            $subject = $_POST['subject'] ?? "A new contact from " . $settings_fromname;
             $body = nl2br($_POST['message']);
+            
+            $db->query("UPDATE feedback SET reply_subject='".addslashes($subject)."', reply_body='".addslashes($body)."' WHERE feedb_id = $feedb_id");
             
             $headers = "From: " . $settings_fromname . " <$settings_fromemail>\r\n" .
                 "Reply-To: Kottouf <$settings_fromemail>\r\n" .

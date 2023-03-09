@@ -12,7 +12,6 @@
         
     }
 
-
 ?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -21,9 +20,9 @@
         <h1>
             <?= $title ?>
             <!--<img src="images/logo.png" style="width:10%"/>-->
-            <button class="btn btn-success pull-<?= DIR_AFTER ?>" onclick="pdfbuses()"
+            <a class="btn btn-success pull-<?= DIR_AFTER ?>" href="<?= CP_PATH ?>/accomo/export/export_accomo_buses?<?= http_build_query($_GET) ?>"
                     style="margin-<?= DIR_AFTER ?>: 10px" target="_blank"><i
-                        class="fa fa-file-pdf-o"></i> <?= BTN_ExportToPDF ?></button>
+                        class="fa fa-file-pdf-o"></i> <?= BTN_ExportToPDF ?></a>
             <a href="?remove=1&bus_id=<?= $_GET['bus_id']??'' ?>&city_id=<?= $_GET['city_id']??'' ?>"
                onclick="return confirm('<?= LBL_RemoveConfirm ?>');" class="btn btn-danger pull-<?= DIR_AFTER ?>"
                style="margin-<?= DIR_AFTER ?>: 10px"><i class="fa fa-trash"></i> <?= BTN_REMOVEACCOMO2 ?></a>
@@ -98,74 +97,6 @@
                         <div>
                             <img src="<?= CP_PATH ?>/assets/images/logo.png" style="width:10%"/>
                         </div>
-                        <?php if (isset($_GET['city_id']) && $_GET['city_id']){
-                            
-                            $stmt = $db->prepare("SELECT * FROM cities WHERE city_id = ?");
-                            $stmt->execute(array($_GET['city_id']));
-                            $city = $stmt->fetch();
-                            
-                            $stmt = $db->prepare("SELECT * FROM buses WHERE bus_id = ?");
-                            $stmt->execute(array($_GET['bus_id']??0));
-                            $bus = $stmt->fetch();
-                            
-                            $stmt = $db->prepare("SELECT * FROM staff WHERE staff_id = ?");
-                            $stmt->execute(array($bus['bus_staff_id']??0));
-                            $staff = $stmt->fetch();
-                        ?>
-
-                        <div style="padding: 26px;font-size: 18px;">
-                            <p><?= ($bus['bus_title']??'') . " - " . ($bus['bus_order']??'') ?></p>
-                            <p><?= HM_staff_name . ': ' . ($staff['staff_name']??'') . " - " . HM_staff_phone . ': ' . ($staff['staff_phones']??'') ?></p>
-                            <p><?= $city['city_title_' . $_COOKIE['lang']] ?></p>
-                        </div>
-                    </div>
-
-                    <div class="box-body">
-                        <table class=" table table-bordered table-striped" id="myTable2">
-                            <thead>
-                            <tr>
-                                <th><?= LBL_Code ?></th>
-                                <th><?= LBL_Name ?></th>
-                                <th><?= LBL_NationalId ?></th>
-                                <th><?= LBL_PhoneNumber ?></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                                $sqlmore2 = $sqlmore1 = '';
-                                if (isset($_GET['bus_id']) && is_numeric($_GET['bus_id']) && $_GET['bus_id'] > 0) $sqlmore1 = " AND p.pil_bus_id = " . $_GET['bus_id'];
-                                if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore2 = " AND p.pil_city_id = " . $_GET['city_id'];
-                                
-                                $sql = $db->query("SELECT p.pil_code, p.pil_name, p.pil_nationalid, p.pil_reservation_number , p.pil_phone, b.bus_title
-												FROM pils p
-												LEFT OUTER JOIN buses b ON p.pil_bus_id = b.bus_id
-												WHERE p.pil_bus_id > 0 $sqlmore1 $sqlmore2");
-                                while ($row = $sql->fetch()) {
-                                    
-                                    echo '<tr>';
-                                    echo '<td>';
-                                    echo $row['pil_code'];
-                                    echo '</td>';
-                                    echo '<td>';
-                                    echo $row['pil_name'];
-                                    echo '</td>';
-                                    echo '<td>';
-                                    echo $row['pil_nationalid'];
-                                    echo '</td>';
-                                    echo '<td>';
-                                    echo $row['pil_phone'];
-                                    echo '</td>';
-                                    
-                                    echo '</tr>';
-                                    
-                                }
-                            ?>
-
-                            </tbody>
-                        </table>
-                    </div><!-- /.box-body -->
-                    <?php } else { ?>
-
                         <div class="box-body">
                             <table class=" table table-bordered table-striped" id="myTable2">
                                 <thead>
@@ -174,6 +105,7 @@
                                     <th><?= LBL_Name ?></th>
                                     <th><?= LBL_NationalId ?></th>
                                     <th><?= LBL_PhoneNumber ?></th>
+                                    <th><?= LBL_BusNumber ?></th>
                                     <th><?= HM_staff_name ?></th>
                                     <th><?= HM_staff_phone ?></th>
                                 </tr>
@@ -185,29 +117,38 @@
                                     if (isset($_GET['bus_id']) && is_numeric($_GET['bus_id']) && $_GET['bus_id'] > 0) $sqlmore1 = " AND p.pil_bus_id = " . $_GET['bus_id'];
                                     if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore2 = " AND p.pil_city_id = " . $_GET['city_id'];
                                     
-                                    $sql = $db->query("SELECT p.pil_code, p.pil_name, p.pil_nationalid, p.pil_reservation_number , p.pil_phone, b.bus_title , b.bus_staff_id
+                                    $sql = $db->query("SELECT p.pil_code, p.pil_name, p.pil_nationalid, p.pil_reservation_number , p.pil_phone, b.bus_title, b.bus_staff_id
 												FROM pils p
 												LEFT OUTER JOIN buses b ON p.pil_bus_id = b.bus_id
 												WHERE p.pil_bus_id > 0 $sqlmore1 $sqlmore2");
                                     while ($row = $sql->fetch()) {
-                                        
                                         echo '<tr>';
+                                        
                                         echo '<td>';
                                         echo $row['pil_code'];
                                         echo '</td>';
+                                        
                                         echo '<td>';
                                         echo $row['pil_name'];
                                         echo '</td>';
+                                        
                                         echo '<td>';
                                         echo $row['pil_nationalid'];
                                         echo '</td>';
+                                        
                                         echo '<td>';
                                         echo $row['pil_phone'];
                                         echo '</td>';
+    
+                                        echo '<td>';
+                                        echo $row['bus_title'];
+                                        echo '</td>';
+                                        
                                         echo '<td>';
                                         $staff = $db->query("SELECT staff_name , staff_phones FROM staff WHERE staff_id = " . $row['bus_staff_id'])->fetch();
                                         echo $staff['staff_name'];
                                         echo '</td>';
+                                        
                                         echo '<td>';
                                         echo $staff['staff_phones'];
                                         echo '</td>';
@@ -220,9 +161,6 @@
                                 </tbody>
                             </table>
                         </div><!-- /.box-body -->
-                    
-                    
-                    <?php } ?>
                 </div><!-- /.box -->
             </div><!--/.col (right) -->
 
@@ -247,7 +185,7 @@
             city_id
         };
 
-        $.post('/post/accomo_buses_cities_selected2', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_buses_cities_selected2', data, function (response) {
 
             $('.busesarea').html(response);
             $('select').select2();

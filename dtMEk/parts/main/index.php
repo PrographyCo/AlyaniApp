@@ -1,7 +1,7 @@
 <?php
     global $db;
     
-    $stmt = $db->prepare("SELECT * FROM feedback WHERE status=?");
+    $stmt = $db->prepare("SELECT * FROM feedback WHERE is_read=?");
     $stmt->execute(array(0));
     $feedback = $stmt->rowCount();
 ?>

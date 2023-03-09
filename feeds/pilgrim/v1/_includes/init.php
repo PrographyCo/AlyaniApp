@@ -1,7 +1,8 @@
 <?php
+
+//    error_reporting(E_ALL);
+//    ini_set('display_errors', 0);
     
-    //error_reporting(E_ALL);
-    //ini_set('display_errors', 1);
     require_once 'constants.php';
     require_once 'db.php';
     require_once 'functions.php';

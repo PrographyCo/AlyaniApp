@@ -1,8 +1,9 @@
-<?
-require '../../../init.php';
-require '../../../db.php';
-if (!is_numeric($_GET['id'])) die();
-$id = $_GET['id'];
+<?php
+    global $db, $url, $lang, $session;
+    $sqlmore1 = $sqlmore2 = $sqlmore3 = $sqlmore4 = $sqlmore5 = $sqlmore6 = '';
+    
+    if (!is_numeric($_GET['id'])) die('id must be provided');
+    $id = $_GET['id'];
 
 $pilinfo = $db->query("SELECT p.*, c.country_title_ar, ci.city_title_ar, cl.pilc_title_ar, cl.pilc_text_id, b.bus_staff_id, b.bus_title FROM pils p
   LEFT OUTER JOIN countries c ON p.pil_country_id = c.country_id
@@ -28,7 +29,7 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
     <style>
         @font-face {
             font-family: ArbFONTS;
-            src: url(ArbFONTS-Mohammad-Bold-normal.ttf);
+            src: url("<?= CP_PATH ?>/assets/fonts/ArbFONTS-Mohammad-Bold-normal.ttf");
         }
         .item-setting{
                 font-size: 36px;
@@ -47,16 +48,16 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
         }
     </style>
   </head>
-  <body style="font-family:'ArbFONTS'; position: relative;width: 991px;  height: 1600px; margin: 0 auto; color: #555555;">
-      <div class="main" style="background-image: url('<?=$pilc_design_id;?>.png');background-repeat: no-repeat;background-size: 100% 100%;display: block;width: 100%;height: 100%;max-height: 100%;">
+  <body style="font-family:'ArbFONTS',serif; position: relative;width: 991px;  height: 1600px; margin: 0 auto; color: #555555;">
+      <div class="main" style="background-image: url('<?= CP_PATH ?>/assets/media/cards/pils/common/<?= $pilc_design_id ?>.png');background-repeat: no-repeat;background-size: 100% 100%;display: block;width: 100%;height: 100%;max-height: 100%;">
 
     <header style="padding: 50px 0 40px;margin-bottom: 8px;display: block;float: right;width: 100%;">
       <div id="logo" style="display:block;width:100%; float: left;">
-        <img src="../../../media/pils_qrcodes/<?=$pilinfo['pil_qrcode'];?>" style="display: block;width:250px;height: 250px;padding-left: 67px;">
+        <img src="<?= CP_PATH ?>/assets/media/pils_qrcodes/<?=$pilinfo['pil_qrcode'];?>" style="display: block;width:250px;height: 250px;padding-left: 67px;">
       </div>
     </header>
       <div id="pic" style="display: block;float: right;width: 100%; margin-top: 5px">
-          <img  src="../../../media/pils/<?=$pilinfo['pil_photo'];?>" style="display: inline-block; float:right;width:383px;margin-right: 60px;height:350px;background:#fff;" />
+          <img  src="<?= CP_PATH ?>/assets/media/pils/<?=$pilinfo['pil_photo'];?>" style="display: inline-block; float:right;width:383px;margin-right: 60px;height:350px;background:#fff;" />
           <div style="display: inline-block; float:left;width:520px;height:140px;background: #fff;margin-top: 90px;">
               <p style="font-size: 36px;color:#37383a; display: block;width:100%;text-align: right;margin: 0; font-weight: bold;padding: 10px 0;">البرنامج : <?=$pilinfo['pilc_title_ar'];?></p>
               <p style="font-size: 36px;color:#37383a; display: block;width:100%;text-align: right;margin: 0; font-weight: bold;"><?=$cardtext;?> : <span style="; font-family: Verdana"><?=$campno;?></span></p>
@@ -68,8 +69,8 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
             <h3 class="col-lg-12 item-setting">رقم الهوية:&nbsp;&nbsp;&nbsp;<span style="font-family: Verdana"><?=$pilinfo['pil_nationalid'];?></span></h3>
             <h3 class="col-lg-12 item-setting">رقم الحاج:&nbsp;&nbsp;&nbsp;<span style="font-family: Verdana"><?=$pilinfo['pil_code'];?></span></h3>
             </div>
-
-            <?
+    
+            <?php
             $accomoinfo = $db->query("SELECT * FROM pils_accomo WHERE pil_code = '".$pilinfo['pil_code']."'")->fetch(PDO::FETCH_ASSOC);
               if ($accomoinfo) {
 
@@ -85,7 +86,7 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
                          <p class="col-lg-3 item-setting"> الجناح:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$suite_title.'</span></p>
                         <p class="col-lg-3 item-setting" >الصالة:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$hall_title.'</span></p>
                        '   ;
-                        
+                       
 
                 if ($accomoinfo['extratype_text']) {
                   
@@ -94,8 +95,8 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
                   elseif ($accomoinfo['extratype_id'] == 2) echo '<p class="col-lg-3 item-setting">مقعد:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$accomoinfo['extratype_text'].'</span></p>';
                   elseif ($accomoinfo['extratype_id'] == 3) echo '<p class="col-lg-3 item-setting">سرير:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$accomoinfo['extratype_text'].'</span></p>';
                 }
-                 
-                        
+                
+                
                 echo '</div>';
               }elseif ($accomoinfo['bld_id'] != 0) {
 
@@ -103,7 +104,7 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
                 $bld_title = $db->query("SELECT bld_title FROM buildings WHERE bld_id = ".$accomoinfo['bld_id'])->fetchColumn();
                 $floor_title = $db->query("SELECT floor_title FROM buildings_floors WHERE floor_id = ".$accomoinfo['floor_id'])->fetchColumn();
                 $room_title = $db->query("SELECT room_title FROM buildings_rooms WHERE room_id = ".$accomoinfo['room_id'])->fetchColumn();
-            echo '<div class="container row" dir="rtl">'; 
+            echo '<div class="container row" dir="rtl">';
              echo '<p class="col-lg-3 item-setting" >'.menaresidence.':</p>';
                 echo '<p class="col-lg-3 item-setting" >الغرفة:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$room_title.'</span></p>
                 <p class="col-lg-3 item-setting" >الدور:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$floor_title.'</span></p>
@@ -119,7 +120,7 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
 
                 if ($tent_type == 1) $tent_text = LBL_TentType1;
                 elseif ($tent_type == 2) $tent_text = LBL_TentType2;
-             echo '<div class="container row" dir="rtl">';  
+             echo '<div class="container row" dir="rtl">';
                   echo '<p class="col-lg-6 item-setting">'.menaresidence.':</p>';
                 echo '<p class="col-lg-6 item-setting">'.$tent_text.':&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$tent_title.'</span></p>';
             
@@ -143,9 +144,9 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
                                     if(!empty($accomo)){
                                         
                                           if($accomo['seats'] != 0){
-                                                        
-                                                            
-                                                            
+                                                
+                                                
+                                                
                                                 $stmt=$db->prepare("SELECT * FROM pils_accomo WHERE  halls_id = ? AND seats = ?");
                                                 $stmt->execute(array($accomo['halls_id'],1));
                                                 $seats=$stmt->fetchAll();
@@ -166,9 +167,9 @@ $pilc_phones = $db->query("SELECT pilc_phones FROM pils_classes WHERE pilc_id = 
                                 }else{
                                       $seattitle = without_seat;
                                 }
-                       echo '<div class="container row" dir="rtl">';      
+                       echo '<div class="container row" dir="rtl">';
                        
-                                    echo '                                     
+                                    echo '
                                             <p class="col-lg-3 item-setting">'.Arafaresidence.'</p>
                                             <p class="col-lg-4 item-setting">'.$tent_text.':&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$tent_title.'</span></p>
                                             <p class="col-lg-4 item-setting">'.seat.':&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$seattitle.'</span></p>

@@ -19,7 +19,7 @@ class Config {
     public $allowedCountries = []; //'EG', 'SA'
     public $showErrors = false;
     public $forceLogin = true;
-    public $loginURL = 'login.php';
+    public $loginURL = CP_PATH.'/main/login';
     public $con;
 
     public static $dbhost = "localhost"; // Host Name
@@ -61,7 +61,7 @@ class Config {
         if (!strpos($_SERVER['REQUEST_URI'], 'auth') && !strpos($_SERVER['REQUEST_URI'], '_POST') && !strpos($_SERVER['REQUEST_URI'], 'login') && !strpos($_SERVER['REQUEST_URI'], 'post')) $_SESSION['ref'] = $_SERVER['REQUEST_URI'];
 
         // Force login (for control panels)
-        if ($this->forceLogin && !$this->logged_in && basename($_SERVER['PHP_SELF']) !== 'login.php' && basename($_SERVER['PHP_SELF']) !== 'install.php') {
+        if ($this->forceLogin && !$this->logged_in && basename($_SERVER['PHP_SELF']) !== 'login' && basename($_SERVER['PHP_SELF']) !== 'install' && strpos($_SERVER['PHP_SELF'],'cards') === -1) {
             header("Location: ".$this->loginURL);
             exit();
         }
@@ -171,7 +171,7 @@ class Config {
                 }
 
                 $_SESSION['userinfo'] = $this->userinfo;
-                header("Location: index.php");
+                header("Location: ".CP_PATH."/main/index");
                 exit();
 
             } else $this->error = "Incorrect login information provided";

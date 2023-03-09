@@ -36,7 +36,7 @@
                                         echo '<div class="col-sm-4" style="margin-bottom:20px">
 													<label><input type="radio" name="design_id" value="' . $i . '" ';
                                         if ($design_id == $i) echo 'checked="checked"';
-                                        echo '/> <img src="'.CP_PATH.'/cards/managers/common/' . $i . '.png" style="height:300px;" /></label>
+                                        echo '/> <img src="'.CP_PATH.'/assets/media/cards/managers/common/' . $i . '.png" style="height:300px;" /></label>
 													</div>';
                                     
                                     }

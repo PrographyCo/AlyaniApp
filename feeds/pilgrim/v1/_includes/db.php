@@ -2,8 +2,8 @@
     $dbhost = "localhost"; // Host Name
     $dbport = "3306"; //Port
     
-    $dbuser = "iqbay487_db3"; // MySQL Database Username
-    $dbpass = ";QQiJrEjHDpz"; // MySQL Database Password
+    $dbuser = "root"; // iqbay487_db3 // MySQL Database Username
+    $dbpass = ""; //;QQiJrEjHDpz // MySQL Database Password
     $dbname = "iqbay487_db3"; // Database Name
 
 

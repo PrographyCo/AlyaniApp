@@ -1,12 +1,13 @@
-<?php include 'layout/header.php';
+<?php
+    global $db, $url, $lang;
     
-    if ($_POST) {
+    if (!empty($_POST)) {
         
-        if (is_array($_POST['s']) && count($_POST['s']) > 0) {
+        if (isset($_POST['s']) && is_array($_POST['s']) && count($_POST['s']) > 0) {
             
             if ($_FILES['s']['tmp_name'][13]) {
                 $ext = strtolower(pathinfo($_FILES['s']['name'][13], PATHINFO_EXTENSION));
-                if (copy($_FILES['s']['tmp_name'][13], 'media/frontimg/frontimg.' . $ext)) {
+                if (copy($_FILES['s']['tmp_name'][13], ASSETS_PATH.'media/frontimg/frontimg.' . $ext)) {
                     
                     $_POST['s']['13'] = 'frontimg.' . $ext;
                     
@@ -25,11 +26,9 @@
                 $sqlupd->execute();
                 
             }
-            
+            $result = '';
             $msg = '<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-check"></i>' . LBL_Updated . '!</h4>' . LBL_Item . ' ' . LBL_Updated . ' ' . LBL_Successfully . '<br />' . $result . '</div>';
-            unset($_POST);
-            
-            
+            $_POST = [];
         }
         
         
@@ -41,16 +40,16 @@
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <?php echo $msg; ?>
+                <?= $msg ?? '' ?>
                 <!-- Input addon -->
                 <form role="form" method="post" enctype="multipart/form-data">
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><?= HM_Settings; ?></h3>
+                            <h3 class="box-title"><?= HM_Settings ?></h3>
                         </div>
                         <div class="box-body">
                             
-                            <?
+                            <?php
                                 
                                 $sqls = $db->query("SELECT * FROM settings ORDER BY s_id");
                                 while ($rows = $sqls->fetch(PDO::FETCH_ASSOC)) {
@@ -85,7 +84,7 @@
                                         echo '<div class="form-group">
 										<label>' . $rows['s_title_' . $lang] . '</label><br />';
                                         
-                                        if ($rows['s_value']) echo '<img src="media/frontimg/' . $rows['s_value'] . '?v=' . time() . '" width="150"/><br />';
+                                        if ($rows['s_value']) echo '<img src="'.CP_PATH.'/assets/media/frontimg/' . $rows['s_value'] . '?v=' . time() . '" width="150"/><br />';
                                         else echo '<img src="media/frontimg/default.png" width="150"/><br />';
                                         echo '<input name="s[' . $rows['s_id'] . ']" type="file" class="file">
 										</div>';
@@ -107,14 +106,13 @@
                     </div><!-- /.box -->
             </div><!--/.col (left) -->
             <div class="col-md-12">
-                <input type="submit" class="col-md-12 btn btn-success" value="<?= LBL_Update; ?>"/>
+                <input type="submit" class="col-md-12 btn btn-success" value="<?= LBL_Update ?>"/>
             </div>
             </form>
         </div>   <!-- /.row -->
     </section><!-- /.content -->
 </div>
 
-<?php include 'layout/footer.php'; ?>
 <script>
     $('select').select2();
     $("file").fileinput({

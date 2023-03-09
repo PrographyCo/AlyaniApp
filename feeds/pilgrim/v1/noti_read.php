@@ -5,6 +5,7 @@
     $lang = checkLang();
     
     $data = $_POST;
+    requiredInputs(['device_uuid','platform']);
     
     if ($pilinfo['pil_id'] > 0) {
         

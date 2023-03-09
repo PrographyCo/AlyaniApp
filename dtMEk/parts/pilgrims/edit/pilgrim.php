@@ -960,7 +960,7 @@
                 pil_accomo_type: accomo_type
             };
 
-            $.post('/post/getAccomoInfo', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/getAccomoInfo', data, function (response) {
 
                 $('#accomoarea').html(response);
                 $('select').select2();
@@ -984,7 +984,7 @@
             gender: gender
         };
 
-        $.post('/post/getSuiteHalls', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/getSuiteHalls', data, function (response) {
             $('#hallsarea').html(response);
             $('select').select2();
         });
@@ -1007,7 +1007,7 @@
             gender: gender
         };
 
-        $.post('/post/getBuildingFloors', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/getBuildingFloors', data, function (response) {
             $('#floorsarea').html(response);
             $('select').select2();
         });
@@ -1023,7 +1023,7 @@
             gender: gender
         };
 
-        $.post('/post/getFloorRooms', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/getFloorRooms', data, function (response) {
             $('#roomsarea').html(response);
             $('select').select2();
         });
@@ -1040,7 +1040,7 @@
                 city_id: city_id
             };
 
-            $.post('/post/grabBusesOfCity', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/grabBusesOfCity', data, function (response) {
                 $('#busarea').html(response);
                 $('select').select2();
             });

@@ -3,6 +3,7 @@
     newlog($_SERVER['REQUEST_URI'], $_GET, $_POST, $_FILES);
     $lang = checkLang();
     
+    requiredInputs(['email']);
     $data = $_POST;
     
     if ($data['email']) {

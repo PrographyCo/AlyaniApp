@@ -2,7 +2,7 @@
     <div class="pull-right hidden-xs">
         <b>Version</b> 1.0.0
     </div>
-    <strong>Copyright@Alolyani Company <?= date("Y"); ?>.</strong> All rights reserved. Developed by <b>Atiaf Apps</b>
+    <strong>Copyright@Alolyani Company <?= date("Y") ?>.</strong> All rights reserved. Developed by <b>Atiaf Apps</b>
 </footer>
 <!-- Add the sidebar's background. This div must be placed
      immediately after the control sidebar -->
@@ -33,7 +33,7 @@
 <?php
     global $js_file;
 ?>
-<script src="<?= CP_PATH ?>/assets/js/<?= $js_file; ?>" type="text/javascript"></script>
+<script src="<?= CP_PATH ?>/assets/js/<?= $js_file ?>" type="text/javascript"></script>
 <script type="text/javascript" src="<?= CP_PATH ?>/assets/plugins/sticky/jquery.plugin.js"></script>
 <script type="text/javascript" src="<?= CP_PATH ?>/assets/plugins/sticky/jquery.sticky.js"></script>
 <script src="<?= CP_PATH ?>/assets/js/fileinput.js" type="text/javascript"></script>
@@ -70,22 +70,26 @@
 ?>
 <script type="text/javascript">
     $(function () {
+        $('.main-sidebar').animate({
+            scrollTop: $('#active').offset()?.top - 100
+        }, 500);
+        
         $(".datatable-table").DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": false,
             "ordering": false,
             "info": true,
-            "autoWidth": false<?=$dt_ar;?>,
+            "autoWidth": false<?=$dt_ar?>,
         });
 
 
         $(".datatable-table2").DataTable({
-            "iDisplayLength": 25<?=$dt_ar;?>
+            "iDisplayLength": 25<?=$dt_ar?>
         });
 
         $(".datatable-table3").DataTable({
-            "order": [[0, "desc"]]<?=$dt_ar;?>
+            "order": [[0, "desc"]]<?=$dt_ar?>
         });
 
         $(".datatable-table4").DataTable({
@@ -94,7 +98,7 @@
             "searching": true,
             "ordering": false,
             "info": true,
-            "autoWidth": false<?=$dt_ar;?>
+            "autoWidth": false<?=$dt_ar?>
         });
 
 
@@ -129,7 +133,7 @@
             "searching": false,
             "ordering": true,
             "info": true,
-            "autoWidth": false<?=$dt_ar;?>
+            "autoWidth": false<?=$dt_ar?>
         });
     });
 
@@ -183,19 +187,13 @@
         var canvas_image_height = HTML_Height;
 
         var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
-        console.log(HTML_Width);
+        
         html2canvas($(".html-content")[0]).then(function (canvas) {
             var imgData = canvas.toDataURL("image/jpeg", 1.0);
             var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
             pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-            // for (var i = 1; i <= totalPDFPages; i++) {
-            //     pdf.addPage(PDF_Width, PDF_Height);
-            //     pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height*i)+(top_left_margin*4),canvas_image_width,canvas_image_height);
-            // }
-            pdf.save(" <?=$title;?>");
-            // $(".html-content").hide();
-
+            pdf.save(" <?=$title??''?>");
+            
             $(".dt-buttons").show();
             $(".dataTables_filter").show();
         });

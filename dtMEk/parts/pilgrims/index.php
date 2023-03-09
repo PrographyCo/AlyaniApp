@@ -208,20 +208,20 @@
                             </thead>
                             <tbody>
                             <?php
-                                $sqlmore1 = $sqlmore2 = $sqlmore3 = $sqlmore4 = $sqlmore5 = $sqlmore6 = $sqlmore6 = '';
-                                if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore1 = " AND pil_city_id = " . $_GET['city_id'];
-                                if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore2 = " AND pil_gender = '" . $_GET['gender'] . "'";
-                                if (isset($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $sqlmore3 = " AND pil_pilc_id = " . $_GET['pilc_id'];
-                                if (isset($_GET['code'])) $sqlmore4 = " AND pil_code LIKE '%" . $_GET['code'] . "%'";
-                                if (isset($_GET['resno'])) $sqlmore5 = " AND pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";
-                                if (isset($_GET['accomo']) && $_GET['accomo'] === 1) $sqlmore6 = " AND pil_code IN (SELECT pil_code FROM pils_accomo)";
-                                if (isset($_GET['accomo']) && $_GET['accomo'] === 2) $sqlmore6 = " AND pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
+                                $where = [];
+                                if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $where[] = "pil_city_id = " . $_GET['city_id'];
+                                if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $where[] = "pil_gender = '" . $_GET['gender'] . "'";
+                                if (isset($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $where[] = "pil_pilc_id = " . $_GET['pilc_id'];
+                                if (!empty($_GET['code'])) $where[] = "pil_code LIKE '%" . $_GET['code'] . "%'";
+                                if (!empty($_GET['resno'])) $where[] = "pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";
+                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) === 1) $where[] = "pil_code IN (SELECT pil_code FROM pils_accomo)";
+                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) === 2) $where[] = "pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
                                 
                                 $sql = $db->query("SELECT p.*, c.country_title_$lang, ci.city_title_$lang FROM $table p
                                                     LEFT OUTER JOIN countries c ON p.pil_country_id = c.country_id
-                                                    LEFT OUTER JOIN cities ci ON p.pil_city_id = ci.city_id
-                                                       WHERE 1 $sqlmore1 $sqlmore2 $sqlmore3 $sqlmore4 $sqlmore5 $sqlmore6
-                                                       ORDER BY pil_name");
+                                                    LEFT OUTER JOIN cities ci ON p.pil_city_id = ci.city_id ".
+                                    (($where!==[])?'WHERE '.implode(' AND ', $where).' ' : '')
+                                    ."ORDER BY pil_name");
                                 while ($row = $sql->fetch()) {
                                 $accomo = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code = '" . $row['pil_code'] . "'")->fetchColumn();
                             
@@ -261,7 +261,7 @@
                                     <span class="label label-<?= ($row['pil_bus_id'] > 0) ? "success" : "danger" ?>"><?= ($row['pil_bus_id'] > 0) ? LBL_VALIDACCOM : LBL_NOACCOM ?></span>
                                 </td>
                                 <td>
-                                    <a href="<?= CP_PATH ?>/pil_cards_designs/pils/common/index.php?id=<?= $row[$table_id] ?>"
+                                    <a href="<?= CP_PATH ?>/cards/pils/common/index?id=<?= $row[$table_id] ?>"
                                        target="_blank"><?= LBL_Card ?></a>
                                 </td>
                                 <td>
@@ -304,7 +304,7 @@
                 pil_id: pil_id
             };
 
-            $.post('/post/removePilAccomo', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/removePilAccomo', data, function (response) {
                 $('#pilaccomo_' + pil_id).html('<span class="label label-danger"><?= LBL_NOACCOM ?></span>');
             });
 
@@ -322,7 +322,7 @@
                 city_id
             };
 
-            $.post('/post/removeAccomoCity', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/removeAccomoCity', data, function (response) {
                 $('#removecityaccomo_loading').html(response);
                 window.location.reload();
             });
@@ -342,7 +342,7 @@
                 city_id
             };
 
-            $.post('/post/removeAccomoCityBus', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/removeAccomoCityBus', data, function (response) {
                 $('#removecityaccomo_loading').html(response);
                 window.location.reload();
             });

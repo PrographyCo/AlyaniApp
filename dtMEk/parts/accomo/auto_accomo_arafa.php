@@ -224,7 +224,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_suites_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_suites_selected', data, function (response) {
 
             $('#hallsarea').html(response.html);
             $('select').select2();
@@ -242,7 +242,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_bldtype_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_bldtype_selected', data, function (response) {
             $('#buildingsarea').html(response);
             $('select').select2();
 
@@ -259,7 +259,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_buildings_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_buildings_selected', data, function (response) {
 
             $('#floorsarea').html(response);
             $('select').select2();
@@ -277,7 +277,7 @@
             gender: $('#gender').val()
         };
 
-        $.post('/post/accomo_floors_selected', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/accomo_floors_selected', data, function (response) {
 
             $('#roomsarea').html(response);
             $('select').select2();
@@ -297,7 +297,7 @@
             type: 'arafa',
         };
 
-        $.post('/post/countCitiesPils', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/countCitiesPils', data, function (response) {
 
             $('#countpils').html(response);
 
@@ -320,7 +320,7 @@
             gender: $('#gender').val(),
             halls_arfa: $('#halls_arfa\\[\\]').val()
         };
-        $.post('/post/calcAvailAccomo', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/calcAvailAccomo', data, function (response) {
 
             if (response.availcount) $('#availcount').html(response.availcount);
             else $('#availcount').html('0');
@@ -340,7 +340,7 @@
             type: 2
         };
 
-        $.post('/post/getAccomosGender', data, function (response) {
+        $.post('<?= CP_PATH ?>/post/getAccomosGender', data, function (response) {
             $('#SuitesArea').html(response.SuitesArea);
             $('#BuildingsTypeArea').html(response.BuildingsTypeArea);
             $('#TentsArea').html(response.TentsArea);

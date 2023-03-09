@@ -209,7 +209,7 @@
                 bld_id: bld_id
             };
 
-            $.post('/post/grabfloors', data, function (response) {
+            $.post('<?= CP_PATH ?>/post/grabfloors', data, function (response) {
 
                 $('#floorsarea').html(response);
                 $('select').select2();

@@ -1,13 +1,22 @@
-<?php include 'layout/header.php';
-    include 'XLSClasses/PHPExcel/IOFactory.php';
-    include('phpqrcode/qrlib.php');
+<?php
+    global $db, $url, $lang;
+    $sql_more = [];
     
-    if (is_numeric($_GET['del'])) {
+    if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
         $id = $_GET['del'];
         $sqldel1 = $db->query("DELETE FROM employees WHERE emp_id = $id");
         
     }
+    
+    if (!empty($_POST))
+    {
+        if (!empty($_POST['name'])) $sql_more[] = 'emp_name LIKE "%'.$_POST['name'].'%"';
+        if (!empty($_POST['job_title'])) $sql_more[] = 'emp_jobtitle LIKE "%'.$_POST['job_title'].'%"';
+    }
+    $sqlemps = $db->query(
+            "SELECT * FROM employees".(($sql_more!==[])?' WHERE '.implode(' AND ', $sql_more):'')
+    );
 
 ?>
 <!-- Content Wrapper. Contains page content -->
@@ -15,9 +24,9 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?= HM_Employees; ?>
-            <a href="e_emp.php" class="btn btn-success pull-<?= DIR_AFTER; ?>"><i
-                        class="fa fa-star"></i> <?= BTN_AddNew; ?></a>
+            <?= HM_Employees ?>
+            <a href="<?= CP_PATH ?>/system/edit/emp" class="btn btn-success pull-<?= DIR_AFTER ?>"><i
+                        class="fa fa-star"></i> <?= BTN_AddNew ?></a>
         </h1>
     </section>
 
@@ -27,27 +36,45 @@
             <!-- left column -->
             <div class="col-md-12">
 
+                <div class="box" style="padding: 0 40px 40px 40px">
+                    <h3 class="box-title"><?= LBL_SearchFilter ?></h3>
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label for="exampleFormControlSelect2"><?= LBL_Name ?></label>
+                                <input type="text" class="form-control" name="name" />
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="exampleFormControlSelect2"><?= LBL_JobTitle ?></label>
+                                <input type="text" class="form-control" name="job_title" />
+                            </div>
+                            <div class="col-lg-3" style="margin-top: 25px;">
+                                <button class="btn btn-success" name="filter"><?= HM_show ?></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title"><?= BTN_ImportFromExcel; ?></h3>
+                        <h3 class="box-title"><?= BTN_ImportFromExcel ?></h3>
                     </div><!-- /.box-header -->
                     <div class="box-body">
 
                         <form method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label><?= LBL_File; ?></label>
+                                <label><?= LBL_File ?></label>
                                 <input type="file" class="form-control" name="excelfile" accept=".xls,.xlsx"/>
                             </div>
-                            <input type="submit" class="col-md-12 btn btn-success" value="<?= LBL_Upload; ?>"/>
+                            <input type="submit" class="col-md-12 btn btn-success" value="<?= LBL_Upload ?>"/>
                         </form>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
                 
                 
-                <?
-                    if ($_FILES) {
+                <?php
+                    if (!empty($_FILES)) {
                         
-                        if ($_FILES['excelfile']['name']) {
+                        if (isset($_FILES['excelfile']['name'])) {
                             
                             $filenameext = pathinfo($_FILES['excelfile']['name'], PATHINFO_EXTENSION);
                             $newname = 'Import_' . date("Y_m_d_H_i_s") . '.' . $filenameext;
@@ -62,9 +89,6 @@
                             }
                             
                             $count = count($sheetData) - 1;
-                            
-                            // TRUNCATE TABLE FIRST
-                            //$sqltrunc = $db->query("TRUNCATE table employees");
                             
                             foreach ($sheetData as $data) {
                                 
@@ -129,7 +153,6 @@
 											</th>
 											</thead><tbody>';
                     
-                    $sqlemps = $db->query("SELECT * FROM employees");
                     while ($row = $sqlemps->fetch(PDO::FETCH_ASSOC)) {
                         
                         echo '<tr>
@@ -143,12 +166,12 @@
 												' . $row['emp_jobtitle'] . '
 												</td>
 												<td>
-												<a href="empcard.php?id=' . $row['emp_id'] . '" target="_blank">' . LBL_EmpCard . '</a>
+												<a href="' . CP_PATH . '/system/empcard?id=' . $row['emp_id'] . '" target="_blank">' . LBL_EmpCard . '</a>
 												</td>
 												<td>
 
-												<a href="e_emp.php?id=' . $row['emp_id'] . '" class="label label-info"><i class="fa fa-edit"></i> ' . LBL_Modify . '</a>
-												<a href="employees.php?del=' . $row['emp_id'] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>
+												<a href="' . CP_PATH . '/system/edit/emp?id=' . $row['emp_id'] . '" class="label label-info"><i class="fa fa-edit"></i> ' . LBL_Modify . '</a>
+												<a href="' . CP_PATH . '/system/employees?del=' . $row['emp_id'] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>
 
 												</td>
 												</tr>';
@@ -166,5 +189,3 @@
     </section><!-- /.content -->
 
 </div>
-
-<?php include 'layout/footer.php'; ?>
