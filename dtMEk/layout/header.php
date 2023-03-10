@@ -40,10 +40,14 @@
     <link href="<?= CP_PATH ?>/assets/css/bootstrap-colorpicker.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="<?= CP_PATH ?>/assets/css/bootstrap-datetimepicker.min.css" media="all" rel="stylesheet" type="text/css"/>
     <link href="<?= CP_PATH ?>/assets/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+    <link href="<?= CP_PATH ?>/assets/css/extra.css" rel="stylesheet" type="text/css"/>
     <?php
         if ($css2) echo '<link href="'.CP_PATH.'/assets/css/' . $css2 . '" rel="stylesheet" type="text/css" />';
         if ($css3) echo '<link href="'.CP_PATH.'/assets/css/' . $css3 . '" rel="stylesheet" type="text/css" />';
     ?>
+
+    <script src="<?= CP_PATH ?>/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="<?= CP_PATH ?>/assets/plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="wrapper">
@@ -85,9 +89,9 @@
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar" style="height: 100vh;overflow:hidden;overflow-y: scroll">
+    <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar" style="height: 100vh;">
+        <section class="sidebar">
             <!-- Sidebar user panel -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
@@ -107,9 +111,10 @@
                 <li <?php if ($curpage === '/main/soothing_summary') echo 'class="active" id="active"'; ?>>
                     <a href="<?= CP_PATH ?>/main/soothing_summary">
                         <i class="fa fa-dashboard fa-fw"></i>
-                        <span><?= HM_soothing_summary ?> ( <?= LBL_MENA ?> ) </span>
+                        <span><?= HM_soothing_summary ?> </span>
                     </a>
                 </li>
+                <!--
                 <li <?php if ($curpage === '/main/soothing_summary_arafa') echo 'class="active" id="active"'; ?>>
                     <a href="<?= CP_PATH ?>/main/soothing_summary_arafa">
                         <i class="fa fa-dashboard fa-fw"></i> <span><?= HM_soothing_summary ?> ( <?= arafa ?> )</span>
@@ -120,7 +125,7 @@
                         <i class="fa fa-dashboard fa-fw"></i> <span><?= HM_bus_accommodation_summary ?></span>
                     </a>
                 </li>
-
+                -->
                 
                 <li class="header"><?= HM_BASICINFORMATION ?></li>
                 
@@ -216,9 +221,9 @@
                 <?php } ?>
                 <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(8, $perms, true))) { ?>
 
-                    <li <?php if ($curpage === '/basic_info/tents') echo 'class="active" id="active"'; ?>>
+                    <li <?php if ($curpagewithquery === '/basic_info/tents?type=1') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/tents?type=1">
-                            <i <?php if ($curpage === '/basic_info/tents') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
+                            <i <?php if ($curpagewithquery === '/basic_info/tents?type=1') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
                                     style="padding-<?= DIR_AFTER ?>: 7px;"></i>
                             <span> <?= HM_Tents ?> ( <?= mozdalifa ?> )</span>
                         </a>
@@ -227,9 +232,9 @@
                 
                 <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(8, $perms, true))) { ?>
 
-                    <li <?php if ($curpage === '/basic_info/tents') echo 'class="active" id="active"'; ?>>
+                    <li <?php if ($curpagewithquery === '/basic_info/tents?type=2') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/tents?type=2">
-                            <i <?php if ($curpage === '/basic_info/tents') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
+                            <i <?php if ($curpagewithquery === '/basic_info/tents?type=2') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
                                     style="padding-<?= DIR_AFTER ?>: 7px;"></i> <span> <?= HM_Halls ?> ( <?= arafa ?> )</span>
                         </a>
                     </li>
@@ -469,7 +474,7 @@
                     </li>
                 <?php } ?>
                 
-                
+                <!--
                 <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/new_questions') echo 'class="active" id="active"'; ?>>
@@ -489,7 +494,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                
+                -->
                 
                 
                 <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(21, $perms, true))) { ?>

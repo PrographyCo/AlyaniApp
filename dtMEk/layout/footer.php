@@ -9,8 +9,6 @@
 <div class="control-sidebar-bg"></div>
 </div><!-- ./wrapper -->
 
-<script src="<?= CP_PATH ?>/assets/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<script src="<?= CP_PATH ?>/assets/plugins/jQueryUI/jquery-ui.min.js" type="text/javascript"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script type="text/javascript">
     $.widget.bridge('uibutton', $.ui.button);

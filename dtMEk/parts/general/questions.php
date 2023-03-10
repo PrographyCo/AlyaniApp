@@ -10,8 +10,8 @@
         
         $id = $_GET['del'];
         
-        $sqldel1 = $db->query("DELETE FROM $table WHERE $table_id = $id");
         $sqldel2 = $db->query("DELETE FROM questions_answers WHERE qa_q_id = $id");
+        $sqldel1 = $db->query("DELETE FROM $table WHERE $table_id = $id");
         
     }
 
@@ -77,7 +77,7 @@
                                     echo '<td>';
                                     
                                     echo '<a href="' . $newedit_page . '?id=' . $row[$table_id] . '" class="label label-info"><i class="fa fa-edit"></i> ' . LBL_Modify . '</a> ';
-                                    echo '<a href="' . $url . '?del=' . $row[$table_id] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
+                                    echo '<a href="' . CP_PATH.$url . '?del=' . $row[$table_id] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
                                     
                                     echo '</td>
 		                      </tr>';

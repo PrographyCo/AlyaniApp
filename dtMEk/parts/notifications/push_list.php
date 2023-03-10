@@ -66,7 +66,7 @@
                         <td>' . date("j F Y g:i:s a", $row['msg_date']) . '</td>';
                                     echo '<td>';
                                     echo '
-									<a href="' . $url . '?del=' . $row['msg_id'] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
+									<a href="' . CP_PATH.$url . '?del=' . $row['msg_id'] . '" class="label label-danger" onclick="return confirm(\'' . LBL_DeleteConfirm . '\');"><i class="fa fa-trash"></i> ' . LBL_Delete . '</a>';
                                     echo '</td>';
                                     echo '
                       </tr>';

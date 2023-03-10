@@ -6,14 +6,17 @@
     $table_id = 'id';
     $sql = $db->query("SELECT * FROM $table ORDER BY result DESC");
     
-    if (isset($_POST['filter'])) {
-        $competition_id = $_POST['competition_id'];
+    if (isset($_GET['filter'])) {
+        $competition_id = $_GET['competition_id'];
+        $sqlmore = '';
+        
+        if (isset($_GET['winners']) && $_GET['winners']==1) $sqlmore = ' AND result = total';
         
         
         if ($competition_id != 0) {
-            $sql = $db->query("SELECT * FROM $table WHERE competition_id = $competition_id ORDER BY result DESC");
+            $sql = $db->query("SELECT * FROM $table WHERE competition_id = $competition_id $sqlmore ORDER BY result DESC");
         } else {
-            $sql = $db->query("SELECT * FROM $table ORDER BY result DESC");
+            $sql = $db->query("SELECT * FROM $table ".str_replace(' AND ',' WHERE ', $sqlmore)." ORDER BY result DESC");
             
         }
         
@@ -26,7 +29,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            <?= $title ?>
+            <?= $title ?> <small><?= (isset($_GET['winners']) && $_GET['winners'] == 1)?LBL_Winners:'' ?></small>
         </h1>
     </section>
 
@@ -39,10 +42,10 @@
 
                 <div class="box">
 
-                    <form method="post" style="margin: 40px;">
+                    <form style="margin: 40px;">
                         <div class="row">
                             <div class="col-lg-2">
-                                <label><?= HM_competitions ?></label>
+                                <label><?= HM_competitions ?> </label>
                                 <select name="competition_id" class="form-control select2">
                                     <option value="0"><?= LBL_Choose ?></option>
                                     <option value="0"><?= HM_ListAll ?></option>
@@ -54,6 +57,14 @@
                                         
                                         <?php }
                                     ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label><?= LBL_Winners ?></label>
+                                <select name="winners" class="form-control select2">
+                                    <option value="0"><?= LBL_Choose ?></option>
+                                    <option value="0"><?= HM_ListAll ?></option>
+                                    <option value="1"><?= LBL_Winners ?></option>
                                 </select>
                             </div>
 

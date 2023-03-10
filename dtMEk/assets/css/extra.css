@@ -1,0 +1,32 @@
+.btn-blue {
+    height: 50px;
+    border: 1px solid #00c0ef;
+    color: #00c0ef;
+    cursor: pointer;
+    background: transparent;
+    transition: all .5s;
+}
+.btn-blue:hover {
+    background: #00c0ef;
+    color: white;
+}
+
+.btn-red {
+    height: 50px;
+    border: 1px solid #dd4b39;
+    color: #dd4b39;
+    cursor: pointer;
+    background: transparent;
+    transition: all .5s;
+}
+.btn-red:hover {
+    background: #dd4b39;
+    color: white;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}

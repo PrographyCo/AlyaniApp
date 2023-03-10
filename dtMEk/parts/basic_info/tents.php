@@ -11,7 +11,7 @@
         $sql = $db->query("SELECT * FROM $table  WHERE type = $type ORDER BY tent_order");
     }
     
-    $newedit_page = '/basic_info/edit/tent';
+    $newedit_page = CP_PATH.'/basic_info/edit/tent?type='.$type;
     $title = $type === 1 ? HM_Tents . ' - ' . mozdalifa : HM_Halls . ' - ' . arafa;
     
     if (isset($_POST['filter'])) {
@@ -136,7 +136,7 @@
 
                                             <a href="<?= $newedit_page . '?type='.$type.'&id=' . $row[$table_id] ?>"
                                                class="label label-info"><i class="fa fa-edit"></i><?= LBL_Modify ?></a>
-                                            <a href="<?= $url . '?del=' . $row[$table_id] . '&type=' . $type ?>"
+                                            <a href="<?= CP_PATH.$url . '?del=' . $row[$table_id] . '&type=' . $type ?>"
                                                class="label label-danger"
                                                onclick="return confirm('<?= LBL_DeleteConfirm ?>');"><i
                                                         class="fa fa-trash"></i> <?= LBL_Delete ?></a>

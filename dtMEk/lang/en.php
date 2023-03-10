@@ -347,3 +347,7 @@
         const LBL_exportfilepils = 'export file pils ';
         const Arafaresidence = 'Arafa residence';
         const menaresidence = 'Mena residence';
+        const LBL_Winners = 'Winners';
+
+        const Arafa = 'Arafa';
+        const Manaa = 'Manaa';

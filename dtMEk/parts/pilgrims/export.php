@@ -3,7 +3,7 @@
     $title = HM_PILGRIMS;
     $table = 'pils';
     $table_id = 'pil_id';
-    $newedit_page = 'e_pil.php';
+    $newedit_page = CP_PATH.'/pilgrims/edit/pil';
     
     if (is_numeric($_GET['del'])) {
         

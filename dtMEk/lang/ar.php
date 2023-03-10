@@ -351,3 +351,8 @@
     
         const Arafaresidence = ' سكن عرفه';
         const menaresidence = ' سكن منى';
+    
+        const LBL_Winners = 'الفائزين';
+    
+        const Arafa = 'عرفة';
+        const Manaa = 'منى';
