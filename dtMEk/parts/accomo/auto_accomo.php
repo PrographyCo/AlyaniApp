@@ -200,7 +200,7 @@
                                                 while ($row1 = $sql1->fetch(PDO::FETCH_ASSOC)) {
                                                     $accomodated = false;
                                                     
-                                                    if (!$accomodated && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
+                                                    if (!$accomodated && isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
                                                         
                                                         // accomodate to suites
                                                         $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id']??0, $_POST['extratype_id']??0, $row1['pil_code'], $row1['pil_gender']);
@@ -214,7 +214,7 @@
                                                         
                                                     }
                                                     
-                                                    if (!$accomodated && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
+                                                    if (!$accomodated && isset($_POST['building_id']) && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
                                                         
                                                         // accomodate to buildings
                                                         $accomodated = AccomoBuildings($_POST['building_id'], $_POST['floor_id'], $_POST['room_id'], $row1['pil_code'], $row1['pil_gender']);
@@ -228,7 +228,7 @@
                                                     }
                                                     
                                                     
-                                                    if (!$accomodated && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
+                                                    if (!$accomodated && isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
                                                         
                                                         // accomodate to tents
                                                         $accomodated = AccomoTents($_POST['tent_id'][$i], $row1['pil_code'], $row1['pil_gender']);

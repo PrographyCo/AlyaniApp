@@ -1,6 +1,6 @@
 <?php
     global $db, $url, $lang, $session;
-    $sqlmore1 = $sqlmore2 = $sqlmore3 = $sqlmore4 = $sqlmore5 = $sqlmore6 = '';
+    $sqlmore = [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,20 +34,21 @@
 
   <?php
     
-      if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore1 = " AND pil_city_id = ".$_GET['city_id'];
-      if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore2 = " AND pil_gender = '".$_GET['gender']."'";
-      if (isset($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $sqlmore3 = " AND pil_pilc_id = ".$_GET['pilc_id'];
-      if (isset($_GET['code'])) $sqlmore4 = " AND pil_code LIKE '%".$_GET['code']."%'";
-      if (isset($_GET['resno'])) $sqlmore5 = " AND pil_reservation_number LIKE '%".$_GET['resno']."%'";
-      if (isset($_GET['accomo']) && $_GET['accomo'] === 1) $sqlmore6 = " AND pil_code IN (SELECT pil_code FROM pils_accomo)";
-      if (isset($_GET['accomo']) && $_GET['accomo'] === 2) $sqlmore6 = " AND pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
-
-    $sql = $db->query("SELECT p.*, cl.pilc_title_ar, cl.pilc_text_id, c.country_title_ar, ci.city_title_ar FROM pils p
-      LEFT OUTER JOIN countries c ON p.pil_country_id = c.country_id
-      LEFT OUTER JOIN cities ci ON p.pil_city_id = ci.city_id
-      LEFT OUTER JOIN pils_classes cl ON p.pil_pilc_id = cl.pilc_id
-      WHERE 1 $sqlmore1 $sqlmore2 $sqlmore3 $sqlmore4 $sqlmore5 $sqlmore6
-      ORDER BY pil_name");
+      if (!empty($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore[] = "pil_city_id = " . $_GET['city_id'];
+      if (!empty($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore[] = "pil_gender = '" . $_GET['gender'] . "'";
+      if (!empty($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $sqlmore[] = "pil_pilc_id = " . $_GET['pilc_id'];
+      if (!empty($_GET['code'])) $sqlmore[] = "pil_code LIKE '%" . $_GET['code'] . "%'";
+      if (!empty($_GET['resno'])) $sqlmore[] = "pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";
+      if (!empty($_GET['accomo']) && $_GET['accomo'] == 1) $sqlmore[] = "pil_code IN (SELECT pil_code FROM pils_accomo)";
+      if (!empty($_GET['accomo']) && $_GET['accomo'] == 2) $sqlmore[] = "pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
+    
+      $sql = $db->query("SELECT p.*, cl.pilc_title_ar, cl.pilc_text_id, c.country_title_ar, ci.city_title_ar FROM pils p
+        LEFT OUTER JOIN countries c ON p.pil_country_id = c.country_id
+        LEFT OUTER JOIN cities ci ON p.pil_city_id = ci.city_id
+        LEFT OUTER JOIN pils_classes cl ON p.pil_pilc_id = cl.pilc_id
+        ".((!empty($sqlmore))?"WHERE ".implode(' AND ', $sqlmore):"")."
+        ORDER BY pil_name");
+      
     while ($pilinfo = $sql->fetch()) {
 
     if ($pilinfo['pilc_text_id'] == 1) $cardtext = 'مخيم';
