@@ -49,6 +49,7 @@
                                 <th><?= LBL_Name ?></th>
                                 <th><?= LBL_ContactNumbers ?></th>
                                 <th><?= LBL_BusNumber ?></th>
+                                <th><?= LBL_Accomodation ?></th>
                                 <th><?= LBL_Status ?></th>
                                 <th><?= LBL_Actions ?></th>
                             </tr>
@@ -57,7 +58,9 @@
                             <?php
                                 $sql = $db->query("SELECT * FROM $table WHERE staff_type = $type ORDER BY staff_name");
                                 while ($row = $sql->fetch()) {
-                                    $buses = $db->query('SELECT * FROM buses WHERE bus_staff_id=' . $row['staff_id'])
+                                    $buses = $db->query('SELECT * FROM buses WHERE bus_staff_id=' . $row['staff_id']);
+                                    $accomo = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code = '" . $row['staff_id'] . "' AND type = 'emp'")->fetchColumn();
+
                                     ?>
                                     <tr>
                                         <td>
@@ -79,6 +82,23 @@
                                                 while ($b = $buses->fetch())
                                                     $a[]='<a href="'.CP_PATH.'/basic_info/edit/bus?id='.$b['bus_id'].'">'.$b['bus_title'].'</a>';
                                                 echo implode(',',$a);
+                                            ?>
+                                        </td>
+                                        <td id="pilaccomo_<?= $row['staff_id'] ?>">
+                                            <span class="label label-<?= ($accomo) ? "success" : "danger" ?>"><?= ($accomo) ? LBL_VALIDACCOM : LBL_NOACCOM ?></span>
+                                            <?php
+                                                if ($accomo) {
+                                                    ?>
+                                                    <a href="#"
+                                                       onclick="confirmRemoveAccomo(<?= $row['staff_id'] ?>);"
+                                                       class="label label-default"><?= LBL_RemoveAccomo ?></a>
+                                                    <?php
+                                                } else {
+                                                    ?>
+                                                    <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['staff_id'] ?>&type=emp"
+                                                       class="label label-default"><?= LBL_Add ?></a>
+                                                    <?php
+                                                }
                                             ?>
                                         </td>
                                         <td>
@@ -112,3 +132,24 @@
     </section><!-- /.content -->
 
 </div>
+<script>
+    function confirmRemoveAccomo(pil_id) {
+
+        var confirmed = confirm('<?= LBL_RemoveAccomoPilgrimConfirm ?>');
+        if (confirmed) {
+
+            $('#pilaccomo_' + pil_id).text('<?= LBL_Loading ?>');
+
+            var data = {
+                pil_id: pil_id,
+                type: 'emp'
+            };
+
+            $.post('<?= CP_PATH ?>/post/removePilAccomo', data, function (response) {
+                $('#pilaccomo_' + pil_id).html('<span class="label label-danger"><?= LBL_NOACCOM ?></span><a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['staff_id'] ?>&type=emp" class="label label-default"><?= LBL_Add ?></a>');
+            });
+
+        }
+
+    }
+</script>

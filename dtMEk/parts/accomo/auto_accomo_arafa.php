@@ -133,7 +133,7 @@
                 </div>
     
                 <?php
-                    if ($_POST) { ?>
+                    if (!empty($_POST)) { ?>
                         <div class="box">
                             <div class="box-body">
     

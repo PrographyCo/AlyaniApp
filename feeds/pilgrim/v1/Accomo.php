@@ -1,5 +1,6 @@
 <?php
     require '_includes/init.php';
+    global $db, $con;
     newlog($_SERVER['REQUEST_URI'], $_GET, $_POST, $_FILES);
     $pilinfo = checkToken(1);
     $lang = checkLang();

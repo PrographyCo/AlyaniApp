@@ -3,6 +3,7 @@
 
   $suites = $_REQUEST['suites']??[];
   $selected = $_REQUEST['selected']??[];
+  $extratype_id = $_REQUEST['extratype_id']??'';
 
   $output['html'] = '';
   if (is_array($suites) && count($suites)>0) {
@@ -20,16 +21,16 @@
     }
     $output['html'] .= '</select>';
     $output['html'] .= '<select name="extratype_id" id="extratype_id" class="form-control select2">
-      <option value="0">
+      <option value="0" '. (($extratype_id=="0")?'selected=selected':'') .'>
         '.LBL_Choose.'
       </option>
-      <option value="1">
+      <option value="1" '. (($extratype_id=="1")?'selected=selected':'') .'>
         '.LBL_Chair1.'
       </option>
-      <option value="2">
+      <option value="2" '. (($extratype_id=="2")?'selected=selected':'') .'>
         '.LBL_Chair2.'
       </option>
-      <option value="3">
+      <option value="3" '. (($extratype_id=="3")?'selected=selected':'') .'>
         '.LBL_Bed.'
       </option>
     </select>';

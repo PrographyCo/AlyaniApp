@@ -326,6 +326,8 @@
         const LBL_NotAnImage = 'ليست صورة';
         const LBL_Number = 'رقم';
         const LBL_RemoveAccomo = 'حذف';
+        const LBL_TransferAccomo = 'نقل';
+        
         const LBL_RemoveAccomoPilgrimConfirm = 'هل ترغب في حذف التسكين لهذا الحاج؟';
         const LBL_ChooseBuildings = 'اختر المباني';
         const LBL_ChoosePremises = 'اختر العمارات';

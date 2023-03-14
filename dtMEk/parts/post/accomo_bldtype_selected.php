@@ -3,6 +3,7 @@
     
     $bld_type = $_REQUEST['bld_type'];
     $gender = $_REQUEST['gender'];
+    $seleted = $_REQUEST['selected']??[];
     
     if (is_numeric($bld_type) && $bld_type > 0) {
         

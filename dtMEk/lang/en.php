@@ -323,6 +323,7 @@
         const LBL_NotAnImage = 'Not an Image';
         const LBL_Number = 'Number';
         const LBL_RemoveAccomo = 'Remove';
+        const LBL_TransferAccomo = 'Transfer';
         const LBL_RemoveAccomoPilgrimConfirm = 'Are you sure you want to remove accomodation for this pilgrim?';
         const LBL_ChooseBuildings = 'Choose Buildings';
         const LBL_ChoosePremises = 'Choose Premises';

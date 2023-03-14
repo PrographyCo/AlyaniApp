@@ -250,6 +250,8 @@
                                     <?php
                                         if ($accomo) {
                                             ?>
+                                            <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['pil_id'] ?>"
+                                               class="label label-default"><?= LBL_TransferAccomo ?></a>
                                             <a href="#"
                                                onclick="confirmRemoveAccomo(<?= $row['pil_id'] ?>);"
                                                class="label label-default"><?= LBL_RemoveAccomo ?></a>
