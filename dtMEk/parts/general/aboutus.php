@@ -26,7 +26,7 @@
             
             if ($_FILES['au_uvideofile']['tmp_name']) {
                 $ext = strtolower(pathinfo($_FILES['au_uvideofile']['name'], PATHINFO_EXTENSION));
-                if (copy($_FILES['au_uvideofile']['tmp_name'], 'media/aboutusvid/1.' . $ext)) {
+                if (copy($_FILES['au_uvideofile']['tmp_name'], ASSETS_PATH.'media/aboutusvid/1.' . $ext)) {
                     
                     $sql2 = $db->query("UPDATE aboutus SET au_videofile = '1." . $ext . "' WHERE au_id = 1");
                     $result .= LBL_VideoUploaded . '<br />';
@@ -113,7 +113,7 @@
                                             
                                             $vidext = strtolower(pathinfo($auinfo['au_videofile'], PATHINFO_EXTENSION));
                                             echo ' <video width="320" height="240" controls>
-                              <source src="media/aboutusvid/' . $auinfo['au_videofile'] . '" type="video/' . $vidext . '">
+                              <source src="'. CP_PATH .'/assets/media/aboutusvid/' . $auinfo['au_videofile'] . '" type="video/' . $vidext . '">
                             Your browser does not support the video tag.
                             </video> ';
                                         

@@ -167,6 +167,7 @@
         const LBL_Text = 'Text';
         const LBL_Video = 'Video';
         const LBL_YTVideo = 'Youtube Video';
+        const LBL_Breif = 'Brief Description';
         const LBL_YTVideoID = 'Youtube Video ID';
         const LBL_QuestionAr = 'Question (AR)';
         const LBL_QuestionEn = 'Question (EN)';
@@ -345,7 +346,8 @@
         const LBL_RemoveAccomoForCityBus = 'Remove Bus Accomodation for this city';
         const LBL_MENA = 'Mena';
         const LBL_sticker = 'Stickers';
-        const LBL_exportfilepils = 'export file pils ';
+        const LBL_exportfilepils = 'export file pils (Excel)';
+        const LBL_exportfileaccomopilspdf = 'export accomodation file (pdf)';
         const Arafaresidence = 'Arafa residence';
         const menaresidence = 'Mena residence';
         const LBL_Winners = 'Winners';

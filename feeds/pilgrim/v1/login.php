@@ -79,11 +79,22 @@
                     $staffinfo = $sql2->fetch(PDO::FETCH_ASSOC);
                     
                     if (password_verify($data['param2'], $staffinfo['staff_password'])) {
+                        $accomo = $db->query("SELECT pa.*, bu.bld_title, f.floor_title, r.room_title, b.bus_title, s.suite_title, h.hall_title, t.tent_title
+					FROM pils_accomo pa
+					LEFT OUTER JOIN buildings bu ON pa.bld_id = bu.bld_id
+					LEFT OUTER JOIN buildings_floors f ON pa.floor_id = f.floor_id
+					LEFT OUTER JOIN buildings_rooms r ON pa.room_id = r.room_id
+					LEFT OUTER JOIN buses b ON pa.bus_id = b.bus_id
+					LEFT OUTER JOIN tents t ON pa.tent_id = t.tent_id
+					LEFT OUTER JOIN suites s ON pa.suite_id = s.suite_id
+					LEFT OUTER JOIN suites_halls h ON pa.hall_id = h.hall_id
+					WHERE pa.pil_code = '". $staffinfo['staff_id'] ."' AND pa.type = 'emp'")->fetch(PDO::FETCH_ASSOC);
                         
                         $items['success'] = true;
                         $items['message'] = '';
                         $items['data']['staff'] = getStaffInfo($staffinfo['staff_id']);
                         $items['data']['token'] = newAccessToken($staffinfo['staff_id'], 2);
+                        $items['data']['accomo'] = ;
                         
                     } else {
                         
@@ -113,11 +124,22 @@
                     $staffinfo = $sql2->fetch(PDO::FETCH_ASSOC);
                     
                     if (password_verify($data['param2'], $staffinfo['staff_password'])) {
+                        $accomo = $db->query("SELECT pa.*, bu.bld_title, f.floor_title, r.room_title, b.bus_title, s.suite_title, h.hall_title, t.tent_title
+					FROM pils_accomo pa
+					LEFT OUTER JOIN buildings bu ON pa.bld_id = bu.bld_id
+					LEFT OUTER JOIN buildings_floors f ON pa.floor_id = f.floor_id
+					LEFT OUTER JOIN buildings_rooms r ON pa.room_id = r.room_id
+					LEFT OUTER JOIN buses b ON pa.bus_id = b.bus_id
+					LEFT OUTER JOIN tents t ON pa.tent_id = t.tent_id
+					LEFT OUTER JOIN suites s ON pa.suite_id = s.suite_id
+					LEFT OUTER JOIN suites_halls h ON pa.hall_id = h.hall_id
+					WHERE pa.pil_code = '". $staffinfo['staff_id'] ."' AND pa.type = 'emp'")->fetch(PDO::FETCH_ASSOC);
                         
                         $items['success'] = true;
                         $items['message'] = '';
                         $items['data']['staff'] = getStaffInfo($staffinfo['staff_id']);
                         $items['data']['token'] = newAccessToken($staffinfo['staff_id'], 3);
+                        $items['data']['accomo'] = ;
                         
                     } else {
                         

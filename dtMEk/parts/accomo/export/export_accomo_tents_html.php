@@ -36,20 +36,8 @@
 </head>
 <body>
 
-
-<div class="box" style="border:0; padding:0; margin:0; box-shadow:none">
-    <div class="box-body">
-        <table class="table table-bordered table-striped">
-            <thead>
-            <tr>
-                <th><?= LBL_Code ?></th>
-                <th><?= LBL_Name ?></th>
-                <th><?= LBL_NationalId ?></th>
-                <th><?= LBL_TentNumber ?></th>
-            </tr>
-            </thead>
-            <tbody>
             <?php
+                $i = 1;
                 $sqlmore1 = '';
                 $array_of_tents = array();
                 if (isset($_GET['tent_id']) && is_numeric($_GET['tent_id']) && $_GET['tent_id'] > 0) $sqlmore1 = " AND pa.tent_id = " . $_GET['tent_id'];
@@ -58,30 +46,35 @@
 					FROM pils_accomo pa
 					INNER JOIN pils p ON pa.pil_code = p.pil_code
 					LEFT OUTER JOIN tents t ON pa.tent_id = t.tent_id
-					WHERE pa.tent_id > 0 $sqlmore1 ORDER BY pa.tent_id");
+					WHERE pa.tent_id > 0 $sqlmore1 ORDER BY pa.tent_id, p.pil_reservation_number");
                 while ($row = $sql->fetch()) {
-                    
-                    if (count($array_of_tents) == 0) {
-                        
-                        $array_of_tents[] = $row['tent_title'];
-                        
-                    } else {
-                        
-                        if (!in_array($row['tent_title'], $array_of_tents)) {
-                            
-                            $array_of_tents[] = $row['tent_title'];
-                            
+                    if (!in_array($row['tent_title'], $array_of_tents)) {
+        
+                        $i = 1;
+        
+                        if (count($array_of_tents) > 0){
                             echo '</tbody>
 							</table>
 						</div><!-- /.box-body -->
 					</div>
 								<p style="page-break-after: always;"></p>
-											<p style="page-break-before: always;"></p>
-											<div class="box">
+											<p style="page-break-before: always;"></p>';
+                        }
+                        
+                        $array_of_tents[] = $row['tent_title'];
+        
+                        echo '<div class="box">
 												<div class="box-body">
+												<div class="box-header text-center">
+												    <img src="'.CP_PATH.'/assets/images/logo.png" alt="logo" style="width: 20%">
+												</div>
 													<table class="table table-bordered table-striped">
 														<thead>
+														    <tr>
+														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="5">' . LBL_TentNumber . ': ' . $row['tent_title'] . '</th>
+                                                            </tr>
 															<tr>
+																<th>#</th>
 																<th>' . LBL_Code . '</th>
 																<th>' . LBL_Name . '</th>
 																<th>' . LBL_NationalId . '</th>
@@ -90,27 +83,31 @@
 														</thead>
 														<tbody>
 														';
-                        
-                        }
-                        
+        
                     }
                     
                     echo '<tr>';
+                    
+                    echo '<td>';
+                    echo $i++;
+                    echo '</td>';
+                    
                     echo '<td>';
                     echo $row['pil_code'];
                     echo '</td>';
+                    
                     echo '<td>';
                     echo $row['pil_name'];
                     echo '</td>';
+                    
                     echo '<td>';
                     echo $row['pil_nationalid'];
                     echo '</td>';
-                    /*echo '<td>';
-                    echo $row['pil_reservation_number'];
-                    echo '</td>';*/
+                    
                     echo '<td>';
                     echo $row['tent_title'];
                     echo '</td>';
+                    
                     echo '</tr>';
                     
                     

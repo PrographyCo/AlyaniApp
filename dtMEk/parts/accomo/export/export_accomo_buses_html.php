@@ -38,6 +38,7 @@
 
 <?php
     
+    $i=1;
     $array_of_buses = array();
     $sqlmore2 = $sqlmore1 = '';
     if (isset($_GET['bus_id']) && is_numeric($_GET['bus_id']) && $_GET['bus_id'] > 0) $sqlmore1 = " AND p.pil_bus_id = " . $_GET['bus_id'];
@@ -46,10 +47,11 @@
     $sql = $db->query("SELECT p.pil_code, p.pil_name, p.pil_nationalid, p.pil_phone, p.pil_reservation_number, b.bus_id, b.bus_title,b.bus_staff_id
 					FROM pils p
 					LEFT OUTER JOIN buses b ON p.pil_bus_id = b.bus_id
-					WHERE p.pil_bus_id > 0 $sqlmore1 $sqlmore2 ORDER BY p.pil_bus_id");
+					WHERE p.pil_bus_id > 0 $sqlmore1 $sqlmore2 ORDER BY p.pil_bus_id, p.pil_reservation_number");
     while ($row = $sql->fetch()) {
         
         if (!in_array($row['bus_id'], $array_of_buses)) {
+            $i=1;
             
             if (count($array_of_buses) > 0) {
                 echo '</tbody>
@@ -62,14 +64,18 @@
             $staff = $db->query("SELECT staff_name , staff_phones FROM staff WHERE staff_id = " . $row['bus_staff_id'])->fetch();
             
             echo '<div class="box">
+												<div class="box-header text-center">
+												    <img src="'.CP_PATH.'/assets/images/logo.png" alt="logo" style="width: 20%">
+												</div>
 												<div class="box-body">
 													<table class="table table-bordered table-striped">
 														<thead>
 														    <tr>
-														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="2">'. LBL_BusNumber .': '. $row['bus_id'].'</th>
+														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="3">'. LBL_BusNumber .': '. $row['bus_id'].'</th>
 														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="2">'. HM_staff_name .': '. $staff['staff_name'].' - '. $staff['staff_phones'] .'</th>
                                                             </tr>
 															<tr>
+                                                                <th>#</th>
                                                                 <th>' . LBL_Code . '</th>
                                                                 <th>' . LBL_Name . '</th>
                                                                 <th>' . LBL_NationalId . '</th>
@@ -83,7 +89,11 @@
         
         
         echo '<tr>';
-        
+    
+        echo '<td>';
+        echo $i++;
+        echo '</td>';
+    
         echo '<td>';
         echo $row['pil_code'];
         echo '</td>';

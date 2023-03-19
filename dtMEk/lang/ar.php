@@ -167,6 +167,7 @@
         const LBL_Text = 'نص';
         const LBL_Video = 'فيديو';
         const LBL_YTVideo = 'يوتيوب فيديو';
+        const LBL_Breif = 'نبذة قصيرة';
         const LBL_YTVideoID = 'يوتيوب فيديو ID';
         const LBL_QuestionAr = 'السؤال (AR)';
         const LBL_QuestionEn = 'السؤال (EN)';
@@ -349,8 +350,8 @@
         const LBL_RemoveAccomoForCityBus = 'حذف تسكين الحافلات لهذه المدينة';
         const LBL_MENA = 'منى';
         const LBL_sticker = 'أستيكر العفش';
-        const LBL_exportfilepils = 'تصدير ملف';
-    
+        const LBL_exportfilepils = 'تصدير ملف الحجاج (اكسل)';
+        const LBL_exportfileaccomopilspdf = 'تصدير ملف التسكين (pdf)';
         const Arafaresidence = ' سكن عرفه';
         const menaresidence = ' سكن منى';
     

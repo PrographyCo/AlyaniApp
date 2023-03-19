@@ -304,6 +304,9 @@
                             <li <?php if ($curpage === '/pilgrims/actions/export') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/pilgrims/actions/export"><i <?php if ($curpage === '/pilgrims/actions/export') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= LBL_exportfilepils ?>
                                 </a></li>
+                            <li <?php if ($curpage === '/pilgrims/actions/export_accomo_pils') echo 'class="active" id="active"'; ?>><a
+                                        href="<?= CP_PATH ?>/pilgrims/actions/export_accomo_pils"><i <?php if ($curpage === '/pilgrims/actions/export_accomo_pils') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= LBL_exportfileaccomopilspdf ?>
+                                </a></li>
 
                             <li <?php if ($curpage === '/pilgrims/classes') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/pilgrims/classes"><i <?php if ($url === '/pilgrims/classes') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_ManageClasses ?>
