@@ -61,7 +61,8 @@ class Config {
         if (!strpos($_SERVER['REQUEST_URI'], 'auth') && !strpos($_SERVER['REQUEST_URI'], '_POST') && !strpos($_SERVER['REQUEST_URI'], 'login') && !strpos($_SERVER['REQUEST_URI'], 'post')) $_SESSION['ref'] = $_SERVER['REQUEST_URI'];
 
         // Force login (for control panels)
-        if ($this->forceLogin && !$this->logged_in && basename($_SERVER['PHP_SELF']) !== 'login' && basename($_SERVER['PHP_SELF']) !== 'install' && strpos($_SERVER['PHP_SELF'],'cards') === -1) {
+        $page = array_reverse(explode('/',trim($_SERVER['REQUEST_URI'],'/?')))[0];
+        if ($this->forceLogin && !$this->logged_in && $page !== 'login' && $page !== 'install' && !str_contains($_SERVER['REQUEST_URI'], 'cards')) {
             header("Location: ".$this->loginURL);
             exit();
         }
