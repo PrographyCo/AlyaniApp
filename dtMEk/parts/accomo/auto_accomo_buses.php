@@ -127,19 +127,24 @@
                                             if ($_POST['pilc_id']) $sqlmore2 = " AND pil_pilc_id='" . $_POST['pilc_id'] . "'";
                                             
                                             
-                                            $sql1 = $db->query("SELECT pil_id, pil_code, pil_gender, pil_city_id FROM pils WHERE pil_city_id = $city_id AND pil_bus_id = 0 $sqlmore1 $sqlmore2 ORDER BY pil_reservation_number");
+                                            $sql1 = $db->query("SELECT pil_id, pil_code, pil_gender, pil_city_id, pil_reservation_number FROM pils WHERE pil_city_id = $city_id AND pil_bus_id = 0 $sqlmore1 $sqlmore2 ORDER BY pil_reservation_number");
+                                            
                                             if ($sql1->rowCount() > 0) {
-                                                
-                                                while ($row1 = $sql1->fetch(PDO::FETCH_ASSOC)) {
+                                                $families = sortPilsFamilies($sql1->fetchAll(PDO::FETCH_ASSOC));
+                                                $c = 0;
+                                                foreach ($families as $res=>$family) {
                                                     
-                                                    $accomodated = AccomoBuses($_POST['bus_id'], $row1['pil_code'], $row1['pil_gender'], $row1['pil_city_id'], $city_id);
+                                                    $accomodated = AccomoBuses($_POST['bus_id'], getPilCodeForFamily($family), '', $family[0]['pil_city_id'], $city_id);
+                                                    
                                                     if ($accomodated) {
                                                         if (!in_array($accomodated, $buses_accomodated)) $buses_accomodated[] = $accomodated;
-                                                        $count[$city_title]++;
-                                                        sendPushNotification(0, null, $noti_message, 2, $row1['pil_id'], 0, 'silent', false, false);
                                                         
+                                                        $count[$city_title] += count($family);
+                                                        
+                                                        foreach ($family as $pil) {
+                                                            sendPushNotification(0, null, $noti_message, 2, $pil['pil_id'], 0, 'silent', false, false);;
+                                                        }
                                                     }
-                                                    
                                                 }
                                                 
                                                 echo LBL_SuccessAccomo . ' <b>' . $count[$city_title] . '</b> ' . HM_Pilgrims . ' ' . LBL_In . ' ' . $city_title . ' <br />';

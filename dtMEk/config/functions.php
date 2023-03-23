@@ -44,18 +44,18 @@
                     
                     if ($days / 7 >= 1) { #weeks
                         $weeks = floor($days / 7);
-                        $return="$weeks Week".(($weeks >= 2)?'s':'');
+                        $return = "$weeks Week" . (($weeks >= 2) ? 's' : '');
                     } #end of weeks
-    
-                    $return = implode(',',[$return,"$days day".(($days >= 2)?'s':'')]);
+                    
+                    $return = implode(',', [$return, "$days day" . (($days >= 2) ? 's' : '')]);
                 } #end of days
                 
                 $hours = $hours - (floor($hours / 24)) * 24;
-                $return = implode(',',[$return,"$hours hr".(($hours >= 2)?'s':'')]);
+                $return = implode(',', [$return, "$hours hr" . (($hours >= 2) ? 's' : '')]);
             } #end of Hours
             
             $minutes = $minutes - (floor($minutes / 60)) * 60;
-            $return = implode(',',[$return,"$minutes min".(($minutes >= 2)?'s':'')]);
+            $return = implode(',', [$return, "$minutes min" . (($minutes >= 2) ? 's' : '')]);
         } #end of minutes
         
         return $return;
@@ -230,7 +230,28 @@
         return $return_buses;
     }
     
-    function busesToAccWithPredefined($buses, $city_id): array
+    function sortPilsFamilies(array $pils)
+    {
+        $families = [];
+        foreach ($pils as $pil) {
+            if (!array_key_exists($pil['pil_reservation_number'], $families)) {
+                $families[$pil['pil_reservation_number']] = [];
+            }
+            $families[$pil['pil_reservation_number']][] = $pil;
+        }
+        return $families;
+    }
+    
+    function getPilCodeForFamily(array $family)
+    {
+        $pil_codes = [];
+        foreach ($family as $pil) {
+            $pil_codes[] = $pil['pil_code'];
+        }
+        return $pil_codes;
+    }
+    
+    function busesToAccWithPredefined($buses, $city_id, $count): array
     {
         
         global $db;
@@ -242,8 +263,8 @@
         while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
             
             $occu = $db->query("SELECT COUNT(pil_id) FROM pils WHERE pil_bus_id = " . $row['bus_id'])->fetchColumn();
-            
-            if ($occu < $row['bus_seats']) $return_buses[] = $row;
+            $seats = ((int)$row['bus_seats']) - (int)$occu;
+            if ($seats > 0 && $seats >= $count) $return_buses[] = $row;
             
         }
         
@@ -251,7 +272,7 @@
     }
     
     
-    function AccomoSuites($suites, $halls, $extratype_id, $pil_code, $pil_gender, $type='pil'): bool
+    function AccomoSuites($suites, $halls, $extratype_id, $pil_code, $pil_gender, $type = 'pil'): bool
     {
         
         global $db;
@@ -285,7 +306,7 @@
                 // Suite accomodation
                 
                 $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-                $stmt->execute(array($pil_code,$type));
+                $stmt->execute(array($pil_code, $type));
                 $check = $stmt->rowCount();
                 
                 if ($check > 0) {
@@ -335,7 +356,7 @@
         
     }
     
-    function AccomoBuildings($buildings, $floors, $rooms, $pil_code, $pil_gender, $type='pil'): bool
+    function AccomoBuildings($buildings, $floors, $rooms, $pil_code, $pil_gender, $type = 'pil'): bool
     {
         
         global $db;
@@ -361,7 +382,7 @@
                     if ($stmt->rowCount() > 0) {
                         // Update
                         $sqlac = $db->prepare("UPDATE pils_accomo SET bld_id = ? , floor_id= ? , room_id = ? , extratype_id = ?, suite_id = 0, hall_id = 0,tent_id = 0  WHERE pil_code = ? AND type = ?");
-                        $sqlac->execute(array($available_buildings[0]['bld_id'], $available_floors[0], $available_rooms[0], $extratype_id, $pil_code,$type));
+                        $sqlac->execute(array($available_buildings[0]['bld_id'], $available_floors[0], $available_rooms[0], $extratype_id, $pil_code, $type));
                         
                         
                     } else {
@@ -404,7 +425,7 @@
         
     }
     
-    function AccomoTents($tents, $pil_code, $pil_gender, $type='pil'): bool
+    function AccomoTents($tents, $pil_code, $pil_gender, $type = 'pil'): bool
     {
         
         global $db;
@@ -460,7 +481,7 @@
     }
     
     
-    function Accomohallsarfa($tents, $pil_code, $pil_gender, $seats, $type="pil"): bool
+    function Accomohallsarfa($tents, $pil_code, $pil_gender, $seats, $type = "pil"): bool
     {
         global $db;
         
@@ -516,36 +537,37 @@
     }
     
     
-    function AccomoBuses($buses, $pil_code, $pil_gender, $pil_city_id, $city_id, $type='pil')
+    function AccomoBuses($buses, $pil_codes = [], $pil_gender, $pil_city_id, $city_id, $type = 'pil')
     {
         
         global $db;
         
-        $available_buses = busesToAccWithPredefined($buses, $city_id);
+        $available_buses = busesToAccWithPredefined($buses, $city_id, count($pil_codes));
         if (is_array($available_buses) && count($available_buses) > 0) {
             
-            $sqlac = $db->prepare("UPDATE pils SET pil_bus_id = :bus_id WHERE pil_code = :pil_code AND type = :type");
-            
-            $sqlac->bindValue("pil_code", $pil_code);
-            $sqlac->bindValue("type", $type);
-            $sqlac->bindValue("bus_id", $available_buses[0]['bus_id']);
-            $sqlac->execute();
-            
-            $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-            $stmt->execute(array($pil_code, $type));
-            $check = $stmt->rowCount();
-            
-            if ($check > 0) {
-                // Update
-                $sqlac = $db->prepare("UPDATE pils_accomo SET bus_id = ? WHERE pil_code = ? AND type = ?");
-                $sqlac->execute(array($available_buses[0]['bus_id'], $pil_code, $type));
+            foreach ($pil_codes as $pil_code) {
                 
-                $result = LBL_ACCOMO_UPDATED;
+                $sqlac = $db->prepare("UPDATE pils SET pil_bus_id = :bus_id WHERE pil_code = :pil_code");
                 
+                $sqlac->bindValue("pil_code", $pil_code);
+                $sqlac->bindValue("bus_id", $available_buses[0]['bus_id']);
+                $sqlac->execute();
                 
-            } else {
-                // Insert
-                $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
+                $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
+                $stmt->execute(array($pil_code, $type));
+                $check = $stmt->rowCount();
+                
+                if ($check > 0) {
+                    // Update
+                    $sqlac = $db->prepare("UPDATE pils_accomo SET bus_id = ? WHERE pil_code = ? AND type = ?");
+                    $sqlac->execute(array($available_buses[0]['bus_id'], $pil_code, $type));
+                    
+                    $result = LBL_ACCOMO_UPDATED;
+                    
+                    
+                } else {
+                    // Insert
+                    $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
                             :pil_code,
                             :type,
                             5,
@@ -559,14 +581,14 @@
                             0,
                             :bus_id,
                             '',
-                            ''
-                         ) ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = 0 , seats = 0, bus_id = :bus_id, extratype_id = '', extratype_text = ''");
-                
-                $sqlac->bindValue("pil_code", $pil_code);
-                $sqlac->bindValue("type", $type);
-                $sqlac->bindValue("bus_id", $available_buses[0]['bus_id']);
-                $sqlac->execute();
-                
+                            '') ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = 0 , seats = 0, bus_id = :bus_id, extratype_id = '', extratype_text = ''");
+                    
+                    $sqlac->bindValue("pil_code", $pil_code);
+                    $sqlac->bindValue("type", $type);
+                    $sqlac->bindValue("bus_id", $available_buses[0]['bus_id']);
+                    $sqlac->execute();
+                    
+                }
             }
             
             return $available_buses[0]['bus_id'];
@@ -686,9 +708,9 @@
         
         // Tents
         if (is_array($tents) && !empty($tents) && $tents[0] !== "") {
-
+            
             if ($gender) $sqlmore1 = "AND tent_gender = '$gender'";
-            $sql = $db->query("SELECT tent_id, tent_capacity FROM tents WHERE tent_active = 1 AND type = 1 AND  tent_id IN (" . implode(',', $tents??['']) . ") $sqlmore1");
+            $sql = $db->query("SELECT tent_id, tent_capacity FROM tents WHERE tent_active = 1 AND type = 1 AND  tent_id IN (" . implode(',', $tents ?? ['']) . ") $sqlmore1");
             
             while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
                 
@@ -704,7 +726,7 @@
             
             if ($gender) $sqlmore1 = "AND tent_gender = '$gender'";
             
-            $sql = $db->query("SELECT tent_id, tent_capacity FROM tents WHERE tent_active = 1  AND type = 2 AND tent_id IN (" . implode(',', $halls_arfa??['']) . ") $sqlmore1");
+            $sql = $db->query("SELECT tent_id, tent_capacity FROM tents WHERE tent_active = 1  AND type = 2 AND tent_id IN (" . implode(',', $halls_arfa ?? ['']) . ") $sqlmore1");
             
             while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
                 
