@@ -73,8 +73,7 @@
 
 <footer>
     <center>
-        <strong>Copyright@Alolyani Company <?= date("Y") ?>.</strong> All rights reserved. Developed by <b>Atiaf
-            Apps</b>
+        <strong>Copyright@Alolyani Company <?= date("Y") ?>.</strong> All rights reserved.
     </center>
 </footer>
 

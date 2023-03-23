@@ -48,7 +48,7 @@ class Config {
         session_start();
 
         // Login
-        if(!empty($_POST['sublogin'])) $this->login($_POST['email'], $_POST['password'], $_POST['remember'], $_GET['goto']);
+        if(!empty($_POST['sublogin'])) $this->login($_POST['email'], $_POST['password'], $_POST['remember']??false, $_GET['goto']??'');
 
         // Security - Limit access to certain countries
         $this->countryAccess($this->allowedCountries);

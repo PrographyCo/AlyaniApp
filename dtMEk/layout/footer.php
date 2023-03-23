@@ -1,8 +1,8 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 1.0.0
+        <b>Version</b> 3.1.0
     </div>
-    <strong>Copyright@Alolyani Company <?= date("Y") ?>.</strong> All rights reserved. Developed by <b>Atiaf Apps</b>
+    <strong>Copyright@Alolyani Company <?= date("Y") ?>.</strong> All rights reserved.
 </footer>
 <!-- Add the sidebar's background. This div must be placed
      immediately after the control sidebar -->
@@ -50,6 +50,8 @@
 
 <?php
     global $lang;
+    
+    $dt_ar = '';
     
     if ($lang === 'ar') {
         

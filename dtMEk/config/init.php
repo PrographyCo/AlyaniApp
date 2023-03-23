@@ -1,5 +1,6 @@
 <?php
     $lang = 'ar';
+    
     if (isset($_GET['lang']) && in_array($lang=strtolower($_GET['lang']),['en','ar'])){
         setcookie('lang', $lang);
         $_COOKIE['lang'] = $lang;

@@ -99,19 +99,20 @@
     
                 <?php
                     $perms = $db->query("SELECT permid FROM _users_perms WHERE user_id = " . $_SESSION['userinfo']['user_id'])->fetchAll(PDO::FETCH_COLUMN);
-                
+                    $user_level = (int)$_SESSION['userinfo']['userlevel'];
                 ?>
 
-                <li <?php if ($curpage === '/main/index') echo 'class="active" id="active"'; ?>>
+<!--                <li <?php if ($curpage === '/main/index') echo 'class="active" id="active"'; ?> >
                     <a href="<?= CP_PATH ?>/main/index">
                         <i class="fa fa-dashboard fa-fw"></i> <span><?= HM_Dashboard ?></span>
                     </a>
                 </li>
+-->
 
-                <li <?php if ($curpage === '/main/soothing_summary') echo 'class="active" id="active"'; ?>>
-                    <a href="<?= CP_PATH ?>/main/soothing_summary">
+                <li <?php if ($curpage === '/main/index') echo 'class="active" id="active"'; ?>>
+                    <a href="<?= CP_PATH ?>/main/index">
                         <i class="fa fa-dashboard fa-fw"></i>
-                        <span><?= HM_soothing_summary ?> </span>
+                        <span><?= HM_Dashboard ?> </span>
                     </a>
                 </li>
                 <!--
@@ -129,7 +130,7 @@
                 
                 <li class="header"><?= HM_BASICINFORMATION ?></li>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(2, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(2, $perms, true))) { ?>
                     <li <?php if ($curpage === '/basic_info/ourlocations') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/ourlocations">
                             <i <?php if ($curpage === '/basic_info/ourlocations') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
@@ -137,7 +138,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(3, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(3, $perms, true))) { ?>
                     <li <?php if ($curpage === '/basic_info/ourcompanies') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/ourcompanies">
                             <i <?php if ($curpage === '/basic_info/ourcompanies') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
@@ -145,7 +146,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(4, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(4, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/basic_info/promos') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/promos">
@@ -154,7 +155,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(5, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(5, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/basic_info/cities') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/cities">
@@ -163,7 +164,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(6, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(6, $perms, true))) { ?>
     
                     <?php
                     
@@ -189,7 +190,7 @@
                         </ul>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(7, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(7, $perms, true))) { ?>
     
                     <?php
                     
@@ -219,7 +220,7 @@
                         </ul>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(8, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(8, $perms, true))) { ?>
 
                     <li <?php if ($curpagewithquery === '/basic_info/tents?type=1') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/tents?type=1">
@@ -230,7 +231,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(8, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(8, $perms, true))) { ?>
 
                     <li <?php if ($curpagewithquery === '/basic_info/tents?type=2') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/tents?type=2">
@@ -240,7 +241,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(9, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(9, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/basic_info/buses') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/basic_info/buses">
@@ -252,7 +253,7 @@
                 
                 <li class="header"><?= HM_STAFF ?></li>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(10, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(10, $perms, true))) { ?>
                     
                     <li <?php if ($curpagewithquery === '/staff/index?type=1') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/staff?type=1">
@@ -261,7 +262,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(11, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(11, $perms, true))) { ?>
 
                     <li <?php if ($curpagewithquery === '/staff/index?type=2') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/staff?type=2">
@@ -270,7 +271,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(12, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(12, $perms, true))) { ?>
 
                     <li <?php if ($curpagewithquery === '/staff/index?type=3') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/staff?type=3">
@@ -279,7 +280,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(13, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(13, $perms, true))) { ?>
 
                     <li class="header"><?= HM_PILGRIMS ?></li>
     
@@ -316,7 +317,7 @@
                 <?php } ?>
                 <!-- <span class="label label-warning pull-right">27</span> -->
                 <li class="header"><?= HM_ACCOMODATIONS ?></li>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(32, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(32, $perms, true))) { ?>
                     <li <?php if ($curpage === '/accomo/auto_accomo') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/accomo/auto_accomo">
                             <i <?php if ($curpage === '/accomo/auto_accomo') echo 'class="fa fa-fw fa-star text-white"'; else echo 'class="fa fa-fw fa-star"'; ?>></i>
@@ -351,14 +352,14 @@
                                 class="fa fa-angle-<?= DIR_AFTER ?> pull-<?= DIR_AFTER ?>"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(14, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(14, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/accomo_suites') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/accomo_suites"><i <?php if ($curpage === '/accomo/accomo_suites') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_SuitesAccomodations ?>
                                 </a></li>
                         
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(15, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(15, $perms, true))) { ?>
 
 
                             <li <?php if ($curpage === '/accomo/accomo_buildings') echo 'class="active" id="active"'; ?>><a
@@ -366,33 +367,33 @@
                                 </a></li>
                         
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(16, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(16, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/accomo_tents') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/accomo_tents"><i <?php if ($curpage === '/accomo/accomo_tents') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_TentsAccomodations ?>
                                     ( <?= mozdalifa ?> ) </a></li>
                         
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(16, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(16, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/accomo_tents_halls') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/accomo_tents_halls"><i <?php if ($curpage === '/accomo/accomo_tents_halls') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_HallsAccomodations ?>
                                 </a></li>
                         
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(17, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(17, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/accomo_buses') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/accomo_buses"><i <?php if ($curpage === '/accomo/accomo_buses') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_BusesAccomodations ?>
                                 </a></li>
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(37, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(37, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/bulkaccomosms') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/bulkaccomosms"><i <?php if ($curpage === '/accomo/bulkaccomosms') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_bulkaccomosms ?>
                                 </a></li>
                         <?php } ?>
-                        <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(38, $perms, true))) { ?>
+                        <?php if ($user_level === 9 || (in_array(38, $perms, true))) { ?>
 
                             <li <?php if ($curpage === '/accomo/bulkbussms') echo 'class="active" id="active"'; ?>><a
                                         href="<?= CP_PATH ?>/accomo/bulkbussms"><i <?php if ($curpage === '/accomo/bulkbussms') echo 'class="fa fa-fw fa-circle text-white"'; else echo 'class="fa fa-fw fa-circle-o"'; ?>></i> <?= HM_bulkbussms ?>
@@ -403,7 +404,7 @@
 
                 <li class="header"><?= HM_PUSHNOTIFICATIONS ?></li>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(18, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(18, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/notifications/push_new') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/notifications/push_new">
@@ -412,7 +413,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(19, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(19, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/notifications/push_list') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/notifications/push_list">
@@ -423,7 +424,7 @@
                 <?php } ?>
 
                 <li class="header"><?= HM_GENERALGUIDE ?></li>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(31, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(31, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/guide/general_guide') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/guide/general_guide">
@@ -433,7 +434,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(31, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(31, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/guide/general_guide_staff') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/guide/general_guide_staff">
@@ -446,7 +447,7 @@
 
 
                 <li class="header"><?= HM_GENERAL ?></li>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/news') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/news">
@@ -456,7 +457,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/competitions') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/competitions">
@@ -466,7 +467,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/competitions-result') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/competitions-result">
@@ -478,7 +479,7 @@
                 <?php } ?>
                 
                 <!--
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/new_questions') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/new_questions">
@@ -488,7 +489,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(20, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(20, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/answers') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/answers">
@@ -500,7 +501,7 @@
                 -->
                 
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(21, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(21, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/aboutus') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/aboutus">
@@ -509,7 +510,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(22, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(22, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/contactinfo') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/contactinfo">
@@ -518,7 +519,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(23, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(23, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/social') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/social">
@@ -527,7 +528,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(24, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(24, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/faq') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/faq">
@@ -536,7 +537,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(25, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(25, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/haj_album') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/haj_album">
@@ -545,7 +546,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(26, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(26, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/haj_guide_cats') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/haj_guide_cats">
@@ -554,7 +555,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(27, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(27, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/haj_guide_articles') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/haj_guide_articles">
@@ -564,7 +565,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(28, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(28, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/general/feedback') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/general/feedback">
@@ -587,7 +588,7 @@
 
                 <li class="header"><?= HM_SYSTEM ?></li>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(29, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(29, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/settings') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/settings">
@@ -597,7 +598,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(33, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(33, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/employees') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/employees">
@@ -607,7 +608,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(35, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(35, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/update_pils_photos') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/update_pils_photos">
@@ -618,7 +619,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(36, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(36, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/update_emps_photos') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/update_emps_photos">
@@ -629,7 +630,7 @@
                     </li>
                 <?php } ?>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(34, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(34, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/designs_managers') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/designs_managers">
@@ -659,7 +660,7 @@
 
                 </li>
                 
-                <?php if ($_SESSION['userinfo']['userlevel'] === 9 || (in_array(30, $perms, true))) { ?>
+                <?php if ($user_level === 9 || (in_array(30, $perms, true))) { ?>
 
                     <li <?php if ($curpage === '/system/users_all') echo 'class="active" id="active"'; ?>>
                         <a href="<?= CP_PATH ?>/system/users_all">

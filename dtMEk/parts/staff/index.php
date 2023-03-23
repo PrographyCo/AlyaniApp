@@ -65,9 +65,9 @@
                                     <tr>
                                         <td>
                                             <?= match ($row['staff_type']) {
-                                                1 => HM_Managers,
-                                                2 => HM_Supervisors,
-                                                3 => HM_Muftis,
+                                                "1" => HM_Managers,
+                                                "2" => HM_Supervisors,
+                                                "3" => HM_Muftis,
                                             } ?>
                                         </td>
                                         <td>
@@ -146,7 +146,7 @@
             };
 
             $.post('<?= CP_PATH ?>/post/removePilAccomo', data, function (response) {
-                $('#pilaccomo_' + pil_id).html('<span class="label label-danger"><?= LBL_NOACCOM ?></span><a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['staff_id'] ?>&type=emp" class="label label-default"><?= LBL_Add ?></a>');
+                $('#pilaccomo_' + pil_id).html('<span class="label label-danger"><?= LBL_NOACCOM ?></span><a href="<?= CP_PATH ?>/accomo/transfer?pil_id='+ pil_id +'&type=emp" class="label label-default"><?= LBL_Add ?></a>');
             });
 
         }
