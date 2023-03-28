@@ -359,3 +359,4 @@
     
         const Arafa = 'عرفة';
         const Manaa = 'منى';
+        const Occu = 'محجوز';

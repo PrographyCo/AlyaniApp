@@ -354,3 +354,4 @@
 
         const Arafa = 'Arafa';
         const Manaa = 'Manaa';
+        const Occu = 'Occupied';

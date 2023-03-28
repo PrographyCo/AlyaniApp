@@ -526,7 +526,12 @@
                                 <th>
                                     <?= LBL_BusSeats ?>
                                 </th>
-
+                                <th>
+                                    <?= Occu ?>
+                                </th>
+                                <th>
+                                    <?= LBL_ٍRemaining ?>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -534,10 +539,15 @@
                             
                                 // Suites
                                 while ($row = $sql->fetch()) {
+                                    $occu = $db->query("SELECT COUNT(pil_id) FROM pils WHERE pil_bus_id = " . $row['bus_id'])->fetchColumn();
+                                    $remaining = $row['bus_seats'] - $occu;
+    
                                     ?>
                                     <tr>
                                         <td><?= $row['city_title_ar'] ?></td>
                                         <td><?= number_format($row['bus_seats']) ?></td>
+                                        <td><?= $occu ?></td>
+                                        <td><?= $remaining ?></td>
                                     </tr>
                                     <?php
                                 }
