@@ -9,7 +9,7 @@
     if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
     else $id = '';
     
-    if ($_POST) {
+    if (!empty($_POST)) {
         
         try {
             $sql = $db->prepare("REPLACE INTO $table VALUES (

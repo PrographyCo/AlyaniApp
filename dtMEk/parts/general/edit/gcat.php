@@ -10,7 +10,7 @@
     else $id = '';
     
     
-    if ($_POST) {
+    if (!empty($_POST)) {
         
         try {
             $sql = $db->prepare("REPLACE INTO $table VALUES (

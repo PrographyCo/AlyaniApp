@@ -6,10 +6,10 @@
     $table = 'guide_articles';
     $table_id = 'ga_id';
     
-    $table = 'guide_categories';
-    $table_id = 'gcat_id';
+    if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
+    else $id = '';
     
-    if ($_POST) {
+    if (!empty($_POST)) {
         
         try {
             $sql = $db->prepare("REPLACE INTO $table VALUES (
@@ -132,13 +132,14 @@
 
                             <div class="form-group">
                                 <label><?= LBL_ChooseParentCategory ?></label>
+                                
                                 <select name="ga_gcat_id" class="form-control">
                                     <?php
                                         $sqlcats = $db->query("SELECT * FROM guide_categories WHERE gcat_active = 1 ORDER BY gcat_title_$lang");
                                         while ($rowcats = $sqlcats->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $rowcats['gcat_id'] . '" ';
-                                            if ((isset($row) && $row['gcat_parent_id'] == $rowcats['gcat_id']) || (isset($_POST['gcat_parent_id']) && $_POST['gcat_parent_id'] == $rowcats['gcat_id']) || (isset($_GET['parent_id']) && $_GET['parent_id'] == $rowcats['gcat_id'])) echo 'selected="selected"';
+                                            if ((isset($row) && $row['ga_gcat_id'] == $rowcats['gcat_id']) || (isset($_POST['ga_gcat_id']) && $_POST['ga_gcat_id'] == $rowcats['gcat_id']) || (isset($_GET['parent_id']) && $_GET['parent_id'] == $rowcats['gcat_id'])) echo 'selected="selected"';
                                             echo '>' . $rowcats['gcat_title_' . $lang] . '</option>';
                                             
                                         }

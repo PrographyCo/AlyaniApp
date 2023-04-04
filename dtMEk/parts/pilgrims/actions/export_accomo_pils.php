@@ -1,6 +1,6 @@
 <?php
     
-    $cardurl = $root_absolute_path . trim(CP_PATH."/media/accomo_PDF/ACCOMO_pil.pdf",'/');
+    $cardurl = $root_absolute_path . "/assets/media/accomo_PDF/ACCOMO_pil.pdf";
     
     $command = "wkhtmltopdf -T 10 -B 10 -L 10 -R 10 --page-size A4 --dpi 300 \"".$_SERVER['HTTP_HOST'].CP_PATH."/pilgrims/actions/export_accomo_pils_html\" ".$cardurl;
     $result = exec($command);

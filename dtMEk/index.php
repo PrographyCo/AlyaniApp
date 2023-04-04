@@ -1,9 +1,9 @@
 <?php
     require './config/constants.php';
     
-    $url = explode('?',str_replace(strtolower(CP_PATH),'',strtolower($_SERVER['REQUEST_URI'])))[0];
+    $url = explode('?',str_replace(CP_PATH,'',$_SERVER['REQUEST_URI']))[0];
     $root_absolute_path = str_replace(trim(CP_PATH,'/'),'',__DIR__);
-
+    
     $includes = [
         'post' => [
             'config/config.inc.php',
