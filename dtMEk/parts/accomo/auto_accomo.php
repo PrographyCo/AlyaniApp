@@ -17,26 +17,26 @@
             <?= $title ?>
             <a href="?removeall=1" onclick="return confirm('<?= LBL_RemoveAccomoConfirm ?>');"
                class="btn btn-danger pull-<?= DIR_AFTER ?>" style="margin-<?= DIR_AFTER ?>: 10px"><i
-                        class="fa fa-trash"></i> <?= BTN_REMOVEACCOMO ?></a>
+                    class="fa fa-trash"></i> <?= BTN_REMOVEACCOMO ?></a>
         </h1>
     </section>
-
+    
     <!-- Main content -->
     <section class="content">
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
-                <?= $msg??'' ?>
+                <?= $msg ?? '' ?>
                 <div class="box">
                     <div class="box-body">
                         <form method="post" enctype="multipart/form-data">
-
-
+                            
+                            
                             <div class="panel well">
                                 <?= LBL_NotAccomoPilgrims ?>: <span id="countpils">0</span>
                                 - <?= LBL_AvailableForAccomo ?>: <span id="availcount">0</span>
                             </div>
-
+                            
                             <div class="row">
                                 <div class="form-group col-sm-4">
                                     <label><?= LBL_Cities ?></label>
@@ -51,7 +51,7 @@
 															</option>';
                                             }
                                         ?>
-
+                                    
                                     </select>
                                 </div>
                                 <div class="form-group col-sm-4">
@@ -61,10 +61,12 @@
                                         <option value="0">
                                             <?= LBL_All ?>
                                         </option>
-                                        <option value="m" <?php if (isset($_REQUEST['gender']) && $_REQUEST['gender'] == 'm') echo 'selected="selected"'; ?>>
+                                        <option
+                                            value="m" <?php if (isset($_REQUEST['gender']) && $_REQUEST['gender'] == 'm') echo 'selected="selected"'; ?>>
                                             <?= LBL_Male ?>
                                         </option>
-                                        <option value="f" <?php if (isset($_REQUEST['gender']) && $_REQUEST['gender'] == 'f') echo 'selected="selected"'; ?>>
+                                        <option
+                                            value="f" <?php if (isset($_REQUEST['gender']) && $_REQUEST['gender'] == 'f') echo 'selected="selected"'; ?>>
                                             <?= LBL_Female ?>
                                         </option>
                                     </select>
@@ -72,7 +74,7 @@
                                 <div class="form-group col-sm-4">
                                     <label><?= LBL_Class ?></label>
                                     <select name="pilc_id" id="pilc_id" class="form-control select2"
-                                            onchange="countCitiesPils();">
+                                            onchange="showClassFields(this);countCitiesPils();">
                                         <option value="0">
                                             <?= LBL_All ?>
                                         </option>
@@ -86,92 +88,26 @@
 															</option>';
                                             }
                                         ?>
-
+                                    
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="row">
-
-                                <div class="form-group col-sm-4">
-                                    <label><?= LBL_SuiteNumber ?></label>
-                                    <div id="SuitesArea">
-
-                                        <select name="suite_id[]" id="suite_id[]" class="form-control select2"
-                                                multiple="multiple" onchange="suites_selected(); calcAvailAccomo();">
-                                            <?php
-                                                $sqlsuites = $db->query("SELECT * FROM suites WHERE suite_active = 1 ORDER BY suite_title");
-                                                while ($rows = $sqlsuites->fetch(PDO::FETCH_ASSOC)) {
-                                                    echo '<option value="' . $rows['suite_id'] . '" ';
-                                                    echo '>
-															' . $rows['suite_title'] . '
-															</option>';
-                                                }
-                                            ?>
-                                        </select>
-                                        <div id="hallsarea">
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="form-group col-sm-4">
-                                    <label><?= HM_Building . ' ' . LBL_Type ?></label>
-                                    <div id="BuildingsTypeArea">
-                                        <select name="bld_type" id="bld_type" class="form-control select2"
-                                                onchange="bldtype_selected(this.value); calcAvailAccomo();">
-                                            <option value="0">
-                                                <?= LBL_All ?>
-                                            </option>
-                                            <option value="1">
-                                                <?= HM_Building ?>
-                                            </option>
-                                            <option value="2">
-                                                <?= LBL_Premises ?>
-                                            </option>
-                                        </select>
-
-                                        <div id="buildingsarea">
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-sm-4">
-                                    <label><?= LBL_TentNumber ?>  </label>
-                                    <div id="TentsArea">
-                                        <select name="tent_id[]" id="tent_id[]" class="form-control select2"
-                                                multiple="multiple" onchange="calcAvailAccomo();">
-                                            <?php
-                                                $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 1 ORDER BY tent_title");
-                                                while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
-                                                    echo '<option value="' . $rowt['tent_id'] . '" ';
-                                                    echo '>
-																' . $rowt['tent_title'] . '
-																</option>';
-                                                }
-                                            ?>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-
+                            
+                            <div class="row data">
+                            
                             </div>
-
+                            
                             <input type="submit" class="btn btn-primary col-xs-12" value="<?= LBL_ApplyAccomo ?>"/>
-
+                        
                         </form>
                     </div>
                 </div>
-    
+                
                 <?php
                     if (!empty($_POST)) { ?>
                         <div class="box">
                             <div class="box-body">
-    
+                                
                                 <?php
                                     
                                     if (isset($_POST['city_id']) && is_array($_POST['city_id']) && count($_POST['city_id']) > 0) {
@@ -203,7 +139,7 @@
                                                     if (!$accomodated && isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
                                                         
                                                         // accomodate to suites
-                                                        $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id']??0, $_POST['extratype_id']??0, $row1['pil_code'], $row1['pil_gender']);
+                                                        $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'] ?? 0, $_POST['extratype_id'] ?? 0, $row1['pil_code'], $row1['pil_gender']);
                                                         if ($accomodated) {
                                                             
                                                             $count[$city_title]++;
@@ -264,12 +200,12 @@
                                     
                                     }
                                 ?>
-
+                            
                             </div><!-- /.box-body -->
                         </div><!-- /.box -->
                     <?php } ?>
             </div><!--/.col (right) -->
-
+        
         </div>   <!-- /.row -->
     </section><!-- /.content -->
 
@@ -412,4 +348,104 @@
         }, 'json');
 
     }
+
+    function showClassFields(el) {
+        let html='';
+        switch (el.value) {
+            case '1':
+                html=generate_type_1();
+                break;
+            case '2':
+                html=generate_type_2();
+                break;
+            default:
+                html=generate_type_3();
+                break;
+        }
+        document.querySelector('.row.data').innerHTML = html;
+        $('select').select2();
+    }
+    
+    function generate_type_1() {
+        return `<div class="form-group col-sm-12">
+                                    <label><?= LBL_SuiteNumber ?></label>
+                                    <div id="SuitesArea">
+
+                                        <select name="suite_id[]" id="suite_id[]" class="form-control select2"
+                                                multiple="multiple" onchange="suites_selected(); calcAvailAccomo();">
+                                            <?php
+        $sqlsuites = $db->query("SELECT * FROM suites WHERE suite_active = 1 ORDER BY suite_title");
+        while ($rows = $sqlsuites->fetch(PDO::FETCH_ASSOC)) {
+            echo '<option value="' . $rows['suite_id'] . '" ';
+            echo '>
+															' . $rows['suite_title'] . '
+															</option>';
+        }
+        ?>
+                                        </select>
+                                        <div id="hallsarea">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>`;
+    }
+
+    function generate_type_2() {
+        return `<div class="form-group col-sm-6 type_2">
+                    <label><?= HM_Building . ' ' . LBL_Type ?></label>
+                    <div id="BuildingsTypeArea">
+                        <select name="bld_type" id="bld_type" class="form-control select2"
+                                onchange="bldtype_selected(this.value); calcAvailAccomo();">
+                            <option value="0">
+                                <?= LBL_All ?>
+                            </option>
+                            <option value="1">
+                                <?= HM_Building ?>
+                            </option>
+                            <option value="2">
+                                <?= LBL_Premises ?>
+                            </option>
+                        </select>
+
+                        <div id="buildingsarea">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6 type_2">
+                    <label><?= LBL_TentNumber ?>  </label>
+                    <div id="TentsArea">
+                        <select name="tent_id[]" id="tent_id[]" class="form-control select2"
+                                multiple="multiple" onchange="calcAvailAccomo();">
+                            <?php
+                            $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 1 ORDER BY tent_title");
+                            while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<option value="' . $rowt['tent_id'] . '" ';
+                                echo '>' . $rowt['tent_title'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>`;
+}
+
+    function generate_type_3() {
+        return `<div class="form-group col-sm-12 type_3">
+                    <label><?= LBL_TentNumber ?></label>
+                    <div id="TentsArea">
+                        <select name="tent_id[]" id="tent_id[]" class="form-control select2"
+                                multiple="multiple" onchange="calcAvailAccomo();">
+                            <?php
+                            $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 1 ORDER BY tent_title");
+                            while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<option value="' . $rowt['tent_id'] . '" ';
+                                echo '>' . $rowt['tent_title'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>`;
+}
 </script>
