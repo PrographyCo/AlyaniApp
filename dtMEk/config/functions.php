@@ -303,24 +303,9 @@
                     $extratype_text = '';
                 }
                 
-                // Suite accomodation
+                // Insert
                 
-                $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-                $stmt->execute(array($pil_code, $type));
-                $check = $stmt->rowCount();
-                
-                if ($check > 0) {
-                    // Update
-                    $sqlac = $db->prepare("UPDATE pils_accomo SET suite_id = ? , hall_id= ? , extratype_id = ? , extratype_text = ?, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0  WHERE pil_code = ? AND type = ?");
-                    $sqlac->execute(array($available_suites[0], $available_halls[0]['hall_id'], $extratype_id, $extratype_text, $pil_code, $type));
-                    
-                    $result = LBL_ACCOMO_UPDATED;
-                    
-                    
-                } else {
-                    // Insert
-                    
-                    $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
+                $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
                                  :pil_code,
                                  :type,
                                  1,
@@ -336,16 +321,14 @@
                                  :extratype_id,
                                  :extratype_text
                                ) ON DUPLICATE KEY UPDATE pil_accomo_type = 1, suite_id = :suite_id, hall_id = :hall_id, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0, halls_id = 0 , seats = 0,  bus_id = 0, extratype_id = :extratype_id, extratype_text = :extratype_text");
-                    
-                    $sqlac->bindValue("pil_code", $pil_code);
-                    $sqlac->bindValue("type", $type);
-                    $sqlac->bindValue("suite_id", $available_suites[0]);
-                    $sqlac->bindValue("hall_id", $available_halls[0]['hall_id']);
-                    $sqlac->bindValue("extratype_id", $extratype_id);
-                    $sqlac->bindValue("extratype_text", $extratype_text);
-                    $sqlac->execute();
-                    
-                }
+                
+                $sqlac->bindValue("pil_code", $pil_code);
+                $sqlac->bindValue("type", $type);
+                $sqlac->bindValue("suite_id", $available_suites[0]);
+                $sqlac->bindValue("hall_id", $available_halls[0]['hall_id']);
+                $sqlac->bindValue("extratype_id", $extratype_id);
+                $sqlac->bindValue("extratype_text", $extratype_text);
+                $sqlac->execute();
                 
                 
                 return true;
@@ -376,19 +359,9 @@
                     
                     $extratype_id = $available_buildings[0]['bld_type'];
                     
-                    $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-                    $stmt->execute(array($pil_code, $type));
+                    // Insert
                     
-                    if ($stmt->rowCount() > 0) {
-                        // Update
-                        $sqlac = $db->prepare("UPDATE pils_accomo SET bld_id = ? , floor_id= ? , room_id = ? , extratype_id = ?, suite_id = 0, hall_id = 0,tent_id = 0  WHERE pil_code = ? AND type = ?");
-                        $sqlac->execute(array($available_buildings[0]['bld_id'], $available_floors[0], $available_rooms[0], $extratype_id, $pil_code, $type));
-                        
-                        
-                    } else {
-                        // Insert
-                        
-                        $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
+                    $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
                                     :pil_code,
                                     :type,
                                     2,
@@ -404,18 +377,15 @@
                                     :extratype_id,
                                     ''
                                 ) ON DUPLICATE KEY UPDATE pil_accomo_type = 2, suite_id = 0, hall_id = 0, bld_id = :bld_id, floor_id = :floor_id, room_id = :room_id, tent_id = 0, halls_id = 0 , seats = 0, bus_id = 0, extratype_id = :extratype_id, extratype_text = ''");
-                        
-                        $sqlac->bindValue("pil_code", $pil_code);
-                        $sqlac->bindValue("type", $type);
-                        $sqlac->bindValue("bld_id", $available_buildings[0]['bld_id']);
-                        $sqlac->bindValue("floor_id", $available_floors[0]);
-                        $sqlac->bindValue("room_id", $available_rooms[0]['room_id']);
-                        $sqlac->bindValue("extratype_id", $extratype_id);
-                        
-                        $sqlac->execute();
-                        
-                    }
                     
+                    $sqlac->bindValue("pil_code", $pil_code);
+                    $sqlac->bindValue("type", $type);
+                    $sqlac->bindValue("bld_id", $available_buildings[0]['bld_id']);
+                    $sqlac->bindValue("floor_id", $available_floors[0]);
+                    $sqlac->bindValue("room_id", $available_rooms[0]);
+                    $sqlac->bindValue("extratype_id", $extratype_id);
+                    
+                    $sqlac->execute();
                     
                     return true;
                     
@@ -434,20 +404,8 @@
         $available_tents = tentsToAcc($tents, $pil_gender, 1);
         if (is_array($available_tents) && count($available_tents) > 0) {
             
-            
-            $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-            $stmt->execute(array($pil_code, $type));
-            
-            if ($stmt->rowCount() > 0) {
-                // Update
-                $sqlac = $db->prepare("UPDATE pils_accomo SET tent_id = ?, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0  WHERE pil_code = ? AND type = ?");
-                $sqlac->execute(array($available_tents[0]['tent_id'], $pil_code, $type));
-                
-                $result = LBL_ACCOMO_UPDATED;
-                
-            } else {
-                // Insert
-                $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
+            // Insert
+            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
                                 :pil_code,
                                 :type,
                                 3,
@@ -463,15 +421,12 @@
                                 '',
                                 ''
                              ) ON DUPLICATE KEY UPDATE pil_accomo_type = 3, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = :tent_id,  halls_id = 0 , seats = 0, bus_id = 0, extratype_id = '', extratype_text = ''");
-                
-                $sqlac->bindValue("pil_code", $pil_code);
-                $sqlac->bindValue("pil_code", $type);
-                $sqlac->bindValue("tent_id", $available_tents[0]['tent_id']);
-                
-                $sqlac->execute();
-                
-            }
             
+            $sqlac->bindValue("pil_code", $pil_code);
+            $sqlac->bindValue("pil_code", $type);
+            $sqlac->bindValue("tent_id", $available_tents[0]['tent_id']);
+            
+            $sqlac->execute();
             
             return true;
             
@@ -489,46 +444,29 @@
         
         if (is_array($available_tents) && count($available_tents) > 0) {
             
-            
-            $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? AND type = ?");
-            $stmt->execute(array($pil_code, $type));
-            $check = $stmt->rowCount();
-            
-            if ($check > 0) {
-                // Update
-                $sqlac = $db->prepare("UPDATE pils_accomo SET halls_id = ?  , seats = ? WHERE pil_code = ? AND type = ?");
-                $sqlac->execute(array($available_tents[0]['tent_id'], $seats, $pil_code, $type));
-                
-                $result = LBL_ACCOMO_UPDATED;
-                
-                
-            } else {
                 // Insert
-                $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-                            :pil_code,
-                            :type,
-                            10,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            :halls_id,
-                            :seats,
-                            0,
-                            '',
-                            ''
-                         ) ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = :halls_id , seats = :seats, bus_id = 0, extratype_id = '', extratype_text = ''");
-                
+            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
+                        :pil_code,
+                        :type,
+                        10,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        :halls_id,
+                        :seats,
+                        0,
+                        '',
+                        ''
+                     ) ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = :halls_id , seats = :seats, bus_id = 0, extratype_id = '', extratype_text = ''");
+            
                 $sqlac->bindValue("pil_code", $pil_code);
                 $sqlac->bindValue("type", $type);
                 $sqlac->bindValue("halls_id", $available_tents[0]['tent_id']);
                 $sqlac->bindValue("seats", $seats);
                 $sqlac->execute();
-                
-            }
-            
             
             return true;
             
@@ -581,7 +519,7 @@
                             0,
                             :bus_id,
                             '',
-                            '') ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = 0 , seats = 0, bus_id = :bus_id, extratype_id = '', extratype_text = ''");
+                            '') ON DUPLICATE KEY UPDATE pil_accomo_type = 5, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,  halls_id = 0 , seats = 0, bus_id = :bus_id, extratype_id = '', extratype_text = ''");
                     
                     $sqlac->bindValue("pil_code", $pil_code);
                     $sqlac->bindValue("type", $type);
@@ -673,7 +611,7 @@
         if (is_array($suites)) {
             
             if ($gender) $sqlmore1 = "AND hall_suite_id IN (SELECT suite_id FROM suites WHERE suite_active = 1 AND suite_gender = '$gender')";
-            if (is_array($halls) && count($halls) > 0) $sqlmore2 = "AND hall_id IN (" . implode(',', $halls) . ")";
+            if (is_array($halls) && count($halls) > 0) $sqlmore2 = "AND hall_id IN (" . (implode(',', $halls)) . ")";
             
             $sql = $db->query("SELECT hall_id, hall_capacity FROM suites_halls WHERE hall_active = 1 AND hall_suite_id IN (" . implode(',', $suites) . ") $sqlmore1 $sqlmore2");
             

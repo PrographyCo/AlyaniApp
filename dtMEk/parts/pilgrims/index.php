@@ -256,6 +256,11 @@
                                                onclick="confirmRemoveAccomo(<?= $row['pil_id'] ?>);"
                                                class="label label-default"><?= LBL_RemoveAccomo ?></a>
                                             <?php
+                                        } else {
+                                            ?>
+                                            <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['pil_id'] ?>"
+                                               class="label label-default"><?= HM_soothing_true ?></a>
+                                            <?php
                                         }
                                     ?>
                                 </td>
