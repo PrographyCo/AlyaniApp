@@ -53,7 +53,10 @@
                                 while ($row = $sql->fetch()) {
                                     $counthalls = $db->query("SELECT COUNT(hall_id) FROM suites_halls WHERE hall_suite_id = " . $row['suite_id'])->fetchColumn();
                                     
-                                    $totalcapacity = $db->query("SELECT SUM(hall_capacity) FROM suites_halls WHERE hall_suite_id = " . $row['suite_id'])->fetchColumn();
+                                    $totalcapacity = $db->query("SELECT COUNT(stuff_id) FROM suites_halls_stuff WHERE hall_id IN (
+                                        SELECT hall_id FROM suites_halls WHERE hall_suite_id = " . $row['suite_id'] . "
+                                    ) AND stuff_active = 1")->fetchColumn();
+                                    
                                     $occu = $db->query("SELECT COUNT(pil_code) FROM pils_accomo WHERE suite_id = " . $row['suite_id'])->fetchColumn();
                                     $remaining = $totalcapacity - $occu;
                                     ?>

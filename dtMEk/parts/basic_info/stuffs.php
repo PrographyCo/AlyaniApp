@@ -2,11 +2,11 @@
     global $db, $session, $lang, $url;
     
     $title = HM_Halls;
-    $table = 'suites_halls';
-    $table_id = 'hall_id';
-    $newedit_page = CP_PATH.'/basic_info/edit/hall';
+    $table = 'suites_halls_stuff';
+    $table_id = 'stuff_id';
+    $newedit_page = CP_PATH.'/basic_info/edit/stuff';
     
-    if (isset($_GET['suite_id']) && $_GET['suite_id'] > 0) $newedit_page .= '?suite_id=' . $_GET['suite_id'];
+    if (isset($_GET['hall_id']) && $_GET['hall_id'] > 0) $newedit_page .= '?hall_id=' . $_GET['hall_id'];
     
     if (isset($_GET['del']) && is_numeric($_GET['del'])) {
         
@@ -40,10 +40,8 @@
                             <thead>
                             <tr>
                                 <th><?= LBL_Title ?></th>
-                                <th><?= HM_Suite ?></th>
-                                <th><?= LBL_Gender ?></th>
-                                <th><?= LBL_Capacity ?></th>
-                                <th><?= LBL_ٍRemaining ?></th>
+                                <th><?= Type ?></th>
+                                <th><?= HM_Hall ?></th>
                                 <th><?= LBL_Status ?></th>
                                 <th><?= LBL_Order ?></th>
                                 <th><?= LBL_Actions ?></th>
@@ -52,36 +50,32 @@
                             <tbody>
                             <?php
                                 $sqlmore = '';
-                                if (isset($_GET['suite_id']) && is_numeric($_GET['suite_id'])) $sqlmore = " AND h.hall_suite_id = " . $_GET['suite_id'];
+                                if (isset($_GET['hall_id']) && is_numeric($_GET['hall_id'])) $sqlmore = "WHERE h.hall_id = " . $_GET['hall_id'];
                                 
-                                $sql = $db->query("SELECT h.*, s.suite_title, s.suite_gender FROM $table h LEFT OUTER JOIN suites s ON h.hall_suite_id = s.suite_id WHERE 1 $sqlmore ORDER BY h.hall_order");
+                                $sql = $db->query("SELECT s.*, h.hall_title FROM $table s LEFT OUTER JOIN suites_halls h ON h.hall_id = s.hall_id $sqlmore ORDER BY s.stuff_order");
                                 while ($row = $sql->fetch()) {
-                                    
-                                    $capacity = $db->query("SELECT COUNT(*) FROM suites_halls_stuff WHERE stuff_active = 1 AND hall_id = " . $row['hall_id'])->fetchColumn();
-                                    $occu = $db->query("SELECT COUNT(pil_code) FROM pils_accomo WHERE hall_id = " . $row['hall_id'])->fetchColumn();
-                                    $remaining = $capacity - $occu;
-                                    
                                     ?>
                                     <tr>
+                                        <td><?= $row['stuff_title'] ?></td>
+                                        <td>
+                                            <?= match ($row['stuff_type']) {
+                                                'bed' => LBL_Bed,
+                                                'chair' => LBL_Chair1,
+                                                'bench' => LBL_Chair2
+                                            }?>
+                                        </td>
                                         <td><?= $row['hall_title'] ?></td>
-                                        <td><?= $row['suite_title'] ?></td>
-                                        <td><?= ($row['suite_gender'] === 'm') ? LBL_Male : LBL_Female ?></td>
                                         <td>
-                                            <a href="<?= CP_PATH ?>/basic_info/stuffs?hall_id=<?= $row['hall_id'] ?>"><?= number_format($capacity) . ' ' . HM_Stuff ?></a>
+                                            <span class="label label-<?= ($row['stuff_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['stuff_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
-                                        <td>
-                                            <?= number_format($remaining) ?></td>
-                                        <td>
-                                            <span class="label label-<?= ($row['hall_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['hall_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
-                                        </td>
-                                        <td><?= $row['hall_order'] ?></td>
+                                        <td><?= $row['stuff_order'] ?></td>
                                         <td>
 
-                                            <a href="<?= $newedit_page . (isset($_GET['suite_id']) ? '&' : '?') . 'id=' . $row[$table_id] ?>"
+                                            <a href="<?= $newedit_page . (isset($_GET['hall_id']) ? '&' : '?') . 'id=' . $row[$table_id] ?>"
                                                class="label label-info">
                                                 <i class="fa fa-edit"></i><?= LBL_Modify ?>
                                             </a>
-                                            <a href="<?= $url . (isset($_GET['suite_id']) ? '?suite_id=' . $_GET['suite_id'] . '&' : '?') . 'del=' . $row[$table_id] ?>"
+                                            <a href="<?= $url . (isset($_GET['hall_id']) ? '?hall_id=' . $_GET['hall_id'] . '&' : '?') . 'del=' . $row[$table_id] ?>"
                                                class="label label-danger"
                                                onclick="return confirm('<?= LBL_DeleteConfirm ?>');">
                                                 <i class="fa fa-trash"></i><?= LBL_Delete ?>

@@ -65,9 +65,9 @@
                                     <tr>
                                         <td>
                                             <?= match ($row['staff_type']) {
-                                                "1" => HM_Managers,
-                                                "2" => HM_Supervisors,
-                                                "3" => HM_Muftis,
+                                                "1",1 => HM_Managers,
+                                                "2",2 => HM_Supervisors,
+                                                "3",3 => HM_Muftis,
                                             } ?>
                                         </td>
                                         <td>

@@ -14,6 +14,8 @@
         const HM_Suites = 'الأجنحة';
         const HM_Suite = 'الجناح';
         const HM_Halls = 'الصالات';
+        
+        const HM_Stuff = 'أثاث';
         const HM_Hall = 'الصالة';
         const HM_Buildings = 'المباني';
         const HM_Building = 'المبنى';
@@ -142,7 +144,7 @@
         const LBL_Gender = 'الجنس';
         const LBL_Male = 'ذكر';
         const LBL_Female = 'انثى';
-        const LBL_Capacity = 'العدد المتاح للتسكين';
+        const LBL_Capacity = 'العدد المتاح من الاثاث';
         const LBL_TotalCapacity = 'إجمالي السعة';
         const LBL_ٍRemaining = 'المتبقي';
         const LBL_TentType1 = 'خيمة';
@@ -360,3 +362,4 @@
         const Arafa = 'عرفة';
         const Manaa = 'منى';
         const Occu = 'محجوز';
+        const Type = 'النوع';

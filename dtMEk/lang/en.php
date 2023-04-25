@@ -14,6 +14,8 @@
         const HM_Suites = 'Suites';
         const HM_Suite = 'Suite';
         const HM_Halls = 'Halls';
+        const HM_Stuff = 'Positions';
+        
         const HM_Hall = 'Hall';
         const HM_Buildings = 'Buildings';
         const HM_Building = 'Building';
