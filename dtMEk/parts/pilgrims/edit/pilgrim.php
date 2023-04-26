@@ -9,7 +9,7 @@
     if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
     else $id = '';
     
-    if ($_POST) {
+    if (!empty($_POST)) {
         
         // check if new or update
         $continue = true;
@@ -189,269 +189,6 @@
                     
                     // Manage Accomodation
                     $countpils = $db->query("SELECT COUNT(pil_id) FROM pils")->fetchColumn();
-                    if (isset($_POST['pil_accomo_type']) && $_POST['pil_accomo_type'] == '0') {
-                        
-                        // No accomodation
-                        $sqldelaccomo = $db->query("DELETE FROM pils_accomo WHERE pil_code = '$pil_code'");
-                        $result = LBL_ACCOMO_REMOVED;
-                        
-                    } elseif ($_POST['pil_accomo_type'] == 1) {
-                        
-                        if ($_POST['extratype_id']) {
-                            
-                            // Lets check if pil with same reservation number exists in same suite, hall, extratype_id limit by 1 order by extratype_text desc
-                            $pil_res_no = $_POST['pil_reservation_number'];
-                            $relative = $db->query("SELECT * FROM pils_accomo WHERE pil_code != '$pil_code' AND suite_id = " . $_POST['pacc_suite_id'] . " AND hall_id = " . $_POST['pacc_hall_id'] . " AND pil_code IN (SELECT pil_code FROM pils WHERE pil_code != '$pil_code' AND pil_reservation_number = '$pil_res_no') ORDER BY extratype_text DESC LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-                            
-                            if ($relative) {
-                                
-                                // we found him, lets get the extratype_text of the next pil, assign it to this pil, and move the other pil to foreach
-                                $otherpil = $db->query("SELECT * FROM pils_accomo WHERE pil_code != '$pil_code' AND suite_id = " . $_POST['pacc_suite_id'] . " AND hall_id = " . $_POST['pacc_hall_id'] . " AND extratype_text > '" . $relative['extratype_text'] . "' ORDER BY extratype_text LIMIT 1")->fetch(PDO::FETCH_ASSOC);
-                                $extratype_text = $otherpil['extratype_text'];
-                                
-                            } else {
-                                
-                                for ($i = 1; $i <= $countpils; $i++) {
-                                    
-                                    $reserved = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code != '$pil_code' AND suite_id > 0 AND hall_id > 0 /* AND extratype_id = " . $_POST['extratype_id'] . " */ AND extratype_text = '$i'")->fetchColumn();
-                                    if (!$reserved) {
-                                        
-                                        $extratype_text = $i;
-                                        break;
-                                        
-                                    }
-                                }
-                                
-                            }
-                            
-                        } else $extratype_text = '';
-                        
-                        // Suite accomodation
-                        
-                        
-                        $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
-                        $stmt->execute(array($pil_code));
-                        $check = $stmt->rowCount();
-                        
-                        if ($check > 0) {
-                            // Update
-                            $sqlac = $db->prepare("UPDATE pils_accomo SET suite_id = ? , hall_id = ? , extratype_id = ?  , extratype_text = ? WHERE pil_code = ?");
-                            $sqlac->execute(array($_POST['pacc_suite_id'], $_POST['pacc_hall_id'], $_POST['extratype_id'], $extratype_text, $pil_code));
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        } else {
-                            // Insert
-                            
-                            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-        						:pil_code,
-        						1,
-        						:suite_id,
-        						:hall_id,
-        						0,
-        						0,
-        						0,
-        						0,
-        						0,
-        						0,
-        						0,
-        						:extratype_id,
-        						:extratype_text
-        					) ON DUPLICATE KEY UPDATE pil_accomo_type = 1, suite_id = :suite_id, hall_id = :hall_id, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0, halls_id = 0 , seats = 0 , bus_id = 0, extratype_id = :extratype_id, extratype_text = :extratype_text");
-                            
-                            $sqlac->bindValue("pil_code", $pil_code);
-                            $sqlac->bindValue("suite_id", $_POST['pacc_suite_id']);
-                            $sqlac->bindValue("hall_id", $_POST['pacc_hall_id']);
-                            $sqlac->bindValue("extratype_id", $_POST['extratype_id']);
-                            $sqlac->bindValue("extratype_text", $extratype_text);
-                            $sqlac->execute();
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        }
-                        
-                        
-                        if ($otherpil) {
-                            
-                            for ($i = 1; $i <= $countpils; $i++) {
-                                
-                                $reserved = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code != '$pil_code' AND suite_id > 0 AND hall_id > 0 /* AND extratype_id = " . $_POST['extratype_id'] . " */ AND extratype_text = '$i'")->fetchColumn();
-                                if (!$reserved) {
-                                    
-                                    $extratype_text_otherpil = $i;
-                                    break;
-                                    
-                                }
-                            }
-                            
-                            $sqlup_otherpil = $db->query("UPDATE pils_accomo SET extratype_text = $extratype_text_otherpil WHERE pil_code = '" . $otherpil['pil_code'] . "'");
-                            
-                        }
-                        
-                    } elseif ($_POST['pil_accomo_type'] == 2 || $_POST['pil_accomo_type'] == 5) {
-                        
-                        if ($_POST['pil_accomo_type'] == 2) $extratype_id = 1;
-                        elseif ($_POST['pil_accomo_type'] == 5) $extratype_id = 2;
-                        // Building accomodation
-                        
-                        
-                        $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
-                        $stmt->execute(array($pil_code));
-                        $check = $stmt->rowCount();
-                        
-                        if ($check > 0) {
-                            // Update
-                            $sqlac = $db->prepare("UPDATE pils_accomo SET bld_id = ? , floor_id = ? , room_id = ? WHERE pil_code = ?");
-                            $sqlac->execute(array($_POST['pacc_bld_id'], $_POST['pacc_floor_id'], $_POST['pacc_room_id'], $pil_code));
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        } else {
-                            // Insert
-                            
-                            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-        						:pil_code,
-        						2,
-        						0,
-        						0,
-        						:bld_id,
-        						:floor_id,
-        						:room_id,
-        						0,
-        						0,
-        						0,
-        						0
-        						:extratype_id,
-        						''
-        					) ON DUPLICATE KEY UPDATE pil_accomo_type = 2, suite_id = 0, hall_id = 0, bld_id = :bld_id, floor_id = :floor_id, room_id = :room_id, tent_id = 0, halls_id = 0 , seats = 0 ,bus_id = 0, extratype_id = :extratype_id, extratype_text = ''");
-                            
-                            $sqlac->bindValue("pil_code", $pil_code);
-                            $sqlac->bindValue("bld_id", $_POST['pacc_bld_id']);
-                            $sqlac->bindValue("floor_id", $_POST['pacc_floor_id']);
-                            $sqlac->bindValue("room_id", $_POST['pacc_room_id']);
-                            $sqlac->bindValue("extratype_id", $extratype_id);
-                            
-                            $sqlac->execute();
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        }
-                        
-                        
-                    } elseif ($_POST['pil_accomo_type'] == 3) {
-                        
-                        
-                        // Tent accomodation
-                        
-                        
-                        $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
-                        $stmt->execute(array($pil_code));
-                        $check = $stmt->rowCount();
-                        
-                        if ($check > 0) {
-                            // Update
-                            $sqlac = $db->prepare("UPDATE pils_accomo SET tent_id = ? WHERE pil_code = ?");
-                            $sqlac->execute(array($_POST['pacc_tent_id'], $pil_code));
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        } else {
-                            // Insert
-                            
-                            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-            						:pil_code,
-            						3,
-            						0,
-            						0,
-            						0,
-            						0,
-            						0,
-            						:tent_id,
-            						0,
-            						0,
-            						0,
-            						'',
-            						''
-            					) ON DUPLICATE KEY UPDATE pil_accomo_type = 3, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = :tent_id,halls_id = 0 , seats = 0 , bus_id = 0, extratype_id = '', extratype_text = ''");
-                            
-                            $sqlac->bindValue("pil_code", $pil_code);
-                            $sqlac->bindValue("tent_id", $_POST['pacc_tent_id']);
-                            $sqlac->execute();
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        }
-                        
-                        
-                    } elseif ($_POST['pil_accomo_type'] == 4) {
-                        
-                        // Tent accomodation
-                        
-                        $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE pil_code = ? ");
-                        $stmt->execute(array($pil_code));
-                        $check = $stmt->rowCount();
-                        
-                        if ($check > 0) {
-                            // Update
-                            $sqlac = $db->prepare("UPDATE pils_accomo SET bus_id = ? WHERE pil_code = ?");
-                            $sqlac->execute(array($_POST['pacc_bus_id'], $pil_code));
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        } else {
-                            // Insert
-                            
-                            // Bus accomodation
-                            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-            						:pil_code,
-            						3,
-            						0,
-            						0,
-            						0,
-            						0,
-            						0,
-            						0,
-            						0,
-            						0,
-            						:bus_id,
-            						'',
-            						''
-            					) ON DUPLICATE KEY UPDATE pil_accomo_type = 4, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0, halls_id = 0 , seats = 0 , bus_id = :bus_id, extratype_id = :extratype_id, extratype_text = ''");
-                            
-                            $sqlac->bindValue("pil_code", $pil_code);
-                            $sqlac->bindValue("bus_id", $_POST['pacc_bus_id']);
-                            $sqlac->execute();
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
-                        }
-                        
-                        
-                    }
                     
                     if (!empty($_POST['pil_accomo_type_arafa'])) {
                         
@@ -472,34 +209,6 @@
                             //sendSMSPilGeneral($id, $noti_message);
                             
                         } else {
-                            // Insert
-                            
-                            $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
-    						:pil_code,
-    						3,
-    						0,
-    						0,
-    						0,
-    						0,
-    						0,
-    						0,
-                            :halls_id,
-                            :seats,
-    						0,
-    						'',
-    						''
-    					) ON DUPLICATE KEY UPDATE pil_accomo_type = 10, suite_id = 0, hall_id = 0, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0,halls_id = :halls_id , seats = :seats , bus_id = 0, extratype_id = '', extratype_text = ''");
-                            
-                            $sqlac->bindValue("pil_code", $pil_code);
-                            $sqlac->bindValue("halls_id", $_POST['pil_accomo_type_arafa']);
-                            $sqlac->bindValue("seats", $_POST['seat']);
-                            $sqlac->execute();
-                            
-                            $result = LBL_ACCOMO_UPDATED;
-                            
-                            sendPushNotification(0, null, $noti_message, 2, $id, 0, 'silent', false, false);
-                            //sendSMSPilGeneral($id, $noti_message);
-                            
                         }
                         
                         
@@ -738,41 +447,23 @@
                                         echo '<div class="panel well">';
                                         echo '<div class="row">';
                                         
-                                        if ($accomoinfo['extratype_id'] > 0) {
-                                            
-                                            echo '<div class="col-sm-3">';
-                                            echo '<b>' . LBL_AccomodationType . '</b><br />' . HM_Suites;
-                                            echo '</div>';
-                                            echo '<div class="col-sm-3">';
-                                            echo '<b>' . HM_Suite . '</b><br />' . $suite_title;
-                                            echo '</div>';
-                                            echo '<div class="col-sm-3">';
-                                            echo '<b>' . HM_Hall . '</b><br />' . $hall_title;
-                                            echo '</div>';
-                                            echo '<div class="col-sm-3">';
-                                            if ($accomoinfo['extratype_id'] == 1) echo '<b>' . LBL_Chair1 . '</b>';
-                                            elseif ($accomoinfo['extratype_id'] == 2) echo '<b>' . LBL_Chair2 . '</b>';
-                                            elseif ($accomoinfo['extratype_id'] == 3) echo '<b>' . LBL_Bed . '</b>';
-                                            echo '<br />' . $accomoinfo['extratype_text'];
-                                            echo '</div>';
-                                            echo '</div>';
-                                            echo '</div>';
-                                            
-                                        } else {
-                                            
-                                            echo '<div class="col-sm-4">';
-                                            echo '<b>' . LBL_AccomodationType . '</b><br />' . HM_Suites;
-                                            echo '</div>';
-                                            echo '<div class="col-sm-4">';
-                                            echo '<b>' . HM_Suite . '</b><br />' . $suite_title;
-                                            echo '</div>';
-                                            echo '<div class="col-sm-4">';
-                                            echo '<b>' . HM_Hall . '</b><br />' . $hall_title;
-                                            echo '</div>';
-                                            echo '</div>';
-                                            echo '</div>';
-                                            
-                                        }
+                                        echo '<div class="col-sm-3">';
+                                        echo '<b>' . LBL_AccomodationType . '</b><br />' . HM_Suites;
+                                        echo '</div>';
+                                        echo '<div class="col-sm-3">';
+                                        echo '<b>' . HM_Suite . '</b><br />' . $suite_title;
+                                        echo '</div>';
+                                        echo '<div class="col-sm-3">';
+                                        echo '<b>' . HM_Hall . '</b><br />' . $hall_title;
+                                        echo '</div>';
+                                        echo '<div class="col-sm-3">';
+                                        if ($accomoinfo['extratype_id'] == 1) echo '<b>' . LBL_Chair1 . '</b>';
+                                        elseif ($accomoinfo['extratype_id'] == 2) echo '<b>' . LBL_Chair2 . '</b>';
+                                        elseif ($accomoinfo['extratype_id'] == 3) echo '<b>' . LBL_Bed . '</b>';
+                                        echo '<br />' . $accomoinfo['stuff_id'];
+                                        echo '</div>';
+                                        echo '</div>';
+                                        echo '</div>';
                                         
                                         
                                     }
@@ -868,53 +559,7 @@
                             
                             
                             ?>
-
-
-                            <div class="form-group">
-                                <label><?= LBL_AccomodationType ?></label>
-                                <select name="pil_accomo_type" class="form-control select2"
-                                        onchange="pilaccomoselect(this.value);">
-                                    <option value=""><?= LBL_CHANGEACCOMODATION ?></option>
-                                    <option value="0"><?= LBL_NOACCOMODATION ?></option>
-                                    <option value="1"><?= HM_Suite ?></option>
-                                    <option value="2"><?= HM_Building ?></option>
-                                    <option value="5"><?= LBL_Premises ?></option>
-                                    <option value="3"><?= HM_Tent ?></option>
-                                    <!-- <option value="4"><?= HM_Bus ?></option> -->
-                                </select>
-                            </div>
-
-                            <div id="accomoarea"></div>
-
-                            <div class="form-group col-sm-6">
-                                <label><?= LBL_TentNumber_halls ?> ( <?= arafa ?> )</label>
-                                <select name="pil_accomo_type_arafa" class="form-control select2">
-                                    <option value=""><?= LBL_TentNumber_halls ?></option>
-                                    <?php
-                                        $gender = $row['pil_gender'];
-                                        $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 2 AND  tent_gender = '$gender'  ORDER BY tent_title");
-                                        while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
-                                            echo '<option value="' . $rowt['tent_id'] . '" ';
-                                            echo '>
-														' . $rowt['tent_title'] . '
-														</option>';
-                                        }
-                                    ?>
-
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-6">
-                                <label><?= with_seat ?>  </label>
-                                <div>
-                                    <select name="seat" class="form-control select2">
-
-                                        <option value="1"><?= with_seat ?></option>
-                                        <option value="0"><?= without_seat ?></option>
-                                    </select>
-                                </div>
-                            </div>
-
-
+                            
                         </div>
 
                     </div>

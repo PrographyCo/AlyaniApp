@@ -219,7 +219,7 @@
             $col = 'halls_id';
         }
         
-        if ($ids!==[])
+        if (!empty(array_filter($ids)))
             $sqlmore = "AND tent_id IN (". implode(',',$ids) .")";
         
         $sql = $db->query("SELECT tent_id, tent_title, tent_capacity FROM tents WHERE tent_active = 1 AND type = $type AND tent_gender = '$gender' ".($sqlmore??''));
@@ -307,7 +307,7 @@
             if (is_array($available_halls) && count($available_halls) > 0) {
                 
                 $stuffQL = 'SELECT * FROM suites_halls_stuff WHERE hall_id=' . $available_halls[0]['hall_id'] . ' AND stuff_id NOT IN (SELECT stuff_id FROM pils_accomo) ';
-                
+
                 if (is_array($stuffs) && !empty($stuffs))
                     $stuffQL .= 'AND stuff_id IN ('.implode(',',$stuffs).')';
                 
@@ -319,7 +319,7 @@
                     }).'"';
                
                 $available_stuffs = $db->query($stuffQL)->fetchAll(PDO::FETCH_ASSOC);
-                
+
                 if (is_array($available_stuffs) && count($available_stuffs) > 0) {
                     
                     $sqlac = $db->prepare("INSERT INTO pils_accomo VALUES (
@@ -338,7 +338,7 @@
                                  0,
                                  :extratype_id,
                                  :extratype_text
-                               ) ON DUPLICATE KEY UPDATE pil_accomo_type = 1, suite_id = :suite_id, hall_id = :hall_id, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0, extratype_id = :extratype_id, extratype_text = :extratype_text");
+                               ) ON DUPLICATE KEY UPDATE pil_accomo_type = 1, suite_id = :suite_id, hall_id = :hall_id, stuff_id = :stuff_id, bld_id = 0, floor_id = 0, room_id = 0, tent_id = 0, extratype_id = :extratype_id, extratype_text = :extratype_text");
                     
                     $sqlac->bindValue("pil_code", $pil_code);
                     $sqlac->bindValue("type", $type);
@@ -427,7 +427,7 @@
         global $db;
         
         $available_tents = tentsToAcc($tents, $pil_gender, 1);
-        var_dump($available_tents);
+        
         if (is_array($available_tents) && count($available_tents) > 0) {
             
             // Insert
@@ -650,10 +650,9 @@
                             '2', 2 => 'bench',
                             '3', 3 => 'bed'
                         }) . '"';
-                    $sqlmore2 = 'AND extratype_id='.$extratype_id;
                 }
                 
-                $capacity = $db->query("SELECT COUNT(*) FROM suites_halls_stuff WHERE stuff_active = 1 AND hall_id = " . $row['hall_id'] . " ". ($sqlmore??''))->fetchColumn();
+                $capacity = $db->query("SELECT COUNT(*) FROM suites_halls_stuff WHERE stuff_active = 1 AND stuff_id NOT IN (SELECT stuff_id FROM pils_accomo WHERE stuff_id != 0) AND hall_id = " . $row['hall_id'] . " ". ($sqlmore??''))->fetchColumn();
                 
                 $totals += $capacity;
                 

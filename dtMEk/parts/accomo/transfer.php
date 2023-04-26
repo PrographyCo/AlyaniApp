@@ -5,6 +5,7 @@
     $pil_id = $_REQUEST['pil_id'] ?? die('pil_id must be provided');
     $type = strtolower($_REQUEST['type'] ?? 'pil');
     $pil_code = ($type === 'emp') ? $pil_id : $db->query("SELECT pil_code FROM pils WHERE pil_id = $pil_id")->fetchColumn();
+    $pilc_id = $db->query("SELECT pil_pilc_id FROM pils WHERE pil_id = $pil_id")->fetchColumn();
     
     $gender = 'm';
     if ($type === 'pil') {
@@ -24,19 +25,18 @@
 عبر تطبيق شركة العلياني لحجاج الداخل .
 ";
         
-        $accomodated = false;
-        
-        if (!$accomodated && isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
+        if (isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
             
             // accomodate to suites
-            $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'] ?? 0, $_POST['extratype_id'] ?? 0, $pil_code, $_POST['gender'] ?? $gender, $type);
+            $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'], $_POST['extratype_id'], $pil_code, $gender, $type, $_POST['stuff_ids']);
+            
             if ($accomodated) {
                 sendPushNotification(0, null, $noti_message, 2, $pil_id, 0, 'silent', false, false);
             }
             
         }
         
-        if (!$accomodated && isset($_POST['building_id']) && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
+        if (isset($_POST['building_id']) && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
             
             // accomodate to buildings
             $accomodated = AccomoBuildings($_POST['building_id'], $_POST['floor_id'], $_POST['room_id'], $pil_code, $_POST['gender'] ?? $gender, $type);
@@ -46,14 +46,16 @@
         }
         
         
-        if (!$accomodated && isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
+        if (isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
             
             // accomodate to tents
-            $accomodated = AccomoTents($_POST['pilc_id'],$_POST['tent_id'][0], $pil_code, $_POST['gender'] ?? $gender, $type);
+            $accomodated = AccomoTents($pilc_id,$_POST['tent_id'], $pil_code, $_POST['gender'] ?? $gender, $type);
             if ($accomodated) {
                 sendPushNotification(0, null, $noti_message, 2, $pil_id, 0, 'silent', false, false);
             }
         }
+        
+        Accomohallsarfa([$_POST['pil_accomo_type_arafa']], $pil_code ,$gender ,$_POST['seat']);
         
         $msg = LBL_SuccessAccomo;
         $_POST = [];
@@ -108,7 +110,7 @@
                                 <div class="form-group col-sm-6">
                                     <label><?= LBL_Class ?></label>
                                     <select name="pilc_id" id="pilc_id" class="form-control select2"
-                                            onchange="showClassFields(this);">
+                                            onchange="showClassFields(this);" disabled>
                                         <option value="" disabled readonly selected>
                                             <?= LBL_All ?>
                                         </option>
@@ -118,9 +120,6 @@
                                                 echo '<option value="' . $rowpc['pilc_id'] . '" >' . $rowpc['pilc_title_' . $lang] . '</option>';
                                             }
                                         ?>
-                                        <option value="0">
-                                            <?= Arafa ?>
-                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -129,8 +128,35 @@
                             
                             </div>
                             
-                            <input type="submit" class="btn btn-primary col-xs-12" value="<?= LBL_ApplyAccomo ?>"
-                                   disabled/>
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <label><?= LBL_TentNumber_halls ?> ( <?= arafa ?> )</label>
+                                    <select name="pil_accomo_type_arafa" class="form-control select2">
+                                        <option value=""><?= LBL_TentNumber_halls ?></option>
+                                        <?php
+                                            $sqltents = $db->query("SELECT * FROM tents WHERE tent_active = 1 AND type = 2 AND  tent_gender = '$gender'  ORDER BY tent_title");
+                                            while ($rowt = $sqltents->fetch(PDO::FETCH_ASSOC)) {
+                                                echo '<option value="' . $rowt['tent_id'] . '"';
+                                                echo (($accomo && $accomo['halls_id'] == $rowt['tent_id'])?'selected=selected':'') . '>' . $rowt['tent_title'] . '
+                                                    </option>';
+                                            }
+                                        ?>
+                                    
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label><?= with_seat ?>  </label>
+                                    <div>
+                                        <select name="seat" class="form-control select2">
+                                            
+                                            <option value="1" <?= ($accomo && $accomo['seats'] == 1)?'selected=selected':'' ?>><?= with_seat ?></option>
+                                            <option value="0" <?= ($accomo && $accomo['seats'] == 0)?'selected=selected':'' ?>><?= without_seat ?></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="submit" class="btn btn-primary col-xs-12" value="<?= LBL_ApplyAccomo ?>" />
                         
                         </form>
                     </div>
@@ -156,7 +182,7 @@
 <script>
     $(document).ready(function () {
         $('select').select2();
-        $('#pilc_id').val(["<?= $accomo ? $accomo['pil_accomo_type']:'0' ?>"]).trigger('change');
+        $('#pilc_id').val(["<?= $pilc_id ?>"]).trigger('change');
     });
 
     function suites_selected() {
@@ -171,18 +197,44 @@
         };
 
         $.post('<?= CP_PATH ?>/post/accomo_suites_selected', data, function (response) {
-
-            console.log(response);
+            
             $('#hallsarea').html(response.html.replace('multiple',''));
             $('select').select2();
 
             <?php
                 if ($accomo && $accomo['hall_id'])
-                    echo '$("#hall_id\\\\[\\\\]").val(["'.$accomo['hall_id'].'"]).trigger("change");'
+                    echo '$("#hall_id\\\\[\\\\]").val(["'.$accomo['hall_id'].'"]);
+                    $("#extratype_id").val(["'.$accomo['extratype_id'].'"]).trigger("change");';
             ?>
 
         }, 'json');
 
+    }
+    
+    function hall_selected() {
+        $('#extratype_id').val([0]).trigger('change');
+    }
+
+    function extratype_selected() {
+
+        $('#type_select').html('');
+        
+        var data = {
+            suites: [$('#suite_id\\[\\]').val()],
+            selectedhalls: [$('#hall_id\\[\\]').val()],
+            extratype_id: $('#extratype_id').val(),
+            selected: [<?= $accomo ? $accomo['stuff_id'] : "" ?>]
+        }
+
+        if ($('#extratype_id').val() > 0) {
+            $('#type_select').html('<?= LBL_Loading ?>');
+            
+            $.post('<?= CP_PATH ?>/post/accomo_suites_halls_type_selected', data, function (response) {
+                $('#type_select').html(response.html.replace('multiple',''));
+
+                $('select').select2();
+            });
+        }
     }
 
     function bldtype_selected(bld_type) {
@@ -255,16 +307,14 @@
             rooms: [$('#room_id\\[\\]').val()],
             tents: [$('#tent_id\\[\\]').val()],
             gender: $('#gender').val(),
-            halls_arfa: $('#halls_arfa').val()
+            halls_arfa: $('#halls_arfa').val(),
+            extratype_id: $('#extratype_id').val()
         };
 
         $.post('<?= CP_PATH ?>/post/calcAvailAccomo', data, function (response) {
             let availCount = (response.availcount) ? response.availcount : 0;
 
             $('#availcount').html(availCount);
-            if (availCount > 0)
-                document.querySelector('input[type=submit]').removeAttribute('disabled');
-            else document.querySelector('input[type=submit]').disabled = 'disabled';
 
         }, 'json');
 
@@ -336,8 +386,7 @@
                             <?php
                             $sqlsuites = $db->query("SELECT * FROM suites WHERE suite_active = 1 ORDER BY suite_title");
                             while ($rows = $sqlsuites->fetch(PDO::FETCH_ASSOC)) {
-                                echo '<option value="' . $rows['suite_id'] . '" ';
-                                echo '>' . $rows['suite_title'] . '</option>';
+                                echo '<option value="' . $rows['suite_id'] . '">' . $rows['suite_title'] . '</option>';
                             }
                             ?>
                         </select>

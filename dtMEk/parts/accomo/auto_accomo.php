@@ -233,8 +233,6 @@
         }
         
         $.post('<?= CP_PATH ?>/post/accomo_suites_halls_type_selected', data, function (response) {
-            console.log(response)
-
             $('#type_select').html(response.html);
 
             $('select').select2();
