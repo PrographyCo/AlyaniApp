@@ -18,7 +18,7 @@
             // get all suites for this gender
             ?>
             <div class="form-group">
-                <label><?= HM_Suite; ?></label>
+                <label><?= HM_Suite ?></label>
                 
                 <?php
                     
@@ -27,8 +27,8 @@
                         
                         ?>
                         <select name="pacc_suite_id" id="pacc_suite_id" class="form-control select2"
-                                onchange="suiteselected(this.value, '<?= $pil_gender; ?>');" required="required">
-                            <option value=""><?= LBL_Choose; ?></option>
+                                onchange="suiteselected(this.value, '<?= $pil_gender ?>');" required="required">
+                            <option value=""><?= LBL_Choose ?></option>
                             
                             <?php
                                 
@@ -73,8 +73,8 @@
                         
                         ?>
                         <select name="pacc_bld_id" id="pacc_bld_id" class="form-control select2"
-                                onchange="bldselected(this.value, '<?= $pil_gender; ?>');" required="required">
-                            <option value=""><?= LBL_Choose; ?></option>
+                                onchange="bldselected(this.value, '<?= $pil_gender ?>');" required="required">
+                            <option value=""><?= LBL_Choose ?></option>
                             
                             <?php
                                 
@@ -103,16 +103,17 @@
             // get tents
             ?>
             <div class="form-group">
-                <label><?= HM_Tent; ?></label>
+                <label><?= HM_Tent ?></label>
     
                 <?php
                     
-                    $tents = tentsToAcc($pil_gender);
+                    $tents = tentsToAcc([],$pil_gender,1);
+
                     if (is_array($tents) && count($tents) > 0) {
                         
                         ?>
                         <select name="pacc_tent_id" id="pacc_tent_id" class="form-control select2" required="required">
-                            <option value=""><?= LBL_Choose; ?></option>
+                            <option value=""><?= LBL_Choose ?></option>
     
                             <?php
                                 
@@ -141,7 +142,7 @@
             // get buses
             ?>
             <div class="form-group">
-                <label><?= HM_Bus; ?></label>
+                <label><?= HM_Bus ?></label>
     
                 <?php
                     
@@ -150,7 +151,7 @@
                         
                         ?>
                         <select name="pacc_bus_id" id="pacc_bus_id" class="form-control select2" required="required">
-                            <option value=""><?= LBL_Choose; ?></option>
+                            <option value=""><?= LBL_Choose ?></option>
     
                             <?php
                                 

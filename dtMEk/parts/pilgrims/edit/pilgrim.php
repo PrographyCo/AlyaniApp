@@ -162,10 +162,10 @@
                     } else $pil_code = $_POST['pil_code'];
                     
                     // Manage QR Code
-                    if (!is_file(ASSETS_PATH . 'media/pils_qrcodes/' . $id . '.png')) {
+                    if (!is_file('./assets/media/pils_qrcodes/' . $id . '.png')) {
                         
                         // how to build raw content - QRCode with simple Business Card (VCard)
-                        $Dir = ASSETS_PATH . 'media/pils_qrcodes/';
+                        $Dir = './assets/media/pils_qrcodes/';
                         
                         // we building raw data
                         //$codeContents  = 'BEGIN:VCARD'."\n";

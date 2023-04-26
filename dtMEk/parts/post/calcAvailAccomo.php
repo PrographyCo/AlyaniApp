@@ -10,6 +10,7 @@
     $tents = $_REQUEST['tents'] ?? '';
     $gender = $_REQUEST['gender'] ?? '';
     $halls_arfa = $_REQUEST['halls_arfa'] ?? '';
-    $output['availcount'] = AvailableToAccomo($suites, $halls, $bld_type, $buildings, $floors, $rooms, $tents, $gender , $halls_arfa);
+    $extratype_id = $_REQUEST['extratype_id'] ?? 0;
+    $output['availcount'] = AvailableToAccomo($suites, $halls, $bld_type, $buildings, $floors, $rooms, $tents, $gender , $halls_arfa, $extratype_id);
 
   echo json_encode($output);

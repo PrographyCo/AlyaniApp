@@ -49,7 +49,7 @@
         if (!$accomodated && isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
             
             // accomodate to tents
-            $accomodated = AccomoTents($_POST['tent_id'][0], $pil_code, $_POST['gender'] ?? $gender, $type);
+            $accomodated = AccomoTents($_POST['pilc_id'],$_POST['tent_id'][0], $pil_code, $_POST['gender'] ?? $gender, $type);
             if ($accomodated) {
                 sendPushNotification(0, null, $noti_message, 2, $pil_id, 0, 'silent', false, false);
             }
@@ -109,7 +109,7 @@
                                     <label><?= LBL_Class ?></label>
                                     <select name="pilc_id" id="pilc_id" class="form-control select2"
                                             onchange="showClassFields(this);">
-                                        <option value="0" disabled readonly selected>
+                                        <option value="" disabled readonly selected>
                                             <?= LBL_All ?>
                                         </option>
                                         <?php
@@ -118,7 +118,7 @@
                                                 echo '<option value="' . $rowpc['pilc_id'] . '" >' . $rowpc['pilc_title_' . $lang] . '</option>';
                                             }
                                         ?>
-                                        <option value="10">
+                                        <option value="0">
                                             <?= Arafa ?>
                                         </option>
                                     </select>

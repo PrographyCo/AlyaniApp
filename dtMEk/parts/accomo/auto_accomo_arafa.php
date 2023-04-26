@@ -168,7 +168,7 @@
                                                     
                                                     if (!$accomodated && is_array($_POST['hallsarfa_id']) && count($_POST['hallsarfa_id']) > 0) {
                                                         // accomodate to suites
-                                                        $accomodated = Accomohallsarfa($_POST['hallsarfa_id'][$i], $row1['pil_code'], $row1['pil_gender'], $_POST['seat']);
+                                                        $accomodated = Accomohallsarfa($_POST['hallsarfa_id'], $row1['pil_code'], $row1['pil_gender'], $_POST['seat']);
                                                         if ($accomodated) {
                                                             
                                                             $count[$city_title]++;

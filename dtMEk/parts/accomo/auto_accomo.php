@@ -134,23 +134,18 @@
                                             if ($sql1->rowCount() > 0) {
                                                 
                                                 while ($row1 = $sql1->fetch(PDO::FETCH_ASSOC)) {
-                                                    $accomodated = false;
                                                     
-                                                    if (!$accomodated && isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
+                                                    if (isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
                                                         
-                                                        // accomodate to suites
-                                                        $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'] ?? 0, $_POST['extratype_id'] ?? 0, $row1['pil_code'], $row1['pil_gender']);
+                                                        $accomodated = AccomoSuites($_POST['suite_id'],$_POST['hall_id'] ?? 0,$_POST['extratype_id'] ?? 0, $row1['pil_code'], $row1['pil_gender'],'pil',$_POST['stuff_ids']);
                                                         if ($accomodated) {
                                                             
                                                             $count[$city_title]++;
                                                             sendPushNotification(0, null, $noti_message, 2, $row1['pil_id'], 0, 'silent', false, false);
-                                                            //sendSMSPilGeneral($row1['pil_id'], $noti_message);
                                                             
                                                         }
                                                         
-                                                    }
-                                                    
-                                                    if (!$accomodated && isset($_POST['building_id']) && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
+                                                    } elseif (isset($_POST['building_id']) && is_array($_POST['building_id']) && count($_POST['building_id']) > 0) {
                                                         
                                                         // accomodate to buildings
                                                         $accomodated = AccomoBuildings($_POST['building_id'], $_POST['floor_id'], $_POST['room_id'], $row1['pil_code'], $row1['pil_gender']);
@@ -161,13 +156,10 @@
                                                             //sendSMSPilGeneral($row1['pil_id'], $noti_message);
                                                             
                                                         }
-                                                    }
-                                                    
-                                                    
-                                                    if (!$accomodated && isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
+                                                    } elseif (isset($_POST['tent_id']) && is_array($_POST['tent_id']) && count($_POST['tent_id']) > 0) {
                                                         
                                                         // accomodate to tents
-                                                        $accomodated = AccomoTents($_POST['tent_id'][$i], $row1['pil_code'], $row1['pil_gender']);
+                                                        $accomodated = AccomoTents($_POST['pilc_id'],$_POST['tent_id'], $row1['pil_code'], $row1['pil_gender']);
                                                         if ($accomodated) {
                                                             
                                                             $count[$city_title]++;
@@ -188,8 +180,6 @@
                                                 echo LBL_NoPilsFoundToAccomodate . ' ' . LBL_In . ' ' . $city_title . ' <br />';
                                                 
                                             }
-                                            
-                                            $i++;
                                         }
                                         
                                     } else {
@@ -231,6 +221,24 @@
 
         }, 'json');
 
+    }
+    
+    function extratype_selected() {
+        $('#type_select').html('<?= LBL_Loading ?>')
+        
+        var data = {
+            suites: $('#suite_id\\[\\]').val(),
+            selectedhalls: $('#hall_id\\[\\]').val(),
+            extratype_id: $('#extratype_id').val()
+        }
+        
+        $.post('<?= CP_PATH ?>/post/accomo_suites_halls_type_selected', data, function (response) {
+            console.log(response)
+
+            $('#type_select').html(response.html);
+
+            $('select').select2();
+        });
     }
 
     function bldtype_selected(bld_type) {
@@ -318,7 +326,8 @@
             rooms: $('#room_id\\[\\]').val(),
             tents: $('#tent_id\\[\\]').val(),
             gender: $('#gender').val(),
-            halls_arfa: $('#halls_arfa').val()
+            halls_arfa: $('#halls_arfa').val(),
+            extratype_id: $('#extratype_id').val()
         };
 
         $.post('<?= CP_PATH ?>/post/calcAvailAccomo', data, function (response) {

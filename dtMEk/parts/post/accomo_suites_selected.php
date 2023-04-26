@@ -20,7 +20,7 @@
 
     }
     $output['html'] .= '</select>';
-    $output['html'] .= '<select name="extratype_id" id="extratype_id" class="form-control select2">
+    $output['html'] .= '<select name="extratype_id" id="extratype_id" class="form-control select2" onchange="extratype_selected(); calcAvailAccomo();">
       <option value="0" '. (($extratype_id=="0")?'selected=selected':'') .'>
         '.LBL_Choose.'
       </option>
@@ -33,7 +33,9 @@
       <option value="3" '. (($extratype_id=="3")?'selected=selected':'') .'>
         '.LBL_Bed.'
       </option>
-    </select>';
+    </select>
+    
+    <div id="type_select"></div>';
 
   }
 
