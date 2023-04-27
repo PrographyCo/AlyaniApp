@@ -222,6 +222,9 @@
         }, 'json');
 
     }
+    function hall_selected() {
+        return;
+    }
     
     function extratype_selected() {
         $('#type_select').html('<?= LBL_Loading ?>')
