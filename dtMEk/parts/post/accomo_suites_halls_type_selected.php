@@ -19,7 +19,7 @@
     $sqlstuffs = $db->query($sql);
     
     $output['html'] .= '<select name="stuff_ids[]" id="stuff_ids[]" class="form-control select2" multiple onchange="calcAvailAccomo();">';
-    $output['html'] .= '<option value="" readonly>'. LBL_Choose .'</option>';
+    $output['html'] .= '<option value="" readonly disabled>'. LBL_Choose .'</option>';
     
     while ($row = $sqlstuffs->fetch(PDO::FETCH_ASSOC))
     {

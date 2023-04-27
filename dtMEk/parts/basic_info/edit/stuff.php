@@ -110,7 +110,7 @@
                                         while ($rows = $sqls->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $rows['hall_id'] . '" ';
-                                            if ((isset($row) && $row['hall_id'] === $rows['hall_id']) || (isset($_GET['hall_id']) && ((int)$_GET['hall_id']) === $rows['hall_id'])) echo 'selected="selected"';
+                                            if ((isset($row) && $row['hall_id'] === $rows['hall_id']) || (isset($_GET['hall_id']) && ((int)$_GET['hall_id']) === (int)$rows['hall_id'])) echo 'selected="selected"';
                                             echo '>' . $rows['hall_title'] . '</option>';
                                             
                                         }

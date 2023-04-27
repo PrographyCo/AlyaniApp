@@ -227,19 +227,23 @@
     }
     
     function extratype_selected() {
-        $('#type_select').html('<?= LBL_Loading ?>')
+        $('#type_select').html('')
         
         var data = {
             suites: $('#suite_id\\[\\]').val(),
             selectedhalls: $('#hall_id\\[\\]').val(),
             extratype_id: $('#extratype_id').val()
         }
-        
-        $.post('<?= CP_PATH ?>/post/accomo_suites_halls_type_selected', data, function (response) {
-            $('#type_select').html(response.html);
 
-            $('select').select2();
-        });
+        if ($('#extratype_id').val() > 0) {
+            $('#type_select').html('<?= LBL_Loading ?>');
+
+            $.post('<?= CP_PATH ?>/post/accomo_suites_halls_type_selected', data, function (response) {
+                $('#type_select').html(response.html);
+
+                $('select').select2();
+            });
+        }
     }
 
     function bldtype_selected(bld_type) {
