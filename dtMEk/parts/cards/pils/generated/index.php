@@ -35,7 +35,7 @@
   <?php
     
       if (!empty($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore[] = "pil_city_id = " . $_GET['city_id'];
-      if (!empty($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore[] = "pil_gender = '" . $_GET['gender'] . "'";
+      if (!empty($_GET['gender']) && ($_GET['gender'] == 'm' || $_GET['gender'] == 'f')) $sqlmore[] = "pil_gender = '" . $_GET['gender'] . "'";
       if (!empty($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $sqlmore[] = "pil_pilc_id = " . $_GET['pilc_id'];
       if (!empty($_GET['code'])) $sqlmore[] = "pil_code LIKE '%" . $_GET['code'] . "%'";
       if (!empty($_GET['resno'])) $sqlmore[] = "pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";

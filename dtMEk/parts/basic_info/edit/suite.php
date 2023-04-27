@@ -110,8 +110,8 @@
                             <div class="form-group">
                                 <label><?= LBL_Gender ?></label>
                                 <select name="suite_gender" class="form-control select2">
-                                    <option value="m" <?php if (isset($row['suite_gender']) && $row['suite_gender'] === 'm') echo 'selected="selected"'; ?>><?= LBL_Male ?></option>
-                                    <option value="f" <?php if (isset($row['suite_gender']) && $row['suite_gender'] === 'f') echo 'selected="selected"'; ?>><?= LBL_Female ?></option>
+                                    <option value="m" <?php if (isset($row['suite_gender']) && $row['suite_gender'] == 'm') echo 'selected="selected"'; ?>><?= LBL_Male ?></option>
+                                    <option value="f" <?php if (isset($row['suite_gender']) && $row['suite_gender'] == 'f') echo 'selected="selected"'; ?>><?= LBL_Female ?></option>
                                 </select>
                             </div>
 
@@ -123,7 +123,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="suite_active" <?php if (!isset($row) || $row['suite_active'] === 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="suite_active" <?php if (!isset($row) || $row['suite_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

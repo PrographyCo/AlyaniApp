@@ -7,7 +7,7 @@
 
   if (is_numeric($pil_id) && $pil_id > 0) {
 
-    if ($type === 'pil')
+    if ($type == 'pil')
       $pil_code = $db->query("SELECT pil_code FROM pils WHERE pil_id = $pil_id")->fetchColumn();
     else
       $pil_code = $pil_id;

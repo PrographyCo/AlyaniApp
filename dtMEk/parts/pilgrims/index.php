@@ -24,15 +24,15 @@
         
     }
     
-    if (isset($_GET['deleteall']) && (int)$_GET['deleteall'] === 1) {
+    if (isset($_GET['deleteall']) && (int)$_GET['deleteall'] == 1) {
         
         if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $sqlmore1 = " AND pil_city_id = " . $_GET['city_id'];
-        if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $sqlmore2 = " AND pil_gender = '" . $_GET['gender'] . "'";
+        if (isset($_GET['gender']) && ($_GET['gender'] == 'm' || $_GET['gender'] == 'f')) $sqlmore2 = " AND pil_gender = '" . $_GET['gender'] . "'";
         if (isset($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $sqlmore3 = " AND pil_pilc_id = " . $_GET['pilc_id'];
         if (isset($_GET['code']) && $_GET['code']) $sqlmore4 = " AND pil_code LIKE '%" . $_GET['code'] . "%'";
         if (isset($_GET['resno']) && $_GET['resno']) $sqlmore5 = " AND pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";
-        if (isset($_GET['accomo']) && $_GET['accomo'] === 1) $sqlmore6 = " AND pil_code IN (SELECT pil_code FROM pils_accomo)";
-        if (isset($_GET['accomo']) && $_GET['accomo'] === 2) $sqlmore6 = " AND pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
+        if (isset($_GET['accomo']) && $_GET['accomo'] == 1) $sqlmore6 = " AND pil_code IN (SELECT pil_code FROM pils_accomo)";
+        if (isset($_GET['accomo']) && $_GET['accomo'] == 2) $sqlmore6 = " AND pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
         
         
         $sqlallpils = $db->query("SELECT p.*, c.country_title_$lang, ci.city_title_$lang FROM $table p
@@ -109,7 +109,7 @@
                                             $sqlcities = $db->query("SELECT * FROM cities WHERE city_active = 1 ORDER BY city_title_" . $lang);
                                             while ($rowc = $sqlcities->fetch(PDO::FETCH_ASSOC)) {
                                                 ?>
-                                                <option value="<?= $rowc['city_id'] ?>" <?= (isset($_GET['city_id']) && $_GET['city_id'] === $rowc['city_id']) ? 'selected="selected"' : '' ?>>
+                                                <option value="<?= $rowc['city_id'] ?>" <?= (isset($_GET['city_id']) && $_GET['city_id'] == $rowc['city_id']) ? 'selected="selected"' : '' ?>>
                                                     <?= $rowc['city_title_' . $lang] ?>
                                                 </option>
                                                 <?php
@@ -124,10 +124,10 @@
                                         <option value="0">
                                             <?= LBL_Choose ?>
                                         </option>
-                                        <option value="m" <?php if (isset($_GET['gender']) && $_GET['gender'] === 'm') echo 'selected="selected"'; ?>>
+                                        <option value="m" <?php if (isset($_GET['gender']) && $_GET['gender'] == 'm') echo 'selected="selected"'; ?>>
                                             <?= LBL_Male ?>
                                         </option>
-                                        <option value="f" <?php if (isset($_GET['gender']) && $_GET['gender'] === 'f') echo 'selected="selected"'; ?>>
+                                        <option value="f" <?php if (isset($_GET['gender']) && $_GET['gender'] == 'f') echo 'selected="selected"'; ?>>
                                             <?= LBL_Female ?>
                                         </option>
                                     </select>
@@ -142,7 +142,7 @@
                                             $sqlpilc = $db->query("SELECT * FROM pils_classes WHERE pilc_active = 1 ORDER BY pilc_title_" . $lang);
                                             while ($rowpc = $sqlpilc->fetch(PDO::FETCH_ASSOC)) {
                                                 echo '<option value="' . $rowpc['pilc_id'] . '" ';
-                                                if (isset($_GET['pilc_id']) && $_GET['pilc_id'] === $rowpc['pilc_id']) echo 'selected="selected"';
+                                                if (isset($_GET['pilc_id']) && $_GET['pilc_id'] == $rowpc['pilc_id']) echo 'selected="selected"';
                                                 echo '>' . $rowpc['pilc_title_' . $lang] . '</option>';
                                             }
                                         ?>
@@ -168,10 +168,10 @@
                                         <option value="0">
                                             <?= LBL_Choose ?>
                                         </option>
-                                        <option value="1" <?php if (isset($_GET['accomo']) && $_GET['accomo'] === 1) echo 'selected="selected"'; ?>>
+                                        <option value="1" <?php if (isset($_GET['accomo']) && $_GET['accomo'] == 1) echo 'selected="selected"'; ?>>
                                             <?= LBL_VALIDACCOM ?>
                                         </option>
-                                        <option value="2" <?php if (isset($_GET['accomo']) && $_GET['accomo'] === 2) echo 'selected="selected"'; ?>>
+                                        <option value="2" <?php if (isset($_GET['accomo']) && $_GET['accomo'] == 2) echo 'selected="selected"'; ?>>
                                             <?= LBL_NOACCOM ?>
                                         </option>
                                     </select>
@@ -210,12 +210,12 @@
                             <?php
                                 $where = [];
                                 if (isset($_GET['city_id']) && is_numeric($_GET['city_id']) && $_GET['city_id'] > 0) $where[] = "pil_city_id = " . $_GET['city_id'];
-                                if (isset($_GET['gender']) && ($_GET['gender'] === 'm' || $_GET['gender'] === 'f')) $where[] = "pil_gender = '" . $_GET['gender'] . "'";
+                                if (isset($_GET['gender']) && ($_GET['gender'] == 'm' || $_GET['gender'] == 'f')) $where[] = "pil_gender = '" . $_GET['gender'] . "'";
                                 if (isset($_GET['pilc_id']) && is_numeric($_GET['pilc_id']) && $_GET['pilc_id'] > 0) $where[] = "pil_pilc_id = " . $_GET['pilc_id'];
                                 if (!empty($_GET['code'])) $where[] = "pil_code LIKE '%" . $_GET['code'] . "%'";
                                 if (!empty($_GET['resno'])) $where[] = "pil_reservation_number LIKE '%" . $_GET['resno'] . "%'";
-                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) === 1) $where[] = "pil_code IN (SELECT pil_code FROM pils_accomo)";
-                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) === 2) $where[] = "pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
+                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) == 1) $where[] = "pil_code IN (SELECT pil_code FROM pils_accomo)";
+                                if (isset($_GET['accomo']) && ((int) $_GET['accomo']) == 2) $where[] = "pil_code NOT IN (SELECT pil_code FROM pils_accomo)";
                                 
                                 $sql = $db->query("SELECT p.*, c.country_title_$lang, ci.city_title_$lang FROM $table p
                                                     LEFT OUTER JOIN countries c ON p.pil_country_id = c.country_id

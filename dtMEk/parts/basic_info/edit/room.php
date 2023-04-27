@@ -159,8 +159,8 @@
                             <div class="form-group">
                                 <label><?= LBL_Gender ?></label>
                                 <select name="room_gender" class="form-control select2">
-                                    <option value="m" <?php if (isset($row) && $row['room_gender'] === 'm') echo 'selected="selected"'; ?>><?= LBL_Male ?></option>
-                                    <option value="f" <?php if (isset($row) && $row['room_gender'] === 'f') echo 'selected="selected"'; ?>><?= LBL_Female ?></option>
+                                    <option value="m" <?php if (isset($row) && $row['room_gender'] == 'm') echo 'selected="selected"'; ?>><?= LBL_Male ?></option>
+                                    <option value="f" <?php if (isset($row) && $row['room_gender'] == 'f') echo 'selected="selected"'; ?>><?= LBL_Female ?></option>
                                 </select>
                             </div>
 

@@ -28,7 +28,7 @@
         
         if (!$error) {
             try {
-                if ($_POST['staff_type'] === 3) {
+                if ($_POST['staff_type'] == 3) {
                     $username = '';
                     $password = '';
                 } else {
@@ -145,9 +145,9 @@
                                 <label><?= LBL_Type ?></label>
                                 <select name="staff_type" class="form-control select2"
                                         onchange="typechanged(this.value);">
-                                    <option value="1" <?php if ((isset($row) && $row['staff_type'] === 1) || $type === 1) echo 'selected="selected"'; ?>><?= HM_Managers ?></option>
-                                    <option value="2" <?php if ((isset($row) && $row['staff_type'] === 2) || $type === 2) echo 'selected="selected"'; ?>><?= HM_Supervisors ?></option>
-                                    <option value="3" <?php if ((isset($row) && $row['staff_type'] === 3) || $type === 3) echo 'selected="selected"'; ?>><?= HM_Muftis ?></option>
+                                    <option value="1" <?php if ((isset($row) && $row['staff_type'] == 1) || $type == 1) echo 'selected="selected"'; ?>><?= HM_Managers ?></option>
+                                    <option value="2" <?php if ((isset($row) && $row['staff_type'] == 2) || $type == 2) echo 'selected="selected"'; ?>><?= HM_Supervisors ?></option>
+                                    <option value="3" <?php if ((isset($row) && $row['staff_type'] == 3) || $type == 3) echo 'selected="selected"'; ?>><?= HM_Muftis ?></option>
                                 </select>
                             </div>
 
@@ -175,17 +175,17 @@
                                 <input id="staff_uphoto" name="staff_uphoto" type="file" class="file">
                             </div>
 
-                            <div id="privaccess" <?php if ((isset($row) && ($row['staff_type'] === 1 || $row['staff_type'] == 3)) || $type === 1 || $type === 3) echo 'style="display: none"'; ?>>
+                            <div id="privaccess" <?php if ((isset($row) && ($row['staff_type'] == 1 || $row['staff_type'] == 3)) || $type == 1 || $type == 3) echo 'style="display: none"'; ?>>
                                 <div class="form-group">
                                     <label><?= LBL_Permissions ?></label>
                                     <select name="staff_priv" class="form-control select2">
-                                        <option value="1" <?php if ((isset($row) && $row['staff_priv'] === 1) || $type === 1) echo 'selected="selected"'; ?>><?= LBL_Locations ?></option>
-                                        <option value="2" <?php if ((isset($row) && $row['staff_priv'] === 2) || $type === 2) echo 'selected="selected"'; ?>><?= LBL_Buses ?></option>
+                                        <option value="1" <?php if ((isset($row) && $row['staff_priv'] == 1) || $type == 1) echo 'selected="selected"'; ?>><?= LBL_Locations ?></option>
+                                        <option value="2" <?php if ((isset($row) && $row['staff_priv'] == 2) || $type == 2) echo 'selected="selected"'; ?>><?= LBL_Buses ?></option>
                                     </select>
                                 </div>
                             </div>
 
-                            <div id="appaccess" <?php if ((isset($row) && $row['staff_type'] === 3) || $type === 3) echo 'style="display: none"'; ?>>
+                            <div id="appaccess" <?php if ((isset($row) && $row['staff_type'] == 3) || $type == 3) echo 'style="display: none"'; ?>>
                                 <div class="form-group">
                                     <label><?= LBL_Username ?></label>
                                     <input type="text" class="form-control" name="staff_username"
@@ -204,7 +204,7 @@
 
                             <div class="form-group">
                                 <label>
-                                    <input type="checkbox" name="staff_active" <?php if (!isset($row) || $row['staff_active'] === 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                    <input type="checkbox" name="staff_active" <?php if (!isset($row) || $row['staff_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

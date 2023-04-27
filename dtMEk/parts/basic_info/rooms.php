@@ -74,7 +74,7 @@
                                             <?= $row['floor_title'] ?>
                                         </td>
                                         <td>
-                                            <?= ($row['room_gender'] === 'm') ? LBL_Male : LBL_Female ?>
+                                            <?= ($row['room_gender'] == 'm') ? LBL_Male : LBL_Female ?>
                                         </td>
                                         <td>
                                             <?= number_format($row['room_capacity']) ?>
@@ -83,7 +83,7 @@
                                             <?= number_format($remaining) ?>
                                         </td>
                                         <td>
-                                            <span class="label label-<?= ($row['room_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['room_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['room_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['room_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td>
                                             <?= $row['room_order'] ?>

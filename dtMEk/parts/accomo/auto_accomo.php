@@ -75,9 +75,6 @@
                                     <label><?= LBL_Class ?></label>
                                     <select name="pilc_id" id="pilc_id" class="form-control select2"
                                             onchange="showClassFields(this);countCitiesPils();">
-                                        <option value="0">
-                                            <?= LBL_All ?>
-                                        </option>
                                         <?php
                                             $sqlpilc = $db->query("SELECT * FROM pils_classes WHERE pilc_active = 1 ORDER BY pilc_title_" . $lang);
                                             while ($rowpc = $sqlpilc->fetch(PDO::FETCH_ASSOC)) {

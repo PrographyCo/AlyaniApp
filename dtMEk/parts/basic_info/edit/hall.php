@@ -38,7 +38,7 @@
                 $sql->bindValue("id", $id);
                 $sql->bindValue("hall_suite_id", $_POST['hall_suite_id']);
                 $sql->bindValue("hall_title", $_POST['hall_title']);
-                $sql->bindValue("hall_capacity", $_POST['hall_capacity']);
+                $sql->bindValue("hall_capacity", $_POST['hall_capacity']??0);
                 $sql->bindValue("hall_order", $_POST['hall_order']);
                 $sql->bindValue("hall_active", (isset($_POST['hall_active']) ? 1 : 0));
                 $sql->bindValue("hall_dateadded", ($_POST['hall_dateadded'] ?? time()));
@@ -110,7 +110,7 @@
                                         while ($rows = $sqls->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $rows['suite_id'] . '" ';
-                                            if ((isset($row) && $row['hall_suite_id'] === $rows['suite_id']) || (isset($_GET['suite_id']) && ((int)$_GET['suite_id']) === $rows['suite_id'])) echo 'selected="selected"';
+                                            if ((isset($row) && $row['hall_suite_id'] == $rows['suite_id']) || (isset($_GET['suite_id']) && ((int)$_GET['suite_id']) == $rows['suite_id'])) echo 'selected="selected"';
                                             echo '>' . $rows['suite_title'] . '</option>';
                                             
                                         }
@@ -125,12 +125,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label><?= LBL_Capacity ?></label>
-                                <input type="number" class="form-control" name="hall_capacity"
-                                       value="<?= $_POST['hall_capacity'] ?? $row['hall_capacity'] ?? '' ?>"/>
-                            </div>
-
-                            <div class="form-group">
                                 <label><?= LBL_Order ?></label>
                                 <input type="text" class="form-control" name="hall_order"
                                        value="<?= $_POST['hall_order'] ?? $row['hall_order'] ?? '' ?>"/>
@@ -138,7 +132,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="hall_active" <?php if (!isset($row) || $row['hall_active']===1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="hall_active" <?php if (!isset($row) || $row['hall_active']==1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

@@ -30,7 +30,7 @@
                                         while ($rowc = $sqlc->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $rowc['pilc_id'] . '" ';
-                                            if (isset($_POST['pilc_id']) && $_POST['pilc_id'] === $rowc['pilc_id']) echo 'selected="selected"';
+                                            if (isset($_POST['pilc_id']) && $_POST['pilc_id'] == $rowc['pilc_id']) echo 'selected="selected"';
                                             echo '>' . $rowc['pilc_title_' . $lang] . '</option>';
                                             
                                         }
@@ -120,8 +120,8 @@
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        if (strtolower($gender) === 'm' || strtolower($gender) === 'ذكر' || strtolower($gender) === 'male') echo 'ذكر';
-                                                        if (strtolower($gender) === 'f' || strtolower($gender) === 'أنثى' || strtolower($gender) === 'female' || strtolower($gender) === 'انثى' || strtolower($gender) === 'أنثي' || strtolower($gender) === 'انثي') echo 'انثى';
+                                                        if (strtolower($gender) == 'm' || strtolower($gender) == 'ذكر' || strtolower($gender) == 'male') echo 'ذكر';
+                                                        if (strtolower($gender) == 'f' || strtolower($gender) == 'أنثى' || strtolower($gender) == 'female' || strtolower($gender) == 'انثى' || strtolower($gender) == 'أنثي' || strtolower($gender) == 'انثي') echo 'انثى';
                                                         
                                                         echo '</td>';
                                                         

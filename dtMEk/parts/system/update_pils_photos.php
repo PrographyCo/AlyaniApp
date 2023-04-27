@@ -37,7 +37,7 @@
                             
                             $zip = new ZipArchive;
                             $res = $zip->open($_FILES['zipfile']['tmp_name']);
-                            if ($res === TRUE) {
+                            if ($res == TRUE) {
                                 $zip->extractTo(ASSETS_PATH.'media/zip_photos/');
                                 $zip->close();
                                 

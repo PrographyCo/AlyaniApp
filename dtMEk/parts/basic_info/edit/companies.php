@@ -436,7 +436,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="comp_active" <?php if (!isset($row) || $row['comp_active'] === 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="comp_active" <?php if (!isset($row) || $row['comp_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

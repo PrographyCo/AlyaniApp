@@ -56,7 +56,7 @@
                                         </td>
                                         <td><?= $row['promo_title_ar'] ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['promo_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['promo_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['promo_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['promo_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['promo_order'] ?></td>
                                         <td>

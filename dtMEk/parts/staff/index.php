@@ -4,9 +4,9 @@
     if (!isset($_GET['type']) || !is_numeric($_GET['type'])) die(400);
     $type = (int)$_GET['type'];
     
-    if ($type === 1) $title = HM_Managers;
-    elseif ($type === 2) $title = HM_Supervisors;
-    elseif ($type === 3) $title = HM_Muftis;
+    if ($type == 1) $title = HM_Managers;
+    elseif ($type == 2) $title = HM_Supervisors;
+    elseif ($type == 3) $title = HM_Muftis;
     
     $table = 'staff';
     $table_id = 'staff_id';
@@ -102,8 +102,8 @@
                                             ?>
                                         </td>
                                         <td>
-                                    <span class="label label-<?= (((int)$row['staff_active']) === 1) ? 'success' : 'danger' ?>">
-                                        <?= (((int)$row['staff_active']) === 1) ? LBL_Active : LBL_Inactive ?>
+                                    <span class="label label-<?= (((int)$row['staff_active']) == 1) ? 'success' : 'danger' ?>">
+                                        <?= (((int)$row['staff_active']) == 1) ? LBL_Active : LBL_Inactive ?>
                                     </span>
                                         </td>
                                         <td>

@@ -161,7 +161,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="promo_active" <?php if (!isset($row) || $row['promo_active'] === 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="promo_active" <?php if (!isset($row) || $row['promo_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

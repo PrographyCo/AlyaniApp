@@ -12,7 +12,7 @@
     }
     
     $newedit_page = CP_PATH.'/basic_info/edit/tent?type='.$type;
-    $title = $type === 1 ? HM_Tents . ' - ' . mozdalifa : HM_Halls . ' - ' . arafa;
+    $title = $type == 1 ? HM_Tents . ' - ' . mozdalifa : HM_Halls . ' - ' . arafa;
     
     if (isset($_POST['filter'])) {
         $soothing = $_POST['tent_soothing'];

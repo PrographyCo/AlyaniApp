@@ -65,14 +65,14 @@
                                     <tr>
                                         <td><?= $row['hall_title'] ?></td>
                                         <td><?= $row['suite_title'] ?></td>
-                                        <td><?= ($row['suite_gender'] === 'm') ? LBL_Male : LBL_Female ?></td>
+                                        <td><?= ($row['suite_gender'] == 'm') ? LBL_Male : LBL_Female ?></td>
                                         <td>
                                             <a href="<?= CP_PATH ?>/basic_info/stuffs?hall_id=<?= $row['hall_id'] ?>"><?= number_format($capacity) . ' ' . HM_Stuff ?></a>
                                         </td>
                                         <td>
                                             <?= number_format($remaining) ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['hall_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['hall_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['hall_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['hall_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['hall_order'] ?></td>
                                         <td>

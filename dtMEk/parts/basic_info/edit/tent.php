@@ -6,7 +6,7 @@
     $table_id = 'tent_id';
     $type = 1;
     
-    if (isset($_REQUEST['type']) && ($type = (int)$_REQUEST['type']) === 2) {
+    if (isset($_REQUEST['type']) && ($type = (int)$_REQUEST['type']) == 2) {
         $title = HM_Halls . ' - ' . arafa;
     } else {
         $title = HM_Tents . ' - ' . mozdalifa;
@@ -115,7 +115,7 @@
 
 
                             <div class="form-group">
-                                <label><?php if ($type === 2) {
+                                <label><?php if ($type == 2) {
                                         echo LBL_TentNumber_halls;
                                     } else {
                                         echo LBL_TentNumber;
@@ -127,8 +127,8 @@
                             <div class="form-group">
                                 <label><?= LBL_Type ?></label>
                                 <select name="tent_type" class="form-control select2">
-                                    <option value="1" <?php if ((isset($row) && $row['tent_type'] == 1) || $type === 1) echo 'selected="selected"'; ?>><?= LBL_TentType1 ?></option>
-                                    <option value="2" <?php if ((isset($row) && $row['tent_type'] == 2) || $type === 2) echo 'selected="selected"'; ?>><?= LBL_TentType2 ?></option>
+                                    <option value="1" <?php if ((isset($row) && $row['tent_type'] == 1) || $type == 1) echo 'selected="selected"'; ?>><?= LBL_TentType1 ?></option>
+                                    <option value="2" <?php if ((isset($row) && $row['tent_type'] == 2) || $type == 2) echo 'selected="selected"'; ?>><?= LBL_TentType2 ?></option>
                                 </select>
                             </div>
 

@@ -4,11 +4,11 @@
     
     $pil_id = $_REQUEST['pil_id'] ?? die('pil_id must be provided');
     $type = strtolower($_REQUEST['type'] ?? 'pil');
-    $pil_code = ($type === 'emp') ? $pil_id : $db->query("SELECT pil_code FROM pils WHERE pil_id = $pil_id")->fetchColumn();
+    $pil_code = ($type == 'emp') ? $pil_id : $db->query("SELECT pil_code FROM pils WHERE pil_id = $pil_id")->fetchColumn();
     $pilc_id = $db->query("SELECT pil_pilc_id FROM pils WHERE pil_id = $pil_id")->fetchColumn();
     
     $gender = 'm';
-    if ($type === 'pil') {
+    if ($type == 'pil') {
         $sql1 = $db->query("SELECT pil_gender FROM pils WHERE pil_id = $pil_id");
         if ($sql1->rowCount() > 0) {
             $gender = $sql1->fetchColumn();
@@ -86,7 +86,7 @@
                         <form method="post" enctype="multipart/form-data">
                             
                             <div class="panel well">
-                                <?= ($type === 'emp') ? HM_STAFF : LBL_Pilgrim ?>: <span
+                                <?= ($type == 'emp') ? HM_STAFF : LBL_Pilgrim ?>: <span
                                     id="countpils"> <?= $pil_code ?> </span>
                                 - <?= LBL_AvailableForAccomo ?>: <span id="availcount">0</span>
                             </div>
@@ -98,11 +98,11 @@
                                             onchange=" calcAvailAccomo(); getAccomosGender(this.value);" readonly
                                             disabled>
                                         <option
-                                            value="m" <?php if (($_REQUEST['gender'] ?? $gender) === 'm') echo 'selected="selected"'; ?>>
+                                            value="m" <?php if (($_REQUEST['gender'] ?? $gender) == 'm') echo 'selected="selected"'; ?>>
                                             <?= LBL_Male ?>
                                         </option>
                                         <option
-                                            value="f" <?php if (($_REQUEST['gender'] ?? $gender) === 'f') echo 'selected="selected"'; ?>>
+                                            value="f" <?php if (($_REQUEST['gender'] ?? $gender) == 'f') echo 'selected="selected"'; ?>>
                                             <?= LBL_Female ?>
                                         </option>
                                     </select>

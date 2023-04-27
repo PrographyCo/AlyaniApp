@@ -109,10 +109,10 @@
                             <div class="form-group">
                                 <label><?= LBL_Type ?></label>
                                 <select name="bld_type" class="form-control select2">
-                                    <option value="1" <?php if (isset($row) && $row['bld_type'] === 1) echo 'selected="selected"'; ?>>
+                                    <option value="1" <?php if (isset($row) && $row['bld_type'] == 1) echo 'selected="selected"'; ?>>
                                         <?= HM_Building ?>
                                     </option>
-                                    <option value="2" <?php if (isset($row) && $row['bld_type'] === 2) echo 'selected="selected"'; ?>>
+                                    <option value="2" <?php if (isset($row) && $row['bld_type'] == 2) echo 'selected="selected"'; ?>>
                                         <?= LBL_Premises ?>
                                     </option>
                                 </select>
@@ -126,7 +126,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="bld_active" <?php if (!isset($row) || $row['bld_active'] === 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="bld_active" <?php if (!isset($row) || $row['bld_active'] == 1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 

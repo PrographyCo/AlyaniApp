@@ -56,7 +56,7 @@
 					WHERE pa.bld_id > 0 $sqlmore1 $sqlmore2 ORDER BY pa.bld_id, pa.floor_id, pa.room_id, p.pil_reservation_number");
     
     while ($row = $sql->fetch()) {
-        if ($row['type'] === 'pil') $pil = $db->query('SELECT pil_name, pil_nationalid, pil_reservation_number FROM pils where pil_code="' . $row['pil_code'] . '"')->fetch(PDO::FETCH_ASSOC);
+        if ($row['type'] == 'pil') $pil = $db->query('SELECT pil_name, pil_nationalid, pil_reservation_number FROM pils where pil_code="' . $row['pil_code'] . '"')->fetch(PDO::FETCH_ASSOC);
         else $pil = $db->query('SELECT staff_name as pil_name FROM staff where staff_id="' . $row['pil_code'] . '"')->fetch(PDO::FETCH_ASSOC);
         
         if (!in_array($row['bld_title'], $array_of_buildings)) {

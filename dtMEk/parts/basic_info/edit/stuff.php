@@ -9,6 +9,14 @@
     if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
     else $id = '';
     
+    if ($_REQUEST['id'] > 0) {
+        $label = LBL_Updated;
+        $edit = true;
+    }else {
+        $label = LBL_Added;
+        $edit = false;
+    }
+    
     if ($_POST) {
         
         $chk = $db->prepare("SELECT $table_id FROM $table WHERE stuff_title = :title AND hall_id = :hall_id AND $table_id != '$id' LIMIT 1");
@@ -16,7 +24,7 @@
         $chk->bindValue("hall_id", $_POST['hall_id']);
         $chk->execute();
         
-        if ($chk->rowCount() > 0) {
+        if (!$edit && $chk->rowCount() > 0) {
             
             $msg = '<div class="alert alert-danger alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-check"></i>' . LBL_Error . '</h4>' . LBL_Title . ' ' . LBL_AlreadyExists . '</div>';
             
@@ -48,9 +56,6 @@
                     $result = '';
                     $id = $db->lastInsertId();
                     
-                    if ($_REQUEST['id'] > 0) $label = LBL_Updated;
-                    else $label = LBL_Added;
-                    
                     $msg = '<div class="alert alert-success alert-dismissable"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-check"></i>' . $label . '!</h4>' . LBL_Item . ' ' . $label . ' ' . LBL_Successfully . '<br />' . $result . '</div>';
                     
                     unset($_POST);
@@ -73,7 +78,6 @@
     
     if (is_numeric($id)) {
         
-        $edit = true;
         $row = $db->query("SELECT * FROM $table WHERE $table_id = " . $id)->fetch();
         
     }
@@ -110,7 +114,7 @@
                                         while ($rows = $sqls->fetch(PDO::FETCH_ASSOC)) {
                                             
                                             echo '<option value="' . $rows['hall_id'] . '" ';
-                                            if ((isset($row) && $row['hall_id'] === $rows['hall_id']) || (isset($_GET['hall_id']) && ((int)$_GET['hall_id']) === (int)$rows['hall_id'])) echo 'selected="selected"';
+                                            if ((isset($row) && $row['hall_id'] == $rows['hall_id']) || (isset($_GET['hall_id']) && ((int)$_GET['hall_id']) == (int)$rows['hall_id'])) echo 'selected="selected"';
                                             echo '>' . $rows['hall_title'] . '</option>';
                                             
                                         }
@@ -127,9 +131,9 @@
                             <div class="form-group">
                                 <label><?= Type ?></label>
                                 <select name="stuff_type" class="form-control select2">
-                                    <option value="bed" <?= (isset($row) && $row['stuff_type'] === 'bed')? 'selected=selected':'' ?>><?= LBL_Bed ?></option>
-                                    <option value="chair" <?= (isset($row) && $row['stuff_type'] === 'chair')? 'selected=selected':'' ?>><?= LBL_Chair1 ?></option>
-                                    <option value="bench" <?= (isset($row) && $row['stuff_type'] === 'bench')? 'selected=selected':'' ?>><?= LBL_Chair2 ?></option>
+                                    <option value="bed" <?= (isset($row) && $row['stuff_type'] == 'bed')? 'selected=selected':'' ?>><?= LBL_Bed ?></option>
+                                    <option value="chair" <?= (isset($row) && $row['stuff_type'] == 'chair')? 'selected=selected':'' ?>><?= LBL_Chair1 ?></option>
+                                    <option value="bench" <?= (isset($row) && $row['stuff_type'] == 'bench')? 'selected=selected':'' ?>><?= LBL_Chair2 ?></option>
                                 </select>
                             </div>
 
@@ -141,7 +145,7 @@
 
                             <div class="form-group">
                                 <label><input type="checkbox"
-                                              name="stuff_active" <?php if (!isset($row) || $row['stuff_active']===1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
+                                              name="stuff_active" <?php if (!isset($row) || $row['stuff_active']==1) echo 'checked="checked"'; ?> /> <?= LBL_Active ?>
                                 </label>
                             </div>
 
