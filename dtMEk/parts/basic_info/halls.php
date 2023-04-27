@@ -72,7 +72,7 @@
                                         <td>
                                             <?= number_format($remaining) ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['hall_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['hall_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['hall_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['hall_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['hall_order'] ?></td>
                                         <td>

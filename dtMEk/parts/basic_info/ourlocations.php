@@ -54,7 +54,7 @@
                                         <td><?= $row['loc_title_ar'] ?></td>
                                         <td><?= $row['loc_phones'] ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['loc_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['loc_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['loc_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['loc_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['loc_order'] ?></td>
                                         <td>

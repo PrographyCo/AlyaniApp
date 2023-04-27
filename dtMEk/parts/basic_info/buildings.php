@@ -62,7 +62,7 @@
                                     $remaining = $totalcapacity - $occu;
                                     
                                     ?>
-                            <tr><td><?= $row['bld_title'] ?></td><td><?= ($row['bld_type'] === 1)?HM_Building:LBL_Premises ?></td><td>
+                            <tr><td><?= $row['bld_title'] ?></td><td><?= ($row['bld_type'] == 1)?HM_Building:LBL_Premises ?></td><td>
                                     <a href="<?= CP_PATH ?>/basic_info/floors?bld_id=<?= $row['bld_id'] ?>"><?= $countfloors . ' ' . HM_Floors ?></a>
                                 </td>
                                 <td><a href="<?= CP_PATH ?>/basic_info/rooms?bld_id=<?= $row['bld_id'] ?>"><?= $countrooms . ' ' . HM_Rooms ?></a></td>
@@ -74,7 +74,7 @@
                                 </td>
                                 <td>
                                     
-                                    <span class="label label-<?= ($row['bld_active']===1)?'success':'danger' ?>"><?= ($row['bld_active']===1)?LBL_Active:LBL_Inactive ?></span>
+                                    <span class="label label-<?= ($row['bld_active']==1)?'success':'danger' ?>"><?= ($row['bld_active']==1)?LBL_Active:LBL_Inactive ?></span>
                                 </td>
                                 <td><?= $row['bld_order'] ?></td>
                                 <td>

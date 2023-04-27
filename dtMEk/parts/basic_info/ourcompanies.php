@@ -55,7 +55,7 @@
                                         <td> <?= $row['comp_title_ar'] ?></td>
                                         <td><?= $row['comp_phone'] ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['comp_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['comp_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['comp_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['comp_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['comp_order'] ?></td>
                                         <td>

@@ -70,7 +70,7 @@
                                             ?>
                                         </td>
                                         <td>
-                                            <span class="label label-<?= ($row['city_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['city_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['city_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['city_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td> <?= $row['city_order'] ?></td>
                                         <td>

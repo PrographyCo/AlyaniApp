@@ -63,14 +63,14 @@
 
                                     <tr>
                                         <td><?= $row["suite_title"] ?>
-                                        <td><?= ($row['suite_gender'] === 'm') ? LBL_Male : LBL_Female ?></td>
+                                        <td><?= ($row['suite_gender'] == 'm') ? LBL_Male : LBL_Female ?></td>
                                         <td>
                                             <a href="<?= CP_PATH ?>/basic_info/halls?suite_id=<?= $row['suite_id'] ?>"><?= $counthalls . ' ' . HM_Halls ?></a>
                                         </td>
                                         <td><?= number_format($totalcapacity) ?></td>
                                         <td><?= number_format($remaining) ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['suite_active'] === 1) ? 'success' : 'danger' ?>"><?= ($row['suite_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['suite_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['suite_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['suite_order'] ?>
                                         </td>

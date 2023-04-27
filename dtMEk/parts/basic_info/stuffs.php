@@ -66,7 +66,7 @@
                                         </td>
                                         <td><?= $row['hall_title'] ?></td>
                                         <td>
-                                            <span class="label label-<?= ($row['stuff_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['stuff_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                            <span class="label label-<?= ($row['stuff_active'] == 1) ? 'success' : 'danger' ?>"><?= ($row['stuff_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                         </td>
                                         <td><?= $row['stuff_order'] ?></td>
                                         <td>
