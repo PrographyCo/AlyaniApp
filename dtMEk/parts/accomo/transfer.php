@@ -28,7 +28,7 @@
         if (isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
             
             // accomodate to suites
-            $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'], $_POST['extratype_id'], $pil_code, $gender, $type, $_POST['stuff_ids']);
+            $accomodated = AccomoSuites($_POST['suite_id'], $_POST['hall_id'], $_POST['extratype_id'], $pil_code, $gender, $type, $_POST['stuff_ids']??[]);
             
             if ($accomodated) {
                 sendPushNotification(0, null, $noti_message, 2, $pil_id, 0, 'silent', false, false);

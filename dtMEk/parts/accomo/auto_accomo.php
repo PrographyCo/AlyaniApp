@@ -134,7 +134,7 @@
                                                     
                                                     if (isset($_POST['suite_id']) && is_array($_POST['suite_id']) && count($_POST['suite_id']) > 0) {
                                                         
-                                                        $accomodated = AccomoSuites($_POST['suite_id'],$_POST['hall_id'] ?? 0,$_POST['extratype_id'] ?? 0, $row1['pil_code'], $row1['pil_gender'],'pil',$_POST['stuff_ids']);
+                                                        $accomodated = AccomoSuites($_POST['suite_id'],$_POST['hall_id'] ?? 0,$_POST['extratype_id'] ?? 0, $row1['pil_code'], $row1['pil_gender'],'pil',$_POST['stuff_ids']??[]);
                                                         if ($accomodated) {
                                                             
                                                             $count[$city_title]++;

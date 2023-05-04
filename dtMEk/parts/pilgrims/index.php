@@ -243,7 +243,7 @@
                                     <?= $row['city_title_' . $lang] ?>
                                 </td>
                                 <td>
-                                    <span class="label label-<?= ($row['pil_active'] === 1) ? "success" : "danger" ?>"><?= ($row['pil_active'] === 1) ? LBL_Active : LBL_Inactive ?></span>
+                                    <span class="label label-<?= ($row['pil_active'] == 1) ? "success" : "danger" ?>"><?= ($row['pil_active'] == 1) ? LBL_Active : LBL_Inactive ?></span>
                                 </td>
                                 <td id="pilaccomo_<?= $row['pil_id'] ?>">
                                     <span class="label label-<?= ($accomo) ? "success" : "danger" ?>"><?= ($accomo) ? LBL_VALIDACCOM : LBL_NOACCOM ?></span>
