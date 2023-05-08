@@ -55,7 +55,8 @@
             }
         }
         
-        Accomohallsarfa([$_POST['pil_accomo_type_arafa']], $pil_code ,$gender ,$_POST['seat']);
+        if (!empty($_POST['pil_accomo_type_arafa']))
+            Accomohallsarfa([$_POST['pil_accomo_type_arafa']], $pil_code ,$gender ,$_POST['seat']);
         
         $msg = LBL_SuccessAccomo;
         $_POST = [];

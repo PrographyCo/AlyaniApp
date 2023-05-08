@@ -9,7 +9,7 @@
     if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) $id = $_REQUEST['id'];
     else $id = '';
     
-    if ($_REQUEST['id'] > 0) {
+    if (isset($_REQUEST['id']) && $_REQUEST['id'] > 0) {
         $label = LBL_Updated;
         $edit = true;
     }else {

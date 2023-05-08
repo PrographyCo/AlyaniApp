@@ -84,6 +84,7 @@
 
     // Buttons
         const BTN_AddNew = 'إضافة جديدة';
+        const BTN_AddNew_Multiple = 'إضافة متعددة';
     
     // Labels
         const LBL_New = 'جديد';

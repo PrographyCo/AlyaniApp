@@ -34,6 +34,8 @@
         const HM_PILGRIMS = 'PILGRIMS';
         const HM_Pilgrims = 'Pilgrims';
         const HM_AddNew = 'Add New';
+        const BTN_AddNew_Multiple = 'Multiple add';
+        
         const HM_AddNewChoice = 'Add New Choice';
         const HM_ListAll = 'List All';
         const HM_ManageClasses = 'Manage Classes';

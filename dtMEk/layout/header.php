@@ -226,7 +226,7 @@
                         <a href="<?= CP_PATH ?>/basic_info/tents?type=1">
                             <i <?php if ($curpagewithquery === '/basic_info/tents?type=1') echo 'class="fa fa-fw fa-list text-white"'; else echo 'class="fa fa-fw fa-list"'; ?>
                                     style="padding-<?= DIR_AFTER ?>: 7px;"></i>
-                            <span> <?= HM_Tents ?> ( <?= mozdalifa ?> )</span>
+                            <span> <?= HM_Tents ?></span>
                         </a>
                     </li>
                 <?php } ?>
