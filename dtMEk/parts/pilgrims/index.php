@@ -200,7 +200,7 @@
                                 <th><?= LBL_Code ?></th>
                                 <th><?= LBL_City ?></th>
                                 <th><?= LBL_Status ?></th>
-                                <th><?= LBL_Accomodation ?></th>
+                                <th><?= LBL_Accomodation . ' ' . Manaa ?></th>
                                 <th><?= LBL_Accomodation . ' ' . Arafa ?></th>
                                 <th><?= LBL_BusAccomodation ?></th>
                                 <th><?= LBL_Card ?></th>
