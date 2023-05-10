@@ -201,6 +201,7 @@
                                 <th><?= LBL_City ?></th>
                                 <th><?= LBL_Status ?></th>
                                 <th><?= LBL_Accomodation ?></th>
+                                <th><?= LBL_Accomodation . ' ' . Arafa ?></th>
                                 <th><?= LBL_BusAccomodation ?></th>
                                 <th><?= LBL_Card ?></th>
                                 <th><?= LBL_Actions ?></th>
@@ -223,7 +224,8 @@
                                     (($where!==[])?'WHERE '.implode(' AND ', $where).' ' : '')
                                     ."ORDER BY pil_name");
                                 while ($row = $sql->fetch()) {
-                                $accomo = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code = '" . $row['pil_code'] . "'")->fetchColumn();
+                                $accomo = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code = '" . $row['pil_code'] . "' AND pil_accomo_type > 0")->fetchColumn();
+                                $accomoArafa = $db->query("SELECT pil_code FROM pils_accomo WHERE pil_code = '" . $row['pil_code'] . "' AND halls_id != 0")->fetchColumn();
                             
                             ?>
                             <tr>
@@ -254,6 +256,25 @@
                                                class="label label-default"><?= LBL_TransferAccomo ?></a>
                                             <a href="#"
                                                onclick="confirmRemoveAccomo(<?= $row['pil_id'] ?>);"
+                                               class="label label-default"><?= LBL_RemoveAccomo ?></a>
+                                            <?php
+                                        } else {
+                                            ?>
+                                            <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['pil_id'] ?>"
+                                               class="label label-default"><?= HM_soothing_true ?></a>
+                                            <?php
+                                        }
+                                    ?>
+                                </td>
+                                <td id="pilaccomo_<?= $row['pil_id'] ?>_arafa">
+                                    <span class="label label-<?= ($accomoArafa) ? "success" : "danger" ?>"><?= ($accomoArafa) ? LBL_VALIDACCOM : LBL_NOACCOM ?></span>
+                                    <?php
+                                        if ($accomoArafa) {
+                                            ?>
+                                            <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=<?= $row['pil_id'] ?>"
+                                               class="label label-default"><?= LBL_TransferAccomo ?></a>
+                                            <a href="#"
+                                               onclick="confirmRemoveAccomoArafa(<?= $row['pil_id'] ?>);"
                                                class="label label-default"><?= LBL_RemoveAccomo ?></a>
                                             <?php
                                         } else {
@@ -312,7 +333,28 @@
             };
 
             $.post('<?= CP_PATH ?>/post/removePilAccomo', data, function (response) {
-                $('#pilaccomo_' + pil_id).html('<span class="label label-danger"><?= LBL_NOACCOM ?></span>');
+                $('#pilaccomo_' + pil_id).html(`<span class="label label-danger"><?= LBL_NOACCOM ?></span>
+                <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=${pil_id}"class="label label-default"><?= HM_soothing_true ?></a>`);
+            });
+
+        }
+
+    }
+    function confirmRemoveAccomoArafa(pil_id) {
+
+        var confirmed = confirm('<?= LBL_RemoveAccomoPilgrimConfirm ?>');
+        if (confirmed) {
+
+            $('#pilaccomo_' + pil_id + '_arafa').text('<?= LBL_Loading ?>');
+
+            var data = {
+                pil_id: pil_id,
+                arafa: true
+            };
+
+            $.post('<?= CP_PATH ?>/post/removePilAccomo', data, function (response) {
+                $('#pilaccomo_' + pil_id + '_arafa').html(`<span class="label label-danger"><?= LBL_NOACCOM ?></span>
+                <a href="<?= CP_PATH ?>/accomo/transfer?pil_id=${pil_id}"class="label label-default"><?= HM_soothing_true ?></a>`);
             });
 
         }
