@@ -119,7 +119,7 @@
 
         $('#myTable2').dataTable({
             dom: 'Blfrtip',
-            buttons: ['excel', 'print'],
+            buttons: [],
             "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
             "autoWidth": false,
             "paging": false,

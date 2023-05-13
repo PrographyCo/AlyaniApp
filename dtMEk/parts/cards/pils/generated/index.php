@@ -93,20 +93,17 @@
                 // Suites
                 $suite_title = $db->query("SELECT suite_title FROM suites WHERE suite_id = ".$accomoinfo['suite_id'])->fetchColumn();
                 $hall_title = $db->query("SELECT hall_title FROM suites_halls WHERE hall_id = ".$accomoinfo['hall_id'])->fetchColumn();
-
+                $stuff_title = $db->query("SELECT stuff_title FROM suites_halls_stuff WHERE stuff_id = ".$accomoinfo['stuff_id'])->fetchColumn();
+                $stuff_type = $db->query("SELECT stuff_type FROM suites_halls_stuff WHERE stuff_id = ".$accomoinfo['stuff_id'])->fetchColumn();
                          echo '
                          <p class="col-lg-3 item-setting">الجناح:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$suite_title.'</span></p>
                         <p class="col-lg-3 item-setting" >الصالة:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$hall_title.'</span></p>
+                        <p class="col-lg-3 item-setting" >'. (match($stuff_type) {
+                                 "bed"   => LBL_Bed,
+                                 "chair" => LBL_Chair1,
+                                 "bench" => LBL_Chair2
+                             } ) .':&nbsp;&nbsp;&nbsp;<span style="font-size:26px; font-weight:bolder; font-family: Verdana">'.$stuff_title.'</span></p>
                        '   ;
-                       
-
-                if ($accomoinfo['extratype_text']) {
-                  
-                  $paddingwidth = '25%';
-                  if ($accomoinfo['extratype_id'] == 1) echo '<p class="col-lg-3 item-setting">كرسي:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$accomoinfo['extratype_text'].'</span></p>';
-                  elseif ($accomoinfo['extratype_id'] == 2) echo '<p class="col-lg-3 item-setting">مقعد:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$accomoinfo['extratype_text'].'</span></p>';
-                  elseif ($accomoinfo['extratype_id'] == 3) echo '<p class="col-lg-3 item-setting">سرير:&nbsp;&nbsp;&nbsp;<span style="font-size:36px; font-weight:bolder; font-family: Verdana">'.$accomoinfo['extratype_text'].'</span></p>';
-                }
                 
                 
                 echo '</div>';

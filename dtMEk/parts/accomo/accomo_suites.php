@@ -19,9 +19,9 @@
     <section class="content-header">
         <h1>
             <?= $title ?>
-            <button class="btn btn-success pull-<?= DIR_AFTER ?>" onclick="pdfsuites()"
+            <a class="btn btn-success pull-<?= DIR_AFTER ?>" href="<?= CP_PATH ?>/accomo/export/export_accomo_suites_html?<?= http_build_query($_GET) ?>"
                     style="margin-<?= DIR_AFTER ?>: 10px" target="_blank"><i
-                        class="fa fa-file-pdf-o"></i> <?= BTN_ExportToPDF ?></button>
+                        class="fa fa-file-pdf-o"></i> <?= BTN_ExportToPDF ?></a>
             <a href="?remove=1&suite_id=<?= $_GET['suite_id']??'' ?>&hall_id=<?= $_GET['hall_id']??'' ?>"
                onclick="return confirm('<?= LBL_RemoveConfirm ?>');" class="btn btn-danger pull-<?= DIR_AFTER ?>"
                style="margin-<?= DIR_AFTER ?>: 10px"><i class="fa fa-trash"></i> <?= BTN_REMOVEACCOMO2 ?></a>
@@ -121,9 +121,13 @@
                                    cellpadding="0">
                                 <thead>
                                 <tr>
+                                    <th class="text-center"><?= LBL_SuiteNumber . ': ' . $suite['suite_title'] ?></th>
+                                    <th class="text-center" colspan="2"><?=  HM_Hall . ': ' . $hall['hall_title'] ?></th>
+                                </tr>
+                                <tr>
                                     <th><?= LBL_Name ?></th>
                                     <th><?= LBL_NationalId ?></th>
-                                    <th><?= seat ?></th>
+                                    <th><?= HM_Stuff ?></th>
 
                                 </tr>
                                 </thead>
@@ -133,36 +137,15 @@
                                     if (is_numeric($_GET['suite_id']) && $_GET['suite_id'] > 0) $sqlmore1 = " AND pa.suite_id = " . $_GET['suite_id'];
                                     if (is_numeric($_GET['hall_id']) && $_GET['hall_id'] > 0) $sqlmore2 = " AND pa.hall_id = " . $_GET['hall_id'];
                                     
-                                    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title , pa.hall_id ,pa.suite_id , pa.pil_code  , h.hall_title, pc.pilc_title_$lang
+                                    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title , pa.hall_id ,pa.suite_id , pa.pil_code, h.hall_title, shs.stuff_type, shs.stuff_title, pc.pilc_title_$lang
 												FROM pils_accomo pa
 												INNER JOIN pils p ON pa.pil_code = p.pil_code
 												LEFT OUTER JOIN suites s ON pa.suite_id = s.suite_id
 												LEFT OUTER JOIN suites_halls h ON pa.hall_id = h.hall_id
+                                                LEFT OUTER JOIN suites_halls_stuff shs ON pa.stuff_id = shs.stuff_id
                         LEFT OUTER JOIN pils_classes pc ON p.pil_pilc_id = pc.pilc_id
-												WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY pa.suite_id, pa.hall_id, pa.extratype_id, pa.extratype_text + 1");
+												WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY pa.suite_id, pa.hall_id, shs.stuff_type, shs.stuff_id");
                                     while ($row = $sql->fetch()) {
-                                        
-                                        $seattitle = 0;
-                                        
-                                        if ($row['hall_id'] != 0) {
-                                            
-                                            $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE  hall_id = ?");
-                                            $stmt->execute(array($row['hall_id']));
-                                            $seats = $stmt->fetchAll();
-                                            $check = $stmt->rowCount();
-                                            if ($check > 0) {
-                                                foreach ($seats as $seat) {
-                                                    $seattitle++;
-                                                    if ($seat['pil_code'] == $row['pil_code']) {
-                                                        
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            $seattitle = without_seat;
-                                        }
-                                        
                                         
                                         echo '<tr>';
                                         
@@ -173,7 +156,11 @@
                                         echo $row['pil_nationalid'];
                                         echo '</td>';
                                         echo '<td>';
-                                        echo $seattitle;
+                                        echo (match($row['stuff_type']) {
+                                            "bed"   => LBL_Bed,
+                                            "chair" => LBL_Chair1,
+                                            "bench" => LBL_Chair2
+                                        } ) . ': ' . $row['stuff_title'];
                                         echo '</td>';
                                         echo '</tr>';
                                         
@@ -191,7 +178,7 @@
 
                                     <th><?= LBL_SuiteNumber ?></th>
                                     <th><?= HM_Hall ?></th>
-                                    <th><?= seat ?></th>
+                                    <th><?= HM_Stuff ?></th>
 
 
                                 </tr>
@@ -202,36 +189,15 @@
                                     if (isset($_GET['suite_id']) && is_numeric($_GET['suite_id']) && $_GET['suite_id'] > 0) $sqlmore1 = " AND pa.suite_id = " . $_GET['suite_id'];
                                     if (isset($_GET['hall_id']) && is_numeric($_GET['hall_id']) && $_GET['hall_id'] > 0) $sqlmore2 = " AND pa.hall_id = " . $_GET['hall_id'];
                                     
-                                    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title , pa.hall_id ,pa.suite_id , pa.pil_code  , h.hall_title, pc.pilc_title_$lang
+                                    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title , pa.hall_id ,pa.suite_id , pa.pil_code  , h.hall_title,shs.stuff_type, shs.stuff_title, pc.pilc_title_$lang
 												FROM pils_accomo pa
 												INNER JOIN pils p ON pa.pil_code = p.pil_code
 												LEFT OUTER JOIN suites s ON pa.suite_id = s.suite_id
 												LEFT OUTER JOIN suites_halls h ON pa.hall_id = h.hall_id
+                                                LEFT OUTER JOIN suites_halls_stuff shs ON pa.stuff_id = shs.stuff_id
                         LEFT OUTER JOIN pils_classes pc ON p.pil_pilc_id = pc.pilc_id
-												WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY pa.suite_id, pa.hall_id, pa.extratype_id, pa.extratype_text + 1");
+												WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY pa.suite_id, pa.hall_id");
                                     while ($row = $sql->fetch()) {
-                                        
-                                        $seattitle = 0;
-                                        
-                                        if ($row['hall_id'] != 0) {
-                                            
-                                            $stmt = $db->prepare("SELECT * FROM pils_accomo WHERE  hall_id = ?");
-                                            $stmt->execute(array($row['hall_id']));
-                                            $seats = $stmt->fetchAll();
-                                            $check = $stmt->rowCount();
-                                            if ($check > 0) {
-                                                foreach ($seats as $seat) {
-                                                    $seattitle++;
-                                                    if ($seat['pil_code'] == $row['pil_code']) {
-                                                        
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            $seattitle = without_seat;
-                                        }
-                                        
                                         
                                         echo '<tr>';
                                         
@@ -249,7 +215,11 @@
                                         echo $row['hall_title'];
                                         echo '</td>';
                                         echo '<td>';
-                                        echo $seattitle;
+                                        echo (match($row['stuff_type']) {
+                                                "bed"   => LBL_Bed,
+                                                "chair" => LBL_Chair1,
+                                                "bench" => LBL_Chair2
+                                            } ) . ': ' . $row['stuff_title'];
                                         echo '</td>';
                                         echo '</tr>';
                                         
@@ -267,63 +237,3 @@
     </section><!-- /.content -->
 
 </div>
-
-<script type="text/javascript">
-
-
-    // Slightly adapted function from this SO answer: https://stackoverflow.com/a/21937796/2159528
-    // It now returns the objects formatted for pdfMake
-    function getClippedRegion(image, x, y, width, height) {
-        var canvas = document.createElement("canvas"),
-            ctx = canvas.getContext("2d");
-
-        canvas.width = width;
-        canvas.height = height;
-
-        //                   source region         dest. region
-        ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
-
-        return {
-            // Those are some pdfMake params
-            image: canvas.toDataURL(),
-            width: 500
-        };
-    }
-
-
-    $("#btnExport").live("click", function () {
-
-        html2canvas($("#tabled")[0], {
-            onrendered: function (canvas) {
-
-
-                // split the canvas produced by html2canvas into several, based on desired PDF page height
-                let splitAt = 775; // A page height which fits for "LETTER" pageSize...
-
-                let images = [];
-                let y = 0;
-                while (canvas.height > y) {
-                    images.push(getClippedRegion(canvas, 0, y, canvas.width, splitAt));
-                    y += splitAt;
-                }
-
-                // PDF creation using pdfMake
-
-                var docDefinition = {
-                    content: images,
-                    pageSize: "LETTER",
-                    defaultStyle: {
-                        font: 'sans-serif'
-                    }
-                };
-                pdfMake.createPdf(docDefinition).download("report.pdf");
-            }
-        });
-    });
-
-</script>
-
-
-
-
-

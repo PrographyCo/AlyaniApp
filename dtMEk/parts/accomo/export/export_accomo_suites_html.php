@@ -51,12 +51,13 @@
     if (isset($_GET['suite_id']) && is_numeric($_GET['suite_id']) && $_GET['suite_id'] > 0) $sqlmore1 = " AND pa.suite_id = " . $_GET['suite_id'];
     if (isset($_GET['hall_id']) && is_numeric($_GET['hall_id']) && $_GET['hall_id'] > 0) $sqlmore2 = " AND pa.hall_id = " . $_GET['hall_id'];
     
-    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title, h.hall_title
+    $sql = $db->query("SELECT pa.*, p.pil_name, p.pil_nationalid, p.pil_reservation_number, s.suite_title, h.hall_title, shs.stuff_title, shs.stuff_type
 					FROM pils_accomo pa
 					INNER JOIN pils p ON pa.pil_code = p.pil_code
 					LEFT OUTER JOIN suites s ON pa.suite_id = s.suite_id
 					LEFT OUTER JOIN suites_halls h ON pa.hall_id = h.hall_id
-					WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY s.suite_title, h.hall_title, p.pil_reservation_number, pa.extratype_id, pa.extratype_text + 1");
+					LEFT OUTER JOIN suites_halls_stuff shs on pa.stuff_id = shs.stuff_id
+					WHERE pa.suite_id > 0 $sqlmore1 $sqlmore2 ORDER BY s.suite_title, h.hall_title, shs.stuff_type, shs.stuff_title, p.pil_reservation_number");
     while ($row = $sql->fetch()) {
         if (!in_array($row['suite_id'], $array_of_suites) || !in_array($row['hall_id'], $array_of_halls)) {
             $i = 1;
@@ -88,6 +89,7 @@
 															<th>' . LBL_NationalId . '</th>
 															<th>' . LBL_SuiteNumber . '</th>
 															<th>' . HM_Hall . '</th>
+															<th>' . HM_Stuff . '</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -119,6 +121,14 @@
         
         echo '<td>';
         echo $row['hall_title'];
+        echo '</td>';
+        
+        echo '<td>';
+        echo (match($row['stuff_type']) {
+            "bed"   => LBL_Bed,
+            "chair" => LBL_Chair1,
+            "bench" => LBL_Chair2
+            } ). ': ' .$row['stuff_title'];
         echo '</td>';
         
         echo '</tr>';
