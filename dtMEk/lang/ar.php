@@ -15,7 +15,7 @@
         const HM_Suite = 'الجناح';
         const HM_Halls = 'الصالات';
         
-        const HM_Stuff = 'أثاث';
+        const HM_Stuff = 'سرير';
         const HM_Hall = 'الصالة';
         const HM_Buildings = 'المباني';
         const HM_Building = 'المبنى';

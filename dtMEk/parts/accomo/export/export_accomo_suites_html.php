@@ -79,16 +79,13 @@
 													<table class="table table-bordered table-striped">
 														<thead>
 														    <tr>
-														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="3">' . LBL_SuiteNumber . ': ' . $row['suite_title'] . '</th>
-														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="3">' . HM_Hall . ': ' . $row['hall_title'] . '</th>
+														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="2">' . LBL_SuiteNumber . ': ' . $row['suite_title'] . '</th>
+														        <th style="text-align: center;font-size: 20px;padding-bottom: 10px;" colspan="2">' . HM_Hall . ': ' . $row['hall_title'] . '</th>
                                                             </tr>
 															<tr>
 															<th>#</th>
-															<th>' . LBL_Code . '</th>
 															<th>' . LBL_Name . '</th>
 															<th>' . LBL_NationalId . '</th>
-															<th>' . LBL_SuiteNumber . '</th>
-															<th>' . HM_Hall . '</th>
 															<th>' . HM_Stuff . '</th>
 															</tr>
 														</thead>
@@ -104,10 +101,6 @@
         echo '</td>';
         
         echo '<td>';
-        echo $row['pil_code'];
-        echo '</td>';
-        
-        echo '<td>';
         echo $row['pil_name'];
         echo '</td>';
         
@@ -116,19 +109,7 @@
         echo '</td>';
         
         echo '<td>';
-        echo $row['suite_title'];
-        echo '</td>';
-        
-        echo '<td>';
-        echo $row['hall_title'];
-        echo '</td>';
-        
-        echo '<td>';
-        echo (match($row['stuff_type']) {
-            "bed"   => LBL_Bed,
-            "chair" => LBL_Chair1,
-            "bench" => LBL_Chair2
-            } ). ': ' .$row['stuff_title'];
+        echo $row['stuff_title'];
         echo '</td>';
         
         echo '</tr>';
